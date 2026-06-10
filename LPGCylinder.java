@@ -162,6 +162,22 @@ public abstract class LPGCylinder{
         this.weight = weight;
     }
 
+    /**
+     * Calcualtes the final price of the LPG Cylinder.
+     * This method is abstract and must be implemented by subclasses
+     * based on their specific pricing rules.
+     * 
+     * @return the final calculated price of the cylinder.
+     */
+    public abstract double calculateFinalPrice();
+
+    /**
+     * Display the details of the LPG Cylinder.
+     * This is an abstract method that must be implemented by subclasses
+     * to show cylinder specific information.
+     */
+    public abstract void display();
+
 
 
 
