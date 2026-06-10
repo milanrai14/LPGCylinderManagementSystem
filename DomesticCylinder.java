@@ -69,4 +69,25 @@ public class DomesticCylinder extends LPGCylinder {
 
     //Setter method
     
+    /**
+     * Sets the subsidy amount for the domestic cyclinder
+     * Subsidy is only allowed if the customer has valid 
+     * citienship number and a monthly usage of no more than
+     * two cylinders.
+     * 
+     * @param subsidyAmount the subsidy amount to be asigned
+     */
+    public void setSubsidyAmount(double subsidyAmount){
+        if(subsidyAmount <= 0){
+            System.out.println("Subsidy amoun must be greater than ");
+            return;
+        }
+        if(this.citizenshipNumber == null  || this.citizenshipNumber.trim().isEmpty() || this.monthlyUsedCylinder > 2 ){
+            System.out.println("Subsidy not allowed");
+        } else {
+            this.subsidyAmount = subsidyAmount;
+        }
+
+    }
+    
 }
