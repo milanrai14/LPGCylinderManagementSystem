@@ -7,12 +7,12 @@
  */
 
 public abstract class LPGCylinder{
-    private String cylinderId;
-    private String cylinderType;
-    private String bookingId;
-    private double basePrice;
-    private double weight;
-    private int quantity;
+    private String cylinderId; // Unique identifier of the cylinder
+    private String cylinderType; // type of cylinder.
+    private String bookingId; // Booking reference ID associated with the cylinder.
+    private double basePrice; // Base price of the cylinder.
+    private double weight; // Weight of the cylinder in kilograms.
+
 
     /**
      * Construct an LPGCylinder objects by initializing its ID, type,
@@ -22,13 +22,14 @@ public abstract class LPGCylinder{
      * @param cylinderType the category of the LPG Cylinder
      * @param bookingId the customer's booking reference number
      * @param basePrice the original price before calculation
-     * @param weight the cylinder weight in kilograms
-     * @param quantity the number of LPG Cylinder booked
-     * 
-     * 
+     * @param weight the cylinder weight in kilograms     
      */
-    public LPGCylinder(String cylinderId, String cylinderType, String bookingId, double basePrice, double weight, int quantity){
+    public LPGCylinder(String cylinderId, String cylinderType, String bookingId, double basePrice, double weight){
         setCylinderId(cylinderId);
+        setCylinderType(cylinderType);
+        setBookingId(bookingId);
+        setBasePrice(basePrice);
+        setWeight(weight);
 
     }
 
@@ -79,14 +80,6 @@ public abstract class LPGCylinder{
         return weight;
     }
 
-    /**
-     * Returns the quantity of booked LPG Cylinder.
-     * 
-     * @return the quantity of booked LPG Cylinder
-     */
-    public int getQuantity(){
-        return quantity;
-    }
 
     //Setter methods
 
@@ -128,6 +121,22 @@ public abstract class LPGCylinder{
     }
 
     /**
+     * Sets the booking Id of the LPG Cylinder during the booking process.
+     * 
+     * @param bookingId the unique booking references ID
+     */
+    public void setBookingId(String bookingId){
+        if(bookingId == null || bookingId.trim().isEmpty()){
+            System.out.println("Invalid booking ID. Booking ID cannot be null and empty.");
+        } else {
+            this.bookingId = bookingId;
+        }
+    }
+
+
+
+
+    /**
      * Sets the base price of the LPG cylinder before calculation.
      * 
      * @param basePrice the original price before calculation
@@ -139,6 +148,20 @@ public abstract class LPGCylinder{
             this.basePrice = basePrice;
         }
     }
+
+    /**
+     * Sets the weight of the LPG Cylinder in kilograms.
+     * 
+     * @param weight weight of the cylunder.
+     */
+    public void setWeight(double weight){
+        if(weight <= 0){
+            System.out.println("Invalid weight. Weight must be greater than 0 kilograms.");
+            return;
+        }
+        this.weight = weight;
+    }
+
 
 
 
