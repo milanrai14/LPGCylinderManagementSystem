@@ -107,7 +107,7 @@ public abstract class LPGCylinder{
     }
 
     /**
-     * Set the types of LPG Cylinder based on customer usage.
+     * Sets the types of LPG Cylinder based on customer usage.
      * Only "Domestic" or "Commercial" cylinder types are allowed.
      * 
      * @param cylinderType the cylinder type to be assigned
@@ -125,6 +125,19 @@ public abstract class LPGCylinder{
         }
         this.cylinderId = cylinderType;
 
+    }
+
+    /**
+     * Sets the base price of the LPG cylinder before calculation.
+     * 
+     * @param basePrice the original price before calculation
+     */
+    public void setBasePrice(double basePrice){
+        if(basePrice <= 0){
+            System.out.println("Base price must be greater than 0");
+        } else {
+            this.basePrice = basePrice;
+        }
     }
 
 
