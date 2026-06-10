@@ -1,13 +1,15 @@
+
 /**
  * Child class of LPG Cylinder that represent a domestic cylinder for the
  * household usage.
  * This class haldles subsidy-related calculations and store
  * the cizizenship information requires for domestic cylinder registration.
- * 
+ *
  * @author Milan Rai
  * @version 1.1.1.1
  */
 public class DomesticCylinder extends LPGCylinder {
+
     private double subsidyAmount;
     private String citizenshipNumber;
     private int quantityOfOrderCylinder; // Number of cylinders ordered.
@@ -15,18 +17,17 @@ public class DomesticCylinder extends LPGCylinder {
 
     /**
      * Initialize a domestic cylinder with LPG Cylinder and customer details.
-     * 
-     * @param cylinderId              the unique identifier of the cylinder
-     * @param cylinderType            the type of the cylinder
-     * @param bookingId               the booking ID assigned to the cylinder
-     * @param basePrice               the base price of the domestic cylinder
-     * @param weight                  the weight of the domestic cylinder in
-     *                                kilograms
-     * @param subsidyAmount           the subsidy amount provided for the customer
-     * @param citizenshipNumber       the customer's citizenship number
+     *
+     * @param cylinderId the unique identifier of the cylinder
+     * @param cylinderType the type of the cylinder
+     * @param bookingId the booking ID assigned to the cylinder
+     * @param basePrice the base price of the domestic cylinder
+     * @param weight the weight of the domestic cylinder in kilograms
+     * @param subsidyAmount the subsidy amount provided for the customer
+     * @param citizenshipNumber the customer's citizenship number
      * @param quantityOfOrderCylinder the number of cylinder ordered
-     * @param montlyUsedCylinder      the number of cylinders used in the current
-     *                                months
+     * @param montlyUsedCylinder the number of cylinders used in the current
+     * months
      */
     public DomesticCylinder(String cylinderId, String cylinderType, String bookingId, double basePrice, double weight,
             String subsidyAmount, String citizenshipNumber, int quantityOfOrderCylinder, int monthlyUsedCylinder) {
@@ -34,10 +35,9 @@ public class DomesticCylinder extends LPGCylinder {
     }
 
     // Getter methods
-
     /**
      * Retruns the subsidy amount
-     * 
+     *
      * @return the subsidy amount
      */
     public double getSubsidyAmount() {
@@ -46,7 +46,7 @@ public class DomesticCylinder extends LPGCylinder {
 
     /**
      * Return the citizenship number of customer
-     * 
+     *
      * @return the citizenship number of customer
      */
     public String getCitizenshipNumber() {
@@ -55,16 +55,16 @@ public class DomesticCylinder extends LPGCylinder {
 
     /**
      * Return the number of cylinder ordered by customer
-     * 
+     *
      * @return quantity of ordered cylinder
      */
-    public int getQuantityOfOrderedCylinder() {
+    public int getQuantityOfOrderCylinder() {
         return quantityOfOrderCylinder;
     }
 
     /**
      * Returns the total cylinder used in a month
-     * 
+     *
      * @return the total cylinder used in a month
      */
     public int getMonthlyUsedCylinder() {
@@ -72,18 +72,17 @@ public class DomesticCylinder extends LPGCylinder {
     }
 
     // Setter method
-
     /**
-     * Sets the subsidy amount for the domestic cyclinder if 
-     * customer is eligible
-     * 
+     * Sets the subsidy amount for the domestic cyclinder if customer is
+     * eligible
+     *
      * @param subsidyAmount the subsidy amount to be asigned
      */
     public void setSubsidyAmount(double subsidyAmount) {
         if (subsidyAmount < 0) {
             System.out.println("Subsidy amount cannot be less than 0.");
 
-        } else if(!isEligibleForSubsidy()){
+        } else if (!isEligibleForSubsidy()) {
             System.out.println("Customer is not eligble for subsidy.");
             return;
         } else {
@@ -92,12 +91,11 @@ public class DomesticCylinder extends LPGCylinder {
     }
 
     /**
-     * Sets citizenship number of the customer
-     * The citizenship number must not be null, empty,
-     * and must contian exactly 12 characters.
-     * 
+     * Sets citizenship number of the customer The citizenship number must not
+     * be null, empty, and must contian exactly 12 characters.
+     *
      * @param citizenshipNumber the citizenship number to be assigned
-     * 
+     *
      */
     public void setCitizenshipNumber(String citizenshipNumber) {
         if (citizenshipNumber == null || citizenshipNumber.trim().isEmpty()) {
@@ -109,11 +107,33 @@ public class DomesticCylinder extends LPGCylinder {
 
         }
     }
+
     /**
-     * Checks whether the customer is eligible for a subsidy
-     * A customer is eligible if they have a valid citizenship number
-     * and have used no more than 2 cylinder in a month.
-     * 
+     * sets the quantity of cylinders ordered. Also updates monthly usage and
+     * also ensures that a customer cannot order more than 2 cylinders per
+     * month.
+     *
+     * @param quantityOfOrderCylinder number of cylinders being order
+     */
+    public void setQuantityOfOrderCylinder(int quantityOfOrderCylinder) {
+        if (quantityOfOrderCylinder <= 0) {
+            System.out.println("Order must be at least 1 cylinder.");
+            return;
+        }
+
+        if (quantityOfOrderCylinder > 2) {
+            System.out.println("Cannot order more than 2 cylinder per month.");
+            return;
+        }
+        this.quantityOfOrderCylinder = quantityOfOrderCylinder;
+        this.monthlyUsedCylinder += quantityOfOrderCylinder;
+    }
+
+    /**
+     * Checks whether the customer is eligible for a subsidy A customer is
+     * eligible if they have a valid citizenship number and have used no more
+     * than 2 cylinder in a month.
+     *
      * @return true if the customer is eligible for a subsidy, otherwise fasle
      */
     public boolean isEligibleForSubsidy() {
@@ -121,5 +141,44 @@ public class DomesticCylinder extends LPGCylinder {
                 && citizenshipNumber.trim().length() == 12;
         boolean withInQuota = this.monthlyUsedCylinder <= 2;
         return validCitizenship && withInQuota;
+    }
+
+    /**
+     * Calculate the final price of the domestic cylinder. If the customer is
+     * eligible for subsidy, a discount is applied, otherwise not applied.
+     *
+     * @return final price after applying quantity and subsidy rules.
+     */
+    @Override
+    public double calculateFinalPrice() {
+        double totalPrice = getBasePrice() * this.quantityOfOrderCylinder;
+
+        if (isEligibleForSubsidy()) {
+            totalPrice = totalPrice - this.subsidyAmount;
+        }
+        return totalPrice;
+    }
+
+    /**
+     *
+     */
+    @Override
+    public void display() {
+        System.out.println("===== Domestic Cylinder Details =====");
+        System.out.println("Cylinder ID: " + getCylinderId());
+        System.out.println("Cylinder Type: " + getCylinderType());
+        System.out.println("Booking ID: " + getBookingId());
+        System.out.println("Base Price: " + getBasePrice());
+        System.out.println("Weight: " + getWeight());
+
+        System.out.println("Citizenship Number: " + this.citizenshipNumber);
+        System.out.println("Quantity Ordered: " + this.quantityOfOrderCylinder);
+        System.out.println("Monthly Usage: " + this.monthlyUsedCylinder);
+
+        System.out.println("Eligible for Subsidy: " + isEligibleForSubsidy());
+        System.out.println("Subsidy Amount: " + this.subsidyAmount);
+
+        System.out.println("Final Price: " + calculateFinalPrice());
+        System.out.println("=====================================");
     }
 }
