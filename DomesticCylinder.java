@@ -124,8 +124,8 @@ public class DomesticCylinder extends LPGCylinder {
             return;
         }
 
-        if (quantityOfOrderCylinder > 2) {
-            System.out.println("Cannot order more than 2 cylinder per month.");
+        if(this.monthlyUsedCylinder + quantityOfOrderCylinder > 2){
+            System.out.println("Cannot exceed more than 2 cylinders per month");
             return;
         }
         this.quantityOfOrderCylinder = quantityOfOrderCylinder;
