@@ -26,12 +26,15 @@ public class DomesticCylinder extends LPGCylinder {
      * @param subsidyAmount the subsidy amount provided for the customer
      * @param citizenshipNumber the customer's citizenship number
      * @param quantityOfOrderCylinder the number of cylinder ordered
-     * @param montlyUsedCylinder the number of cylinders used in the current
-     * months
      */
     public DomesticCylinder(String cylinderId, String cylinderType, String bookingId, double basePrice, double weight,
-            String subsidyAmount, String citizenshipNumber, int quantityOfOrderCylinder, int monthlyUsedCylinder) {
+            double  subsidyAmount, String citizenshipNumber, int quantityOfOrderCylinder) {
         super(cylinderId, cylinderType, bookingId, basePrice, weight);
+        setSubsidyAmount(subsidyAmount);
+        setCitizenshipNumber(citizenshipNumber);
+        setQuantityOfOrderCylinder(quantityOfOrderCylinder);
+
+
     }
 
     // Getter methods
@@ -100,7 +103,7 @@ public class DomesticCylinder extends LPGCylinder {
     public void setCitizenshipNumber(String citizenshipNumber) {
         if (citizenshipNumber == null || citizenshipNumber.trim().isEmpty()) {
             System.out.println("Citizenship cannit be empty!");
-        } else if (citizenshipNumber.length() != 12) {
+        } else if (citizenshipNumber.trim().length() != 12) {
             System.out.println("Citizenship number must be exactly 12 characters.");
         } else {
             this.citizenshipNumber = citizenshipNumber.trim();
