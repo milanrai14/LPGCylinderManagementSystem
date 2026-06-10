@@ -163,7 +163,7 @@ public class DomesticCylinder extends LPGCylinder {
     }
 
     /**
-     *
+     *Display all the details of the domestic cylinder
      */
     @Override
     public void display() {
