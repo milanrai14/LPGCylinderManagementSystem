@@ -9,7 +9,8 @@
 public class CommercialCylinder extends LPGCylinder {
     private String businessLicense;
     private int quantity;
-    private double commercialDiscount;
+    private double commercialDiscount = 0.0;
+    private int totalOrderCyliner = 0;
 
     /**
      * Initialize a Commerical cylinder with LPG Cylinder and customer details.
@@ -60,6 +61,15 @@ public class CommercialCylinder extends LPGCylinder {
     public double getCommercialDiscount(){
         return commercialDiscount;
     }
+
+    /**
+     * Returns the total number of order cylinder.
+     * 
+     *@return the total order cylinder up to now
+     */
+    public int getTotalOrderCylinder(){
+        return totalOrderCyliner;
+    }
     
 
     //Setter method
@@ -78,4 +88,81 @@ public class CommercialCylinder extends LPGCylinder {
         }
     }
 
+    /**
+     * Sets quantity of cylinder ordered.
+     * Also updates the total number of cylinders ordered.
+     * 
+     * @param quantity the number of cylinders to be ordered
+     */
+    public void setQuantity(int quantity){
+        if(quantity < 0){
+            System.out.println("Order must be greater than 0.");
+        } else {
+            this.quantity = quantity;
+            this.totalOrderCyliner += quantity;
+        }
+
+    }
+
+    /**
+     * Applying commercial discount based on the quantity
+     * of cylinders ordered.
+     * If quantity is 10 or more, a 5% discount will apply.
+     * If quantity is 5 to 9, a 3% discount will apply
+     *Otherwise, no discount apply
+     */
+    public void applyCommercialDiscount(){
+        if(this.quantity >= 10){
+            this.commercialDiscount = 0.05; //5 percent discount
+        } else if(this.quantity >=5 ){
+            this.commercialDiscount = 0.03; // 3 percent discount
+        } else {
+            this.commercialDiscount = 0.0;
+        }
+    }
+
+    /**
+     *Calculates the final price after applying commercial discount
+     
+     @return final price of the order
+     */
+    public double calculateFinalPrice(){
+        applyCommercialDiscount();
+        double totalPrice = this.quantity * getBasePrice();
+        totalPrice = totalPrice - (totalPrice * this.commercialDiscount);
+        return totalPrice;
+    }
+
+    
+
+/**
+ * Displays all details of the commercial cylinder including
+ * business information, quantity, discount, and final price.
+ */
+@Override
+public void display() {
+    System.out.println("===== Commercial Cylinder Details =====");
+
+    System.out.println("Cylinder ID: " + getCylinderId());
+    System.out.println("Cylinder Type: " + getCylinderType());
+    System.out.println("Booking ID: " + getBookingId());
+    System.out.println("Base Price: " + getBasePrice());
+    System.out.println("Weight: " + getWeight());
+
+    System.out.println("Business License: " + this.businessLicense);
+    System.out.println("Quantity Ordered: " + this.quantity);
+    System.out.println("Total Orders Till Now: " + this.totalOrderCyliner);
+
+    // // Always calculate discount first
+    // applyCommercialDiscount();
+
+    System.out.println("Commercial Discount: " + this.commercialDiscount);
+
+    System.out.println("Final Price: " + calculateFinalPrice());
+
+    System.out.println("=======================================");
 }
+
+
+}
+
