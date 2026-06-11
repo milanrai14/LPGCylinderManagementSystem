@@ -152,14 +152,11 @@ public void display() {
     System.out.println("Business License: " + this.businessLicense);
     System.out.println("Quantity Ordered: " + this.quantity);
     System.out.println("Total Orders Till Now: " + this.totalOrderCyliner);
-
-    // // Always calculate discount first
-    // applyCommercialDiscount();
+    
+    applyCommercialDiscount();
 
     System.out.println("Commercial Discount: " + this.commercialDiscount);
-
     System.out.println("Final Price: " + calculateFinalPrice());
-
     System.out.println("=======================================");
 }
 
