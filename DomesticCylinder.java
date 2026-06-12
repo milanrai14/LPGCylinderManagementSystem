@@ -87,7 +87,6 @@ public class DomesticCylinder extends LPGCylinder {
 
         } else if (!isEligibleForSubsidy()) {
             System.out.println("Customer is not eligble for subsidy.");
-            return;
         } else {
             this.subsidyAmount = subsidyAmount;
         }
@@ -140,7 +139,7 @@ public class DomesticCylinder extends LPGCylinder {
      * @return true if the customer is eligible for a subsidy, otherwise fasle
      */
     public boolean isEligibleForSubsidy() {
-        boolean validCitizenship = this.citizenshipNumber != null
+        boolean validCitizenship = this.citizenshipNumber != null 
                 && citizenshipNumber.trim().length() == 12;
         boolean withInQuota = this.monthlyUsedCylinder <= 2;
         return validCitizenship && withInQuota;

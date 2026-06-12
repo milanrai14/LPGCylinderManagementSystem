@@ -108,15 +108,9 @@ public abstract class LPGCylinder{
     public void setCylinderType(String cylinderType){
         if(cylinderType == null || cylinderType.trim().isEmpty()){
             System.out.println("Cylinder type cannot be empty or null.");
-            return;
+        } else {
+            this.cylinderType = cylinderType.trim();
         }
-        cylinderType = cylinderType.trim();
-
-        if(!cylinderType.equalsIgnoreCase("Domestic") && !cylinderType.equalsIgnoreCase("Commercial")){
-            System.out.println("Invalid cylinder type. Allowed only: Domestic, Commerical");
-            return;
-        }
-        this.cylinderId = cylinderType;
 
     }
 
@@ -177,8 +171,6 @@ public abstract class LPGCylinder{
      * to show cylinder specific information.
      */
     public abstract void display();
-
-
 
 
 }

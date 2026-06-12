@@ -28,9 +28,8 @@ public class CommercialCylinder extends LPGCylinder {
             String businessLicense, int quantity) {
 
         super(cylinderId, cylinderType, bookingId, basePrice, weight);
-
-        this.businessLicense = businessLicense;
-        this.quantity = quantity;
+        setBusinessLicense(businessLicense);
+        setQuantity(quantity);
     }
 
     //Getter method
@@ -126,11 +125,12 @@ public class CommercialCylinder extends LPGCylinder {
      
      @return final price of the order
      */
+    @Override
     public double calculateFinalPrice(){
         applyCommercialDiscount();
         double totalPrice = this.quantity * getBasePrice();
-        totalPrice = totalPrice - (totalPrice * this.commercialDiscount);
-        return totalPrice;
+        double finalPrice=  totalPrice - (totalPrice * this.commercialDiscount);
+        return finalPrice;
     }
 
     
