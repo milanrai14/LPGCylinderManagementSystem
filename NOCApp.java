@@ -86,8 +86,12 @@ public class NOCApp {
         DomesticCylinder domestic = new DomesticCylinder(cylinderId, cylinderType, bookingId, basePrice, weight, subsidyAmount, citizenshipNumber, quantity
         );
 
-        cylinders.add(domestic);
-        System.out.println("Domestic Cylinder Added Successfully!");
+        if(domestic.isValid()){
+            cylinders.add(domestic);
+            System.out.println("Domestic cylinder added successfully.");
+        } else {
+            System.out.println("Invalid data type");
+        }
     }
 
 
@@ -119,8 +123,12 @@ public class NOCApp {
 
         CommercialCylinder commercial = new CommercialCylinder(cylinderId, cylinderType, bookingId, basePrice, weight, businessLicense, quantity);
 
-        cylinders.add(commercial);
-        System.out.println("Commercial Cylinder Added Successfully!");
+        if(commercial.isValid()){
+            cylinders.add(commercial);
+            System.out.println("Commercial Cylinder Added Successfully!");
+        } else {
+            System.out.println("Commercial Cylinder not saved due to invalid data.");
+        }
     }
 
 

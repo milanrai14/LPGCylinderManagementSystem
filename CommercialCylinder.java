@@ -32,14 +32,14 @@ public class CommercialCylinder extends LPGCylinder {
         setQuantity(quantity);
     }
 
-    //Getter method
+    // Getter method
 
     /**
      * Returns the license of business or company
      * 
      * @return the business license
      */
-    public String getBusinessLicense(){
+    public String getBusinessLicense() {
         return businessLicense;
     }
 
@@ -48,7 +48,7 @@ public class CommercialCylinder extends LPGCylinder {
      * 
      * @return the total quantiy of the cylinder
      */
-    public int getQuantity(){
+    public int getQuantity() {
         return quantity;
     }
 
@@ -57,30 +57,29 @@ public class CommercialCylinder extends LPGCylinder {
      * 
      * @return the commerical discount
      */
-    public double getCommercialDiscount(){
+    public double getCommercialDiscount() {
         return commercialDiscount;
     }
 
     /**
      * Returns the total number of order cylinder.
      * 
-     *@return the total order cylinder up to now
+     * @return the total order cylinder up to now
      */
-    public int getTotalOrderCylinder(){
+    public int getTotalOrderCylinder() {
         return totalOrderCyliner;
     }
-    
 
-    //Setter method
+    // Setter method
 
     /**
-     * Sets the business license number 
+     * Sets the business license number
      * The license must conaints exactly 6 digits only.
      * 
      * @param businessLicense the business license number to be assigned.
      */
-    public void setBusinessLicense(String businessLicense){
-        if (businessLicense != null && businessLicense.matches("^[0-9]{6}$")){
+    public void setBusinessLicense(String businessLicense) {
+        if (businessLicense != null && businessLicense.matches("^[0-9]{6}$")) {
             this.businessLicense = businessLicense;
         } else {
             System.out.println("Invalid Business License number. format: 6 digits.");
@@ -93,8 +92,8 @@ public class CommercialCylinder extends LPGCylinder {
      * 
      * @param quantity the number of cylinders to be ordered
      */
-    public void setQuantity(int quantity){
-        if(quantity < 0){
+    public void setQuantity(int quantity) {
+        if (quantity < 0) {
             System.out.println("Order must be greater than 0.");
         } else {
             this.quantity = quantity;
@@ -108,12 +107,12 @@ public class CommercialCylinder extends LPGCylinder {
      * of cylinders ordered.
      * If quantity is 10 or more, a 5% discount will apply.
      * If quantity is 5 to 9, a 3% discount will apply
-     *Otherwise, no discount apply
+     * Otherwise, no discount apply
      */
-    public void applyCommercialDiscount(){
-        if(this.quantity >= 10){
-            this.commercialDiscount = 0.05; //5 percent discount
-        } else if(this.quantity >=5 ){
+    public void applyCommercialDiscount() {
+        if (this.quantity >= 10) {
+            this.commercialDiscount = 0.05; // 5 percent discount
+        } else if (this.quantity >= 5) {
             this.commercialDiscount = 0.03; // 3 percent discount
         } else {
             this.commercialDiscount = 0.0;
@@ -121,45 +120,58 @@ public class CommercialCylinder extends LPGCylinder {
     }
 
     /**
-     *Calculates the final price after applying commercial discount
-     
-     @return final price of the order
+     * Checks whether the commercial cylinder object contains
+     * valid and complete information.
+     *
+     * @return true if all required fields contain valid values,
+     *         otherwise false
+     */
+    public boolean isValid() {
+        return getCylinderId() != null
+            && getCylinderType() != null
+            && getBookingId() != null
+            && getBasePrice() > 0
+            && getWeight() > 0
+            && businessLicense != null
+            && quantity > 0;
+    }
+
+    /**
+     * Calculates the final price after applying commercial discount
+     * 
+     * @return final price of the order
      */
     @Override
-    public double calculateFinalPrice(){
+    public double calculateFinalPrice() {
         applyCommercialDiscount();
         double totalPrice = this.quantity * getBasePrice();
-        double finalPrice=  totalPrice - (totalPrice * this.commercialDiscount);
+        double finalPrice = totalPrice - (totalPrice * this.commercialDiscount);
         return finalPrice;
     }
 
-    
+    /**
+     * Displays all details of the commercial cylinder including
+     * business information, quantity, discount, and final price.
+     */
+    @Override
+    public void display() {
+        System.out.println("===== Commercial Cylinder Details =====");
 
-/**
- * Displays all details of the commercial cylinder including
- * business information, quantity, discount, and final price.
- */
-@Override
-public void display() {
-    System.out.println("===== Commercial Cylinder Details =====");
+        System.out.println("Cylinder ID: " + getCylinderId());
+        System.out.println("Cylinder Type: " + getCylinderType());
+        System.out.println("Booking ID: " + getBookingId());
+        System.out.println("Base Price: " + getBasePrice());
+        System.out.println("Weight: " + getWeight());
 
-    System.out.println("Cylinder ID: " + getCylinderId());
-    System.out.println("Cylinder Type: " + getCylinderType());
-    System.out.println("Booking ID: " + getBookingId());
-    System.out.println("Base Price: " + getBasePrice());
-    System.out.println("Weight: " + getWeight());
+        System.out.println("Business License: " + this.businessLicense);
+        System.out.println("Quantity Ordered: " + this.quantity);
+        System.out.println("Total Orders Till Now: " + this.totalOrderCyliner);
 
-    System.out.println("Business License: " + this.businessLicense);
-    System.out.println("Quantity Ordered: " + this.quantity);
-    System.out.println("Total Orders Till Now: " + this.totalOrderCyliner);
-    
-    applyCommercialDiscount();
+        applyCommercialDiscount();
 
-    System.out.println("Commercial Discount: " + this.commercialDiscount);
-    System.out.println("Final Price: " + calculateFinalPrice());
-    System.out.println("=======================================");
-}
-
+        System.out.println("Commercial Discount: " + this.commercialDiscount);
+        System.out.println("Final Price: " + calculateFinalPrice());
+        System.out.println("=======================================");
+    }
 
 }
-

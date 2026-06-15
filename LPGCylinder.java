@@ -100,8 +100,7 @@ public abstract class LPGCylinder{
     }
 
     /**
-     * Sets the types of LPG Cylinder based on customer usage.
-     * Only "Domestic" or "Commercial" cylinder types are allowed.
+     * Sets the types of LPG Cylinder based on consumer usage.
      * 
      * @param cylinderType the cylinder type to be assigned
      */

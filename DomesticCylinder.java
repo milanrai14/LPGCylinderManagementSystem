@@ -18,22 +18,22 @@ public class DomesticCylinder extends LPGCylinder {
     /**
      * Initialize a domestic cylinder with LPG Cylinder and customer details.
      *
-     * @param cylinderId the unique identifier of the cylinder
-     * @param cylinderType the type of the cylinder
-     * @param bookingId the booking ID assigned to the cylinder
-     * @param basePrice the base price of the domestic cylinder
-     * @param weight the weight of the domestic cylinder in kilograms
-     * @param subsidyAmount the subsidy amount provided for the customer
-     * @param citizenshipNumber the customer's citizenship number
+     * @param cylinderId              the unique identifier of the cylinder
+     * @param cylinderType            the type of the cylinder
+     * @param bookingId               the booking ID assigned to the cylinder
+     * @param basePrice               the base price of the domestic cylinder
+     * @param weight                  the weight of the domestic cylinder in
+     *                                kilograms
+     * @param subsidyAmount           the subsidy amount provided for the customer
+     * @param citizenshipNumber       the customer's citizenship number
      * @param quantityOfOrderCylinder the number of cylinder ordered
      */
     public DomesticCylinder(String cylinderId, String cylinderType, String bookingId, double basePrice, double weight,
-            double  subsidyAmount, String citizenshipNumber, int quantityOfOrderCylinder) {
+            double subsidyAmount, String citizenshipNumber, int quantityOfOrderCylinder) {
         super(cylinderId, cylinderType, bookingId, basePrice, weight);
         setSubsidyAmount(subsidyAmount);
         setCitizenshipNumber(citizenshipNumber);
         setQuantityOfOrderCylinder(quantityOfOrderCylinder);
-
 
     }
 
@@ -123,7 +123,7 @@ public class DomesticCylinder extends LPGCylinder {
             return;
         }
 
-        if(this.monthlyUsedCylinder + quantityOfOrderCylinder > 2){
+        if (this.monthlyUsedCylinder + quantityOfOrderCylinder > 2) {
             System.out.println("Cannot exceed more than 2 cylinders per month");
             return;
         }
@@ -139,7 +139,7 @@ public class DomesticCylinder extends LPGCylinder {
      * @return true if the customer is eligible for a subsidy, otherwise fasle
      */
     public boolean isEligibleForSubsidy() {
-        boolean validCitizenship = this.citizenshipNumber != null 
+        boolean validCitizenship = this.citizenshipNumber != null
                 && citizenshipNumber.trim().length() == 12;
         boolean withInQuota = this.monthlyUsedCylinder <= 2;
         return validCitizenship && withInQuota;
@@ -162,7 +162,25 @@ public class DomesticCylinder extends LPGCylinder {
     }
 
     /**
-     *Display all the details of the domestic cylinder
+     * validates whether the domestic cylinder contains all
+     * required and valid information
+     * 
+     * @return true if the domestic cylinder contains valid data, otherwise false.
+     */
+    public boolean isValid() {
+        return getCylinderId() != null
+                && getCylinderType() != null
+                && getBookingId() != null
+                && getCitizenshipNumber() != null
+                && getBasePrice() > 0
+                && getWeight() > 0
+                && subsidyAmount > 0
+                && subsidyAmount > 0
+                && quantityOfOrderCylinder > 0;
+    }
+
+    /**
+     * Display all the details of the domestic cylinder
      */
     @Override
     public void display() {
