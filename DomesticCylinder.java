@@ -146,22 +146,6 @@ public class DomesticCylinder extends LPGCylinder {
     }
 
     /**
-     * Calculate the final price of the domestic cylinder. If the customer is
-     * eligible for subsidy, a discount is applied, otherwise not applied.
-     *
-     * @return final price after applying quantity and subsidy rules.
-     */
-    @Override
-    public double calculateFinalPrice() {
-        double totalPrice = getBasePrice() * this.quantityOfOrderCylinder;
-
-        if (isEligibleForSubsidy()) {
-            totalPrice = totalPrice - this.subsidyAmount;
-        }
-        return totalPrice;
-    }
-
-    /**
      * validates whether the domestic cylinder contains all
      * required and valid information
      * 
@@ -177,6 +161,22 @@ public class DomesticCylinder extends LPGCylinder {
                 && subsidyAmount > 0
                 && subsidyAmount > 0
                 && quantityOfOrderCylinder > 0;
+    }
+
+    /**
+     * Calculate the final price of the domestic cylinder. If the customer is
+     * eligible for subsidy, a discount is applied, otherwise not applied.
+     *
+     * @return final price after applying quantity and subsidy rules.
+     */
+    @Override
+    public double calculateFinalPrice() {
+        double totalPrice = getBasePrice() * this.quantityOfOrderCylinder;
+
+        if (isEligibleForSubsidy()) {
+            totalPrice = totalPrice - this.subsidyAmount;
+        }
+        return totalPrice;
     }
 
     /**
