@@ -31,10 +31,9 @@ public class DomesticCylinder extends LPGCylinder {
     public DomesticCylinder(String cylinderId, String cylinderType, String bookingId, double basePrice, double weight,
             double subsidyAmount, String citizenshipNumber, int quantityOfOrderCylinder) {
         super(cylinderId, cylinderType, bookingId, basePrice, weight);
-        setSubsidyAmount(subsidyAmount);
         setCitizenshipNumber(citizenshipNumber);
+        setSubsidyAmount(subsidyAmount);
         setQuantityOfOrderCylinder(quantityOfOrderCylinder);
-
     }
 
     // Getter methods
