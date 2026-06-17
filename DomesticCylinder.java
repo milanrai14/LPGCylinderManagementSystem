@@ -98,21 +98,22 @@ public class DomesticCylinder extends LPGCylinder {
 
     /**
      * Sets citizenship number of the customer The citizenship number must not
-     * be null, empty, and must contian exactly 12 characters.
+     * be null, empty, and must contian exactly 12 numeric characters only.
      *
      * @param citizenshipNumber the citizenship number to be assigned
      *
      */
-    public void setCitizenshipNumber(String citizenshipNumber) {
-        if (citizenshipNumber == null || citizenshipNumber.trim().isEmpty()) {
-            System.out.println("Citizenship cannit be empty!");
-        } else if (citizenshipNumber.trim().length() != 12) {
-            System.out.println("Citizenship number must be exactly 12 characters.");
-        } else {
-            this.citizenshipNumber = citizenshipNumber.trim();
-
-        }
+public void setCitizenshipNumber(String citizenshipNumber) {
+    if (citizenshipNumber == null || citizenshipNumber.trim().isEmpty()) {
+        System.out.println("Citizenship number cannot be empty!");
+    } else if (!citizenshipNumber.trim().matches("\\d+$")) {
+        System.out.println("Citizenship number must contain only digits.");
+    } else if (citizenshipNumber.trim().length() != 12) {
+        System.out.println("Citizenship number must be exactly 12 digits.");
+    } else {
+        this.citizenshipNumber = citizenshipNumber.trim();
     }
+}
 
     /**
      * sets the quantity of cylinders ordered. Also updates monthly usage and
