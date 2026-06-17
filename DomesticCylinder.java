@@ -91,7 +91,6 @@ public class DomesticCylinder extends LPGCylinder {
         }
          else if (!isEligibleForSubsidy()) {
             System.out.println("Customer is not eligble for subsidy.");
-            this.subsidyAmount = 0;
         } else {
             this.subsidyAmount = subsidyAmount;
         }
