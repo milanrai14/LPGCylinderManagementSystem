@@ -91,6 +91,7 @@ public class DomesticCylinder extends LPGCylinder {
         }
          else if (!isEligibleForSubsidy()) {
             System.out.println("Customer is not eligble for subsidy.");
+            this.subsidyAmount = 0;
         } else {
             this.subsidyAmount = subsidyAmount;
         }
@@ -114,17 +115,6 @@ public class DomesticCylinder extends LPGCylinder {
         }
     }
 
-// public void setCitizenshipNumber(String citizenshipNumber) {
-//     if (citizenshipNumber == null || citizenshipNumber.trim().isEmpty()) {
-//         System.out.println("Citizenship number cannot be empty!");
-//     } else if (!citizenshipNumber.trim().matches("\\d+$")) {
-//         System.out.println("Citizenship number must contain only digits.");
-//     } else if (citizenshipNumber.trim().length() != 12) {
-//         System.out.println("Citizenship number must be exactly 12 digits.");
-//     } else {
-//         this.citizenshipNumber = citizenshipNumber.trim();
-//     }
-// }
 
     /**
      * sets the quantity of cylinders ordered. Also updates monthly usage and
