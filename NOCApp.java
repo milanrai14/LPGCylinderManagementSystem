@@ -1,3 +1,13 @@
+/**
+ * NOCApp is the main application class for the Nepal Oil Corporation Cylinder Management System.
+ * It provides a command-line interface that allows user to add domestic cylinder
+ * commercial cylinder, and diplay all stored cylinder records and calculate and display the final prices.
+ * 
+ * The application stores all cylinder objects in ArrayList.
+ * 
+ * @author Milan Rai
+ * @version 1.1.1.1
+*/
 import java.util.ArrayList;
 import java.util.Scanner;
 
