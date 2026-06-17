@@ -127,17 +127,11 @@ public class CommercialCylinder extends LPGCylinder {
      *         otherwise false
      */
     public boolean isValid() {
-        return getCylinderId() != null
-            && getCylinderType() != null
-            && getBookingId() != null
-            && getBasePrice() > 0
-            && getWeight() > 0
-            && businessLicense != null
-            && quantity > 0;
+        return getCylinderId() != null && getCylinderType() != null && getBookingId() != null && getBasePrice() > 0 && getWeight() > 0 && businessLicense != null && quantity > 0;
     }
 
     /**
-     * Calculates the final price after applying commercial discount
+     * Calculates the final price after applying commercial discount.
      * 
      * @return final price of the order
      */

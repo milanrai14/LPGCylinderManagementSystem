@@ -85,7 +85,11 @@ public class DomesticCylinder extends LPGCylinder {
         if (subsidyAmount < 0) {
             System.out.println("Subsidy amount cannot be less than 0.");
 
-        } else if (!isEligibleForSubsidy()) {
+        } else if (subsidyAmount > getBasePrice()) {
+            System.out.println("Subsidy amount cannot be greater than base price.");
+            
+        }
+         else if (!isEligibleForSubsidy()) {
             System.out.println("Customer is not eligble for subsidy.");
         } else {
             this.subsidyAmount = subsidyAmount;
@@ -152,15 +156,7 @@ public class DomesticCylinder extends LPGCylinder {
      * @return true if the domestic cylinder contains valid data, otherwise false.
      */
     public boolean isValid() {
-        return getCylinderId() != null
-                && getCylinderType() != null
-                && getBookingId() != null
-                && getCitizenshipNumber() != null
-                && getBasePrice() > 0
-                && getWeight() > 0
-                && subsidyAmount > 0
-                && subsidyAmount > 0
-                && quantityOfOrderCylinder > 0;
+        return getCylinderId() != null && getCylinderType() != null && getBookingId() != null && getCitizenshipNumber() != null && getBasePrice() > 0 && getWeight() > 0 && subsidyAmount > 0 && subsidyAmount > 0 && quantityOfOrderCylinder > 0;
     }
 
     /**
