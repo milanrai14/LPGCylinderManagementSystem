@@ -163,7 +163,7 @@ public class CommercialCylinder extends LPGCylinder {
 
         applyCommercialDiscount();
 
-        System.out.println("Commercial Discount: " + this.commercialDiscount);
+        System.out.println("Commercial Discount: " + this.commercialDiscount * 100 + "%");
         System.out.println("Final Price: " + calculateFinalPrice());
         System.out.println("=======================================");
     }

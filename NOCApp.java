@@ -1,185 +1,239 @@
-/**
- * NOCApp is the main application class for the Nepal Oil Corporation Cylinder Management System.
- * It provides a command-line interface that allows user to add domestic cylinder
- * commercial cylinder, and diplay all stored cylinder records and calculate and display the final prices.
- * 
- * The application stores all cylinder objects in ArrayList.
- * 
- * @author Milan Rai
- * @version 1.1.1.1
-*/
 import java.util.ArrayList;
-import java.util.Scanner;
 
-public class NOCApp {
+import javax.swing.JButton;
+import javax.swing.JComboBox;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
+import javax.swing.JTextField;
 
-    Scanner sc = new Scanner(System.in);
+public class NOCApp extends JFrame {
     ArrayList<LPGCylinder> cylinders = new ArrayList<LPGCylinder>();
+    
+
+    public NOCApp() {
+
+        setTitle("NEA Electricity Billing System");
+        setSize(1200, 900);
+        setLocationRelativeTo(null);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setLayout(null);
+
+        // Customer Type
+        JLabel customerTypeLabel = new JLabel("Customer Type:");
+        customerTypeLabel.setBounds(30, 30, 150, 30);
+        add(customerTypeLabel);
+
+        String[] types = { "Select One", "Residential", "Commercial" };
+        JComboBox<String> customerTypeComboBox = new JComboBox<>(types);
+        customerTypeComboBox.setBounds(200, 30, 200, 30);
+        add(customerTypeComboBox);
+
+        // Customer ID
+        JLabel customerIdLabel = new JLabel("Customer ID:");
+        customerIdLabel.setBounds(30, 80, 150, 30);
+        add(customerIdLabel);
+
+        JTextField customerIdField = new JTextField();
+        customerIdField.setBounds(200, 80, 200, 30);
+        add(customerIdField);
+
+        // Customer Name
+        JLabel customerNameLabel = new JLabel("Customer Name:");
+        customerNameLabel.setBounds(30, 130, 150, 30);
+        add(customerNameLabel);
+
+        JTextField customerNameField = new JTextField();
+        customerNameField.setBounds(200, 130, 200, 30);
+        add(customerNameField);
+
+        // Units Consumed
+        JLabel unitsLabel = new JLabel("Units Consumed:");
+        unitsLabel.setBounds(30, 180, 150, 30);
+        add(unitsLabel);
+
+        JTextField unitsField = new JTextField();
+        unitsField.setBounds(200, 180, 200, 30);
+        add(unitsField);
+
+        // Rate Per Unit
+        JLabel rateLabel = new JLabel("Rate Per Unit:");
+        rateLabel.setBounds(30, 230, 150, 30);
+        add(rateLabel);
+
+        JTextField rateField = new JTextField();
+        rateField.setBounds(200, 230, 200, 30);
+        add(rateField);
+
+        // Citizenship Number
+        JLabel citizenshipLabel = new JLabel("Citizenship Number:");
+        citizenshipLabel.setBounds(30, 280, 150, 30);
+        add(citizenshipLabel);
+
+        JTextField citizenshipField = new JTextField();
+        citizenshipField.setBounds(200, 280, 200, 30);
+
+        add(citizenshipField);
+
+        // Subsidy Amount
+        JLabel subsidyLabel = new JLabel("Subsidy Amount:");
+        subsidyLabel.setBounds(30, 330, 150, 30);
+        add(subsidyLabel);
+
+        JTextField subsidyField = new JTextField("0.0");
+        subsidyField.setBounds(200, 330, 200, 30);
+        add(subsidyField);
+
+        // Business Registration Number
+        JLabel businessLabel = new JLabel("Business Registration Number:");
+        businessLabel.setBounds(30, 380, 180, 30);
+        add(businessLabel);
+
+        JTextField businessField = new JTextField();
+        businessField.setBounds(220, 380, 180, 30);
+        add(businessField);
+
+        // Display Area
+        JTextArea displayArea = new JTextArea();
+        displayArea.setLineWrap(true);
+        displayArea.setWrapStyleWord(true);
+
+        JScrollPane scrollPane = new JScrollPane(displayArea);
+        scrollPane.setBounds(30, 450, 500, 300);
+        add(scrollPane);
+
+        // Buttons
+        JButton addResidentialButton = new JButton("Add Residential Customer");
+        addResidentialButton.setBounds(600, 30, 220, 40);
+        add(addResidentialButton);
+
+        // Listener register gareeko using lamda expression
+        addResidentialButton.addActionListener(e -> {
+            String customerType = (String) customerTypeComboBox.getSelectedItem();
+            System.out.println(customerType);
+            String customerId = customerIdField.getText();
+            System.out.println(customerId);
+            String customerName = customerNameField.getText();
+            System.out.println(customerName);
+            String units = unitsField.getText();
+            System.out.println(units);
+            String rate = rateField.getText();
+            System.out.println(rate);
+
+            if (!"Residential".equals(customerType)) {
+                JOptionPane.showMessageDialog(null,
+                        "This button is only for Residential customers!\n" +
+                                "Please select 'Residential' from the dropdown.",
+                        "Invalid Customer Type",
+                        JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            if (customerId.trim().isEmpty() || units.trim().isEmpty() || rate.trim().isEmpty()) {
+                JOptionPane.showMessageDialog(null, "Enter the valid requirement", "Invalid Entry",
+                        JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            JOptionPane.showMessageDialog(null,
+                    "Customer added successfully!\n" +
+                            "Type: " + customerType + "\n" +
+                            "ID: " + customerId + "\n" +
+                            "Name: " + customerName + "\n" +
+                            "Units: " + units + "\n" +
+                            "Rate: " + rate,
+                    "Success",
+                    JOptionPane.INFORMATION_MESSAGE);
+            displayArea.append("Customer Added Successfully\n");
+            displayArea.append("--------------------------------------\n");
+            displayArea.append("Type: " + customerType + "\n");
+            displayArea.append("ID: " + customerId + "\n");
+            displayArea.append("Name: " + customerName + "\n");
+            displayArea.append("Units: " + units + "\n");
+            displayArea.append("Rate: " + rate + "\n");
+            displayArea.append("--------------------------------------\n");
+
+        });
+
+        JButton addCommercialButton = new JButton("Add Commercial Customer");
+        addCommercialButton.setBounds(600, 80, 220, 40);
+        add(addCommercialButton);
+
+        // Listner register for commercial
+        addCommercialButton.addActionListener(e -> {
+            String customerType = (String) customerTypeComboBox.getSelectedItem();
+            System.out.println(customerType);
+            String customerId = customerIdField.getText();
+            System.out.println(customerId);
+            String customerName = customerNameField.getText();
+            System.out.println(customerName);
+            String units = unitsField.getText();
+            System.out.println(units);
+            String rate = rateField.getText();
+            System.out.println(rate);
+
+            if (!"Commercial".equals(customerType)) {
+                JOptionPane.showMessageDialog(null,
+                        "This button is only for Commerical customers!\n" +
+                                "Please select 'Residential' from the dropdown.",
+                        "Invalid Customer Type",
+                        JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            if (customerId.trim().isEmpty() || units.trim().isEmpty() || rate.trim().isEmpty()
+                    || customerName.trim().isEmpty()) {
+                JOptionPane.showMessageDialog(null, "Enter the valid requirement", "Invalid Entry",
+                        JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            JOptionPane.showMessageDialog(null,
+                    "Customer added successfully!\n" +
+                            "Type: " + customerType + "\n" +
+                            "ID: " + customerId + "\n" +
+                            "Name: " + customerName + "\n" +
+                            "Units: " + units + "\n" +
+                            "Rate: " + rate,
+                    "Success",
+                    JOptionPane.INFORMATION_MESSAGE);
+        });
+
+        JButton calculateButton = new JButton("Calculate Bill");
+        calculateButton.setBounds(600, 130, 220, 40);
+        add(calculateButton);
+
+        // Listner of calculation
+        calculateButton.addActionListener(e -> {
+
+        });
+
+        JButton displayAllButton = new JButton("Display All Customers");
+        displayAllButton.setBounds(600, 180, 220, 40);
+        add(displayAllButton);
+
+        JButton identifyTypeButton = new JButton("Identify Customer Type");
+        identifyTypeButton.setBounds(600, 230, 220, 40);
+        add(identifyTypeButton);
+
+        JButton clearFieldsButton = new JButton("Clear Fields");
+        clearFieldsButton.setBounds(600, 280, 220, 40);
+        add(clearFieldsButton);
+
+        JButton saveButton = new JButton("Save to File");
+        saveButton.setBounds(600, 330, 220, 40);
+        add(saveButton);
+
+        JButton loadButton = new JButton("Load from File");
+        loadButton.setBounds(600, 380, 220, 40);
+        add(loadButton);
+
+        setVisible(true);
+    }
 
     public static void main(String[] args) {
-        NOCApp app = new NOCApp();
-        app.startApplication();
-    }
-
-    public void startApplication() {
-
-        int choice;
-
-        do {
-            System.out.println("==========================================");
-            System.out.println("    Nepal Oil Corporation Management");
-            System.out.println("==========================================");
-            System.out.println("1. Add Domestic Cylinder");
-            System.out.println("2. Add Commercial Cylinder");
-            System.out.println("3. Display All Cylinders");
-            System.out.println("4. Show Final Prices");
-            System.out.println("5. Exit");
-            System.out.print("Enter choice: ");
-
-            choice = sc.nextInt();
-            sc.nextLine();
-
-            switch (choice) {
-                case 1:
-                     addDomesticCylinder();
-                     break;
-                case 2:
-                    addCommercialCylinder();
-                    break;
-                case 3:
-                    displayAllCylinders();
-                    break;
-                case 4: 
-                    showFinalPrices();
-                    break;
-                case 5:
-                    System.out.println("Thank you for using NOC System.");
-                    break;
-                default:
-                    System.out.println("Invalid choice!");
-            }
-
-        } while (choice != 5);
-    }
-
-    
-    public void addDomesticCylinder() {
-
-        System.out.println("=========== Domestic Cylinder Entry ===========");
-
-        System.out.print("Cylinder ID: ");
-        String cylinderId = sc.nextLine();
-
-        System.out.println("Cylinder Type: ");
-        String cylinderType = sc.nextLine();
-
-        System.out.print("Booking ID: ");
-        String bookingId = sc.nextLine();
-
-        System.out.print("Base Price: ");
-        double basePrice = sc.nextDouble();
-
-        System.out.print("Weight: ");
-        double weight = sc.nextDouble();
-        sc.nextLine();
-
-        System.out.print("Citizenship Number: ");
-        String citizenshipNumber = sc.nextLine();
-
-        System.out.print("Quantity: ");
-        int quantity = sc.nextInt();
-
-        System.out.print("Subsidy Amount: ");
-        double subsidyAmount = sc.nextDouble();
-        sc.nextLine();
-
-        DomesticCylinder domestic = new DomesticCylinder(cylinderId, cylinderType, bookingId, basePrice, weight, subsidyAmount, citizenshipNumber, quantity
-        );
-
-        if(domestic.isValid()){
-            cylinders.add(domestic);
-            System.out.println("Domestic cylinder added successfully.");
-        } else {
-            System.out.println("Invalid data type");
-        }
-    }
-
-
-    public void addCommercialCylinder() {
-
-        System.out.println("=========== Commercial Cylinder Entry ===========");
-
-        System.out.print("Business License: ");
-        String businessLicense = sc.nextLine();
-
-        System.out.print("Cylinder ID: ");
-        String cylinderId = sc.nextLine();
-
-        System.out.println("Cylinder Type: ");
-        String cylinderType = sc.nextLine();
-
-        System.out.print("Booking ID: ");
-        String bookingId = sc.nextLine();
-
-        System.out.print("Base Price: ");
-        double basePrice = sc.nextDouble();
-
-        System.out.print("Weight: ");
-        double weight = sc.nextDouble();
-
-        System.out.print("Quantity: ");
-        int quantity = sc.nextInt();
-        sc.nextLine();
-
-        CommercialCylinder commercial = new CommercialCylinder(cylinderId, cylinderType, bookingId, basePrice, weight, businessLicense, quantity);
-
-        if(commercial.isValid()){
-            cylinders.add(commercial);
-            System.out.println("Commercial Cylinder Added Successfully!");
-        } else {
-            System.out.println("Commercial Cylinder not saved due to invalid data.");
-        }
-    }
-
-
-    public void displayAllCylinders() {
-
-        if (cylinders.isEmpty()) {
-            System.out.println("No cylinder records found.");
-            return;
-        }
-
-        for (LPGCylinder cylinder : cylinders) {
-            cylinder.display();
-            System.out.println();
-        }
-    }
-
-    
-    public void showFinalPrices() {
-
-        if (cylinders.isEmpty()) {
-            System.out.println("No cylinder records found.");
-            return;
-        }
-
-        System.out.println("============= FINAL PRICE REPORT =============");
-
-        for (LPGCylinder cylinder : cylinders) {
-
-            System.out.print("Cylinder ID: " + cylinder.getCylinderId());
-
-            if (cylinder instanceof DomesticCylinder d) {
-                System.out.print(" | Type: Domestic");
-                System.out.print(" | Citizen: " + d.getCitizenshipNumber());
-            }
-
-            if (cylinder instanceof CommercialCylinder c) {
-                System.out.print(" | Type: Commercial");
-                System.out.print(" | Business: " + c.getBusinessLicense());
-            }
-
-            System.out.println(" | Final Price: Rs " + cylinder.calculateFinalPrice());
-        }
+        new NOCApp();
     }
 }
