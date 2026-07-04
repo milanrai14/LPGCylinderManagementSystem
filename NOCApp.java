@@ -11,7 +11,7 @@ import javax.swing.JTextField;
 
 public class NOCApp extends JFrame {
     ArrayList<LPGCylinder> cylinders = new ArrayList<LPGCylinder>();
-    
+
 
     public NOCApp() {
 
@@ -99,6 +99,7 @@ public class NOCApp extends JFrame {
         JTextArea displayArea = new JTextArea();
         displayArea.setLineWrap(true);
         displayArea.setWrapStyleWord(true);
+        displayArea.setEditable(false);
 
         JScrollPane scrollPane = new JScrollPane(displayArea);
         scrollPane.setBounds(30, 450, 500, 300);
