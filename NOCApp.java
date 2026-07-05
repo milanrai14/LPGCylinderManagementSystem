@@ -23,13 +23,14 @@ import javax.swing.JTextField;
 public class NOCApp extends JFrame {
     final int CITIZENSHIP_LENGTH = 12;
     ArrayList<LPGCylinder> cylinders = new ArrayList<LPGCylinder>();
+
     // Add this method to NOCApp class
-private boolean isEligibleForSubsidy(String citizenshipNumber, int quantity) {
-    boolean validCitizenship = citizenshipNumber != null 
-            && citizenshipNumber.trim().length() == 12;
-    boolean withinQuota = quantity <= 2; // Assuming first order of the month
-    return validCitizenship && withinQuota;
-}
+    private boolean isEligibleForSubsidy(String citizenshipNumber, int quantity) {
+        boolean validCitizenship = citizenshipNumber != null
+                && citizenshipNumber.trim().length() == 12;
+        boolean withinQuota = quantity <= 2; // Assuming first order of the month
+        return validCitizenship && withinQuota;
+    }
 
     public NOCApp() {
 
@@ -99,8 +100,8 @@ private boolean isEligibleForSubsidy(String citizenshipNumber, int quantity) {
         monthLabel.setBounds(30, 380, 150, 30);
         add(monthLabel);
 
-        String[] months = { "January", "February", "March", "April", "May", "June",
-                "July", "August", "September", "October", "November", "December" };
+        String[] months = { "January", "February", "March", "April", "May", "June", "July", "August", "September",
+                "October", "November", "December" };
         JComboBox<String> monthComboBox = new JComboBox<>(months);
         monthComboBox.setBounds(200, 380, 200, 30);
         add(monthComboBox);
@@ -128,8 +129,8 @@ private boolean isEligibleForSubsidy(String citizenshipNumber, int quantity) {
         weightLabel.setBounds(30, 530, 150, 30);
         add(weightLabel);
 
-        String[] weightList = { "14 kg", "16 Kg", "18 Kg" };
-        JComboBox<String> weightComboBox = new JComboBox<>(weightList);
+        Double[] weightList = { 14.0, 16.0, 18.0 }; // ← Use Double[] (capital D)
+        JComboBox<Double> weightComboBox = new JComboBox<>(weightList);
         weightComboBox.setBounds(200, 530, 200, 30);
         add(weightComboBox);
 
@@ -150,109 +151,163 @@ private boolean isEligibleForSubsidy(String citizenshipNumber, int quantity) {
         JTextField subsidyField = new JTextField("0.0");
         subsidyField.setBounds(200, 630, 200, 30);
         add(subsidyField);
+        // Display Area
+        JTextArea displayArea = new JTextArea();
+        displayArea.setEditable(false);
+        displayArea.setLineWrap(true);
+        displayArea.setWrapStyleWord(true);
+
+        JScrollPane scrollPane = new JScrollPane(displayArea);
+        scrollPane.setBounds(700, 30, 450, 680);
+        add(scrollPane);
 
         // Add Domestic Cylinder
         JButton addDomesticButton = new JButton("Add Domestic Cylinder");
         addDomesticButton.setBounds(460, 30, 200, 35);
         add(addDomesticButton);
-        
 
-        // Listener register for adding domesticCylinder using lamda expression
         addDomesticButton.addActionListener(e -> {
-            String cylinderType = (String) cylinderTypeCombobox.getSelectedItem();
-            System.out.println(cylinderType);
-            String customerName = customerNameField.getText();
-            System.out.println(customerName);
-            String citizenshipNumber = citizenshipField.getText();
-            System.out.println(citizenshipNumber);
-            String bookingId = bookingIdField.getText();
-            System.out.println(bookingId);
-            String bookingMonth = (String) monthComboBox.getSelectedItem();
-            System.out.println(bookingMonth);
-            String cylinderId = cylinderIdField.getText();
-            System.out.println(cylinderId);
-            int quantity = Integer.parseInt(quantityField.getText());
-            System.out.println(quantity);
-            String weight = (String) weightComboBox.getSelectedItem();
-            System.out.println(weight);
-            double basePrice = Double.parseDouble(basePriceField.getText());
-            System.out.println(basePrice);
-            double subsidyAmount = Double.parseDouble(subsidyField.getText());
-            System.out.println(subsidyAmount);
 
-            if (!"Domestic".equals(cylinderType)) {
+            String cylinderType = (String) cylinderTypeCombobox.getSelectedItem();
+            if (!"Domestic".equalsIgnoreCase(cylinderType)) {
                 JOptionPane.showMessageDialog(this,
                         "This button is only for Domestic Cylinder!\n" +
                                 "Please select 'Domestic' from the dropdown.",
                         "Invalid Cylinder Type",
                         JOptionPane.ERROR_MESSAGE);
                 return;
-
             }
+            String customerName = customerNameField.getText().trim();
+            String citizenshipNumber = citizenshipField.getText().trim();
+            String bookingId = bookingIdField.getText().trim();
+            String bookingMonth = (String) monthComboBox.getSelectedItem();
+            String cylinderId = cylinderIdField.getText().trim();
+            int quantity = Integer.parseInt(quantityField.getText());
+            double weight = (Double) weightComboBox.getSelectedItem();
+            double basePrice = Double.parseDouble(basePriceField.getText());
+            double subsidyAmount = Double.parseDouble(subsidyField.getText());
+
             if (!customerName.matches("^[A-Za-z]+ [A-Za-z]+$")) {
-                System.out.println("Invalid name format. Please enter first and last name.");
+                JOptionPane.showMessageDialog(this,
+                        "Invalid name format. Please enter first and last name.",
+                        "Validation Error", JOptionPane.ERROR_MESSAGE);
                 return;
             }
 
-            if (citizenshipNumber == null || citizenshipNumber.trim().isEmpty()) {
-                System.out.println("Cannot be null");
-            } else if (citizenshipNumber.length() != CITIZENSHIP_LENGTH) {
-                System.out.println("Citizenship number must be " + CITIZENSHIP_LENGTH + " digits");
-            } else if (!citizenshipNumber.matches("\\d+")) {
-                System.out.println("Citizenship number must contain only digits (0-9)");
-            } else {
-                System.out.println("Valid citizenship number");
+            if (citizenshipNumber.isEmpty()) {
+                JOptionPane.showMessageDialog(this, "Citizenship number cannot be empty",
+                        "Validation Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+            if (citizenshipNumber.length() != CITIZENSHIP_LENGTH) {
+                JOptionPane.showMessageDialog(this,
+                        "Citizenship number must be " + CITIZENSHIP_LENGTH + " digits",
+                        "Validation Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+            if (!citizenshipNumber.matches("\\d+")) {
+                JOptionPane.showMessageDialog(this,
+                        "Citizenship number must contain only digits (0-9)",
+                        "Validation Error", JOptionPane.ERROR_MESSAGE);
+                return;
             }
 
             for (LPGCylinder cylinder : cylinders) {
                 if (cylinder.getBookingId().equals(bookingId)) {
-                    System.out.println("Booking ID already exists. Please use a unique ID.");
-                    return;
-                }
-
-            }
-
-            for(LPGCylinder cylinder: cylinders){
-                if(cylinder.getCylinderId().equals(cylinderId)){
-                    System.out.println("Cylinder ID already exists. Please use a unique ID.");
+                    JOptionPane.showMessageDialog(this,
+                            "Booking ID already exists. Please use a unique ID.",
+                            "Duplicate ID", JOptionPane.ERROR_MESSAGE);
                     return;
                 }
             }
 
-            if (cylinderId == null || cylinderId.trim().isEmpty()) {
-                System.out.println("Cylinder ID cannot be null or empty");
-            } else if (!cylinderId.matches("NOC-\\d{3}")) {
-                System.out.println("Invalid Cylinder ID format. Use NOC-001");
+            for (LPGCylinder cylinder : cylinders) {
+                if (cylinder.getCylinderId().equals(cylinderId)) {
+                    JOptionPane.showMessageDialog(this,
+                            "Cylinder ID already exists. Please use a unique ID.",
+                            "Duplicate ID", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
             }
 
-            if(quantity <= 0){
-                System.out.println("Quantity cannot be less than or equal to 0");
+            if (cylinderId.isEmpty()) {
+                JOptionPane.showMessageDialog(this, "Cylinder ID cannot be empty",
+                        "Validation Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+            if (!cylinderId.matches("NOC-\\d{3}")) {
+                JOptionPane.showMessageDialog(this,
+                        "Invalid Cylinder ID format. Use NOC-001",
+                        "Validation Error", JOptionPane.ERROR_MESSAGE);
                 return;
             }
 
-            if(basePrice <= 0){
-                System.out.println("Base Price must be greater than 0'");
+            if (quantity <= 0) {
+                JOptionPane.showMessageDialog(this,
+                        "Quantity must be greater than 0",
+                        "Validation Error", JOptionPane.ERROR_MESSAGE);
                 return;
             }
 
-
-            
-
-            if( subsidyAmount <= 0){
-                System.out.println("Subsidy amount cannot be less than 0.");
-            } else if (subsidyAmount > basePrice){
-                System.out.println("Subsidy amount cannot be greater than base price");
+            if (basePrice <= 0) {
+                JOptionPane.showMessageDialog(this,
+                        "Base Price must be greater than 0",
+                        "Validation Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+            if (subsidyAmount < 0) {
+                JOptionPane.showMessageDialog(this,
+                        "Subsidy amount cannot be less than 0",
+                        "Validation Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+            if (subsidyAmount > basePrice) {
+                JOptionPane.showMessageDialog(this,
+                        "Subsidy amount cannot be greater than base price",
+                        "Validation Error", JOptionPane.ERROR_MESSAGE);
+                return;
             }
 
-            if(!isEligibleForSubsidy(citizenshipNumber, quantity)){
-                System.out.println("No eligible for subsidy admount");
+            if (!isEligibleForSubsidy(citizenshipNumber, quantity)) {
+                JOptionPane.showMessageDialog(this,
+                        "Customer is not eligible for subsidy.\nSubsidy will be set to 0.",
+                        "Not Eligible", JOptionPane.WARNING_MESSAGE);
                 subsidyAmount = 0.0;
-                return;
             }
 
-            DomesticCylinder domestic = new DomesticCylinder(cylinderId, cylinderType, bookingId, basePrice, weight, bookingMonth, customerName, subsidyAmount, citizenshipNumber, quantity);
+            DomesticCylinder domestic = new DomesticCylinder(cylinderId,
+ cylinderType, bookingId, basePrice, weight, bookingMonth, customerName,
+ subsidyAmount, citizenshipNumber, quantity);
             cylinders.add(domestic);
-            
+
+            // adding ti text area
+            displayArea.setText("Domestic Cylinder Added Successfully!\n\n");
+            displayArea.append("Cylinder ID: " + cylinderId + "\n");
+            displayArea.append("Customer: " + customerName + "\n");
+            displayArea.append("Citizenship: " + citizenshipNumber + "\n");
+            displayArea.append("Booking ID: " + bookingId + "\n");
+            displayArea.append("Month: " + bookingMonth + "\n");
+            displayArea.append("Quantity: " + quantity + "\n");
+            displayArea.append("Weight: " + weight + " kg\n");
+            displayArea.append("Base Price: Rs " + basePrice + "\n");
+            displayArea.append("Subsidy: Rs " + subsidyAmount + "\n");
+            displayArea.append("Final Price: Rs " + domestic.calculateFinalPrice() + "\n");
+            displayArea.append("\nTotal Cylinders in System: " + cylinders.size());
+
+            customerNameField.setText("");
+            citizenshipField.setText("");
+            bookingIdField.setText("");
+            cylinderIdField.setText("");
+            quantityField.setText("");
+            basePriceField.setText("");
+            subsidyField.setText("0.0");
+            cylinderTypeCombobox.setSelectedIndex(0);
+
+            JOptionPane.showMessageDialog(this,
+                    "Domestic Cylinder added successfully!\n\n" +
+                            "Final Price: Rs " + domestic.calculateFinalPrice(),
+                    "Success",
+                    JOptionPane.INFORMATION_MESSAGE);
 
         });
 
@@ -295,16 +350,6 @@ private boolean isEligibleForSubsidy(String citizenshipNumber, int quantity) {
         JButton clearButton = new JButton("Clear");
         clearButton.setBounds(460, 430, 200, 35);
         add(clearButton);
-
-        // Display Area
-        JTextArea displayArea = new JTextArea();
-        displayArea.setEditable(false);
-        displayArea.setLineWrap(true);
-        displayArea.setWrapStyleWord(true);
-
-        JScrollPane scrollPane = new JScrollPane(displayArea);
-        scrollPane.setBounds(700, 30, 450, 680);
-        add(scrollPane);
 
         setVisible(true);
     }
