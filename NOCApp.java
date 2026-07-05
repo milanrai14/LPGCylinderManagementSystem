@@ -1,22 +1,17 @@
-import java.util.ArrayList;
-
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
 public class NOCApp extends JFrame {
-    ArrayList<LPGCylinder> cylinders = new ArrayList<LPGCylinder>();
-
 
     public NOCApp() {
 
         setTitle("NEA Electricity Billing System");
-        setSize(1200, 900);
+        setSize(1200, 800);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLayout(null);
@@ -26,8 +21,8 @@ public class NOCApp extends JFrame {
         customerTypeLabel.setBounds(30, 30, 150, 30);
         add(customerTypeLabel);
 
-        String[] types = { "Select One", "Residential", "Commercial" };
-        JComboBox<String> customerTypeComboBox = new JComboBox<>(types);
+        String[] customerTypes = { "Select One", "Domestic", "Commercial" };
+        JComboBox<String> customerTypeComboBox = new JComboBox<>(customerTypes);
         customerTypeComboBox.setBounds(200, 30, 200, 30);
         add(customerTypeComboBox);
 
@@ -40,7 +35,7 @@ public class NOCApp extends JFrame {
         customerIdField.setBounds(200, 80, 200, 30);
         add(customerIdField);
 
-        // Customer Name
+        // Customer Name (Domestic)
         JLabel customerNameLabel = new JLabel("Customer Name:");
         customerNameLabel.setBounds(30, 130, 150, 30);
         add(customerNameLabel);
@@ -49,188 +44,144 @@ public class NOCApp extends JFrame {
         customerNameField.setBounds(200, 130, 200, 30);
         add(customerNameField);
 
-        // Units Consumed
-        JLabel unitsLabel = new JLabel("Units Consumed:");
-        unitsLabel.setBounds(30, 180, 150, 30);
-        add(unitsLabel);
+        // Organization Name (Commercial)
+        JLabel organizationLabel = new JLabel("Organization Name:");
+        organizationLabel.setBounds(30, 180, 150, 30);
+        add(organizationLabel);
 
-        JTextField unitsField = new JTextField();
-        unitsField.setBounds(200, 180, 200, 30);
-        add(unitsField);
+        JTextField organizationField = new JTextField();
+        organizationField.setBounds(200, 180, 200, 30);
+        add(organizationField);
 
-        // Rate Per Unit
-        JLabel rateLabel = new JLabel("Rate Per Unit:");
-        rateLabel.setBounds(30, 230, 150, 30);
-        add(rateLabel);
-
-        JTextField rateField = new JTextField();
-        rateField.setBounds(200, 230, 200, 30);
-        add(rateField);
-
-        // Citizenship Number
+        // Citizenship Number (Domestic)
         JLabel citizenshipLabel = new JLabel("Citizenship Number:");
-        citizenshipLabel.setBounds(30, 280, 150, 30);
+        citizenshipLabel.setBounds(30, 230, 150, 30);
         add(citizenshipLabel);
 
         JTextField citizenshipField = new JTextField();
-        citizenshipField.setBounds(200, 280, 200, 30);
-
+        citizenshipField.setBounds(200, 230, 200, 30);
         add(citizenshipField);
 
-        // Subsidy Amount
-        JLabel subsidyLabel = new JLabel("Subsidy Amount:");
-        subsidyLabel.setBounds(30, 330, 150, 30);
-        add(subsidyLabel);
-
-        JTextField subsidyField = new JTextField("0.0");
-        subsidyField.setBounds(200, 330, 200, 30);
-        add(subsidyField);
-
-        // Business Registration Number
-        JLabel businessLabel = new JLabel("Business Registration Number:");
-        businessLabel.setBounds(30, 380, 180, 30);
+        // Business License Number (Commercial)
+        JLabel businessLabel = new JLabel("Business License Number:");
+        businessLabel.setBounds(30, 280, 170, 30);
         add(businessLabel);
 
         JTextField businessField = new JTextField();
-        businessField.setBounds(220, 380, 180, 30);
+        businessField.setBounds(200, 280, 200, 30);
         add(businessField);
 
-        // Display Area
-        JTextArea displayArea = new JTextArea();
-        displayArea.setLineWrap(true);
-        displayArea.setWrapStyleWord(true);
-        displayArea.setEditable(false);
+        // Cylinder ID
+        JLabel cylinderIdLabel = new JLabel("Cylinder ID:");
+        cylinderIdLabel.setBounds(30, 330, 150, 30);
+        add(cylinderIdLabel);
 
-        JScrollPane scrollPane = new JScrollPane(displayArea);
-        scrollPane.setBounds(30, 450, 500, 300);
-        add(scrollPane);
+        JTextField cylinderIdField = new JTextField();
+        cylinderIdField.setBounds(200, 330, 200, 30);
+        add(cylinderIdField);
 
-        // Buttons
-        JButton addResidentialButton = new JButton("Add Residential Customer");
-        addResidentialButton.setBounds(600, 30, 220, 40);
-        add(addResidentialButton);
+        // Cylinder Type
+        JLabel cylinderTypeLabel = new JLabel("Cylinder Type:");
+        cylinderTypeLabel.setBounds(30, 380, 150, 30);
+        add(cylinderTypeLabel);
 
-        // Listener register gareeko using lamda expression
-        addResidentialButton.addActionListener(e -> {
-            String customerType = (String) customerTypeComboBox.getSelectedItem();
-            System.out.println(customerType);
-            String customerId = customerIdField.getText();
-            System.out.println(customerId);
-            String customerName = customerNameField.getText();
-            System.out.println(customerName);
-            String units = unitsField.getText();
-            System.out.println(units);
-            String rate = rateField.getText();
-            System.out.println(rate);
+        String[] cylinderTypes = { "14.2 Kg", "19 Kg", "47.5 Kg" };
+        JComboBox<String> cylinderTypeComboBox = new JComboBox<>(cylinderTypes);
+        cylinderTypeComboBox.setBounds(200, 380, 200, 30);
+        add(cylinderTypeComboBox);
 
-            if (!"Residential".equals(customerType)) {
-                JOptionPane.showMessageDialog(null,
-                        "This button is only for Residential customers!\n" +
-                                "Please select 'Residential' from the dropdown.",
-                        "Invalid Customer Type",
-                        JOptionPane.ERROR_MESSAGE);
-                return;
-            }
+        // Booking ID
+        JLabel bookingIdLabel = new JLabel("Booking ID:");
+        bookingIdLabel.setBounds(30, 430, 150, 30);
+        add(bookingIdLabel);
 
-            if (customerId.trim().isEmpty() || units.trim().isEmpty() || rate.trim().isEmpty()) {
-                JOptionPane.showMessageDialog(null, "Enter the valid requirement", "Invalid Entry",
-                        JOptionPane.ERROR_MESSAGE);
-                return;
-            }
+        JTextField bookingIdField = new JTextField();
+        bookingIdField.setBounds(200, 430, 200, 30);
+        add(bookingIdField);
 
-            JOptionPane.showMessageDialog(null,
-                    "Customer added successfully!\n" +
-                            "Type: " + customerType + "\n" +
-                            "ID: " + customerId + "\n" +
-                            "Name: " + customerName + "\n" +
-                            "Units: " + units + "\n" +
-                            "Rate: " + rate,
-                    "Success",
-                    JOptionPane.INFORMATION_MESSAGE);
-            displayArea.append("Customer Added Successfully\n");
-            displayArea.append("--------------------------------------\n");
-            displayArea.append("Type: " + customerType + "\n");
-            displayArea.append("ID: " + customerId + "\n");
-            displayArea.append("Name: " + customerName + "\n");
-            displayArea.append("Units: " + units + "\n");
-            displayArea.append("Rate: " + rate + "\n");
-            displayArea.append("--------------------------------------\n");
+        // Quantity of Ordered Cylinders
+        JLabel quantityLabel = new JLabel("Quantity of Order:");
+        quantityLabel.setBounds(30, 480, 150, 30);
+        add(quantityLabel);
 
-        });
+        JTextField quantityField = new JTextField();
+        quantityField.setBounds(200, 480, 200, 30);
+        add(quantityField);
 
-        JButton addCommercialButton = new JButton("Add Commercial Customer");
-        addCommercialButton.setBounds(600, 80, 220, 40);
+        // Weight
+        JLabel weightLabel = new JLabel("Weight (Kg):");
+        weightLabel.setBounds(30, 530, 150, 30);
+        add(weightLabel);
+
+        JTextField weightField = new JTextField();
+        weightField.setBounds(200, 530, 200, 30);
+        add(weightField);
+
+        // Base Price
+        JLabel basePriceLabel = new JLabel("Base Price:");
+        basePriceLabel.setBounds(30, 580, 150, 30);
+        add(basePriceLabel);
+
+        JTextField basePriceField = new JTextField();
+        basePriceField.setBounds(200, 580, 200, 30);
+        add(basePriceField);
+
+        // Subsidy Amount (Domestic)
+        JLabel subsidyLabel = new JLabel("Subsidy Amount:");
+        subsidyLabel.setBounds(30, 630, 150, 30);
+        add(subsidyLabel);
+
+        JTextField subsidyField = new JTextField("0.0");
+        subsidyField.setBounds(200, 630, 200, 30);
+        add(subsidyField);
+
+        // Buttons - moved closer to input fields
+        JButton addDomesticButton = new JButton("Add Domestic");
+        addDomesticButton.setBounds(440, 30, 150, 35);
+        add(addDomesticButton);
+
+        JButton addCommercialButton = new JButton("Add Commercial");
+        addCommercialButton.setBounds(440, 80, 150, 35);
         add(addCommercialButton);
 
-        // Listner register for commercial
-        addCommercialButton.addActionListener(e -> {
-            String customerType = (String) customerTypeComboBox.getSelectedItem();
-            System.out.println(customerType);
-            String customerId = customerIdField.getText();
-            System.out.println(customerId);
-            String customerName = customerNameField.getText();
-            System.out.println(customerName);
-            String units = unitsField.getText();
-            System.out.println(units);
-            String rate = rateField.getText();
-            System.out.println(rate);
+        JButton calculatePriceButton = new JButton("Calculate Price");
+        calculatePriceButton.setBounds(440, 130, 150, 35);
+        add(calculatePriceButton);
 
-            if (!"Commercial".equals(customerType)) {
-                JOptionPane.showMessageDialog(null,
-                        "This button is only for Commerical customers!\n" +
-                                "Please select 'Residential' from the dropdown.",
-                        "Invalid Customer Type",
-                        JOptionPane.ERROR_MESSAGE);
-                return;
-            }
-
-            if (customerId.trim().isEmpty() || units.trim().isEmpty() || rate.trim().isEmpty()
-                    || customerName.trim().isEmpty()) {
-                JOptionPane.showMessageDialog(null, "Enter the valid requirement", "Invalid Entry",
-                        JOptionPane.ERROR_MESSAGE);
-                return;
-            }
-
-            JOptionPane.showMessageDialog(null,
-                    "Customer added successfully!\n" +
-                            "Type: " + customerType + "\n" +
-                            "ID: " + customerId + "\n" +
-                            "Name: " + customerName + "\n" +
-                            "Units: " + units + "\n" +
-                            "Rate: " + rate,
-                    "Success",
-                    JOptionPane.INFORMATION_MESSAGE);
-        });
-
-        JButton calculateButton = new JButton("Calculate Bill");
-        calculateButton.setBounds(600, 130, 220, 40);
-        add(calculateButton);
-
-        // Listner of calculation
-        calculateButton.addActionListener(e -> {
-
-        });
-
-        JButton displayAllButton = new JButton("Display All Customers");
-        displayAllButton.setBounds(600, 180, 220, 40);
+        JButton displayAllButton = new JButton("Display All");
+        displayAllButton.setBounds(440, 180, 150, 35);
         add(displayAllButton);
 
-        JButton identifyTypeButton = new JButton("Identify Customer Type");
-        identifyTypeButton.setBounds(600, 230, 220, 40);
+        JButton identifyTypeButton = new JButton("Identify Type");
+        identifyTypeButton.setBounds(440, 230, 150, 35);
         add(identifyTypeButton);
 
-        JButton clearFieldsButton = new JButton("Clear Fields");
-        clearFieldsButton.setBounds(600, 280, 220, 40);
-        add(clearFieldsButton);
+        JButton clearButton = new JButton("Clear Fields");
+        clearButton.setBounds(440, 280, 150, 35);
+        add(clearButton);
 
         JButton saveButton = new JButton("Save to File");
-        saveButton.setBounds(600, 330, 220, 40);
+        saveButton.setBounds(440, 330, 150, 35);
         add(saveButton);
 
         JButton loadButton = new JButton("Load from File");
-        loadButton.setBounds(600, 380, 220, 40);
+        loadButton.setBounds(440, 380, 150, 35);
         add(loadButton);
 
+        JButton exitButton = new JButton("Exit");
+        exitButton.setBounds(440, 430, 150, 35);
+        add(exitButton);
+
+        // Display Area
+        JTextArea displayArea = new JTextArea();
+        displayArea.setEditable(false);
+        displayArea.setLineWrap(true);
+        displayArea.setWrapStyleWord(true);
+
+        JScrollPane scrollPane = new JScrollPane(displayArea);
+        scrollPane.setBounds(630, 30, 500, 630);
+        add(scrollPane);
+        
         setVisible(true);
     }
 
