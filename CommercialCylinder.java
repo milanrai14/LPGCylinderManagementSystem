@@ -7,6 +7,7 @@
  * @version 1.1.1.1
  */
 public class CommercialCylinder extends LPGCylinder {
+    private String organizationName;
     private String businessLicense;
     private int quantity;
     private double commercialDiscount = 0.0;
@@ -20,19 +21,29 @@ public class CommercialCylinder extends LPGCylinder {
      * @param bookingId       the booking ID assigned to the cylinder
      * @param basePrice       the base price of the commercial cylinder
      * @param weight          the weight of the commercial cylinder in kilograms
+     * @param organization    the name of the organization who ordered the cylinder
      * @param businessLicense the business licecnse of the business or company
      * @param quantity        the number of ordered cylinder
      */
     public CommercialCylinder(String cylinderId, String cylinderType,
-            String bookingId, double basePrice, double weight,
+            String bookingId, double basePrice, double weight, String month, String organizationName,
             String businessLicense, int quantity) {
 
-        super(cylinderId, cylinderType, bookingId, basePrice, weight);
+        super(cylinderId, cylinderType, bookingId, basePrice, weight, month);
         setBusinessLicense(businessLicense);
         setQuantity(quantity);
     }
 
     // Getter method
+
+    /**
+     * Returns the name of the organization
+     * 
+     * @return the name of organization
+     */
+    public String getOrganizationName(){
+        return organizationName;
+    }
 
     /**
      * Returns the license of business or company
@@ -71,6 +82,19 @@ public class CommercialCylinder extends LPGCylinder {
     }
 
     // Setter method
+
+    /**
+     * Sets the organization name with the validation
+     * 
+     * @param organizationName
+     */
+    public void setOrganizationName(String organizationName){
+        if(organizationName == null || organizationName.trim().isEmpty()){
+            System.out.println("Organization name cannot be empty");
+            return;
+        }
+        this.organizationName = organizationName.trim();
+    }
 
     /**
      * Sets the business license number
