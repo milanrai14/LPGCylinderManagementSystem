@@ -30,6 +30,7 @@ public class CommercialCylinder extends LPGCylinder {
             String businessLicense, int quantity) {
 
         super(cylinderId, cylinderType, bookingId, basePrice, weight, month);
+        setOrganizationName(organizationName);
         setBusinessLicense(businessLicense);
         setQuantity(quantity);
     }
