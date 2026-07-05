@@ -1,3 +1,4 @@
+
 /**
  * NOCApp is the main GUI application for the Nepal Oil Corporation Cylinder Management System.
  * It provides a graphical interface for managing LPG cylinder bookings including
@@ -14,11 +15,13 @@ import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
 public class NOCApp extends JFrame {
+    final int CITIZENSHIP_LENGTH = 12;
     ArrayList<LPGCylinder> cylinders = new ArrayList<LPGCylinder>();
 
     public NOCApp() {
@@ -38,15 +41,6 @@ public class NOCApp extends JFrame {
         JComboBox<String> cylinderTypeCombobox = new JComboBox<>(cylinderTypes);
         cylinderTypeCombobox.setBounds(200, 30, 200, 30);
         add(cylinderTypeCombobox);
-
-        // Customer ID
-        JLabel customerIdLabel = new JLabel("Customer ID:");
-        customerIdLabel.setBounds(30, 80, 150, 30);
-        add(customerIdLabel);
-
-        JTextField customerIdField = new JTextField();
-        customerIdField.setBounds(200, 80, 200, 30);
-        add(customerIdField);
 
         // Customer Name (Domestic only)
         JLabel customerNameLabel = new JLabel("Customer Name:");
@@ -119,7 +113,7 @@ public class NOCApp extends JFrame {
         add(quantityLabel);
 
         JTextField quantityField = new JTextField();
-        quantityField.setBounds(200, 480, 200, 30); 
+        quantityField.setBounds(200, 480, 200, 30);
         add(quantityField);
 
         // Weight
@@ -131,10 +125,10 @@ public class NOCApp extends JFrame {
         JComboBox<String> weightComboBox = new JComboBox<>(weightList);
         weightComboBox.setBounds(200, 530, 200, 30);
         add(weightComboBox);
-    
+
         // Base Price
         JLabel basePriceLabel = new JLabel("Base Price:");
-        basePriceLabel.setBounds(30, 580, 150, 30); 
+        basePriceLabel.setBounds(30, 580, 150, 30);
         add(basePriceLabel);
 
         JTextField basePriceField = new JTextField();
@@ -143,24 +137,22 @@ public class NOCApp extends JFrame {
 
         // Subsidy Amount (Domestic only)
         JLabel subsidyLabel = new JLabel("Subsidy Amount:");
-        subsidyLabel.setBounds(30, 630, 200, 30); 
+        subsidyLabel.setBounds(30, 630, 200, 30);
         add(subsidyLabel);
 
         JTextField subsidyField = new JTextField("0.0");
-        subsidyField.setBounds(200, 630, 200, 30);  
+        subsidyField.setBounds(200, 630, 200, 30);
         add(subsidyField);
 
-        //Add Domestic Cylinder
+        // Add Domestic Cylinder
         JButton addDomesticButton = new JButton("Add Domestic Cylinder");
         addDomesticButton.setBounds(460, 30, 200, 35);
         add(addDomesticButton);
 
-        //Listener register for adding domesticCylinder using lamda expression
-        addDomesticButton.addActionListener(e ->{
+        // Listener register for adding domesticCylinder using lamda expression
+        addDomesticButton.addActionListener(e -> {
             String cylinderType = (String) cylinderTypeCombobox.getSelectedItem();
             System.out.println(cylinderType);
-            String customerID = customerIdField.getText();
-            System.out.println(customerID);
             String customerName = customerNameField.getText();
             System.out.println(customerName);
             String citizenshipNumber = citizenshipField.getText();
@@ -172,50 +164,97 @@ public class NOCApp extends JFrame {
             String cylinderId = cylinderIdField.getText();
             System.out.println(cylinderId);
             int quantity = Integer.parseInt(quantityField.getText());
-            System.out.println(quantity);   
+            System.out.println(quantity);
             String weight = (String) weightComboBox.getSelectedItem();
             System.out.println(weight);
             double basePrice = Double.parseDouble(basePriceField.getText());
-            System.out.println(basePrice);  
+            System.out.println(basePrice);
             double subsidyAmount = Double.parseDouble(subsidyField.getText());
             System.out.println(subsidyAmount);
-            
-            if(!"Commercial".equals(cylinderType)){
+
+            if (!"Domestic".equals(cylinderType)) {
+                JOptionPane.showMessageDialog(this,
+                        "This button is only for Domestic Cylinder!\n" +
+                                "Please select 'Domestic' from the dropdown.",
+                        "Invalid Cylinder Type",
+                        JOptionPane.ERROR_MESSAGE);
+                return;
 
             }
+            if (!customerName.matches("^[A-Za-z]+ [A-Za-z]+$")) {
+                System.out.println("Invalid name format. Please enter first and last name.");
+                return;
+            }
+
+            if (citizenshipNumber == null || citizenshipNumber.trim().isEmpty()) {
+                System.out.println("Cannot be null");
+            } else if (citizenshipNumber.length() != CITIZENSHIP_LENGTH) {
+                System.out.println("Citizenship number must be " + CITIZENSHIP_LENGTH + " digits");
+            } else if (!citizenshipNumber.matches("\\d+")) {
+                System.out.println("Citizenship number must contain only digits (0-9)");
+            } else {
+                System.out.println("Valid citizenship number");
+            }
+
+            for (LPGCylinder cylinder : cylinders) {
+                if (cylinder.getBookingId().equals(bookingId)) {
+                    System.out.println("Booking ID already exists. Please use a unique ID.");
+                    return;
+                }
+
+            }
+
+            for(LPGCylinder cylinder: cylinders){
+                if(cylinder.getCylinderId().equals(cylinderId)){
+                    System.out.println("Cylinder ID already exists. Please use a unique ID.");
+                    return;
+                }
+            }
+
+            if (cylinderId == null || cylinderId.trim().isEmpty()) {
+                System.out.println("Cylinder ID cannot be null or empty");
+            } else if (!cylinderId.matches("NOC-\\d{3}")) {
+                System.out.println("Invalid Cylinder ID format. Use NOC-001");
+            }
+
+            if(quantity <= 0){
+                System.out.println("Quantity cannot be less than or equal to 0");
+                return;
+            }
+
         });
 
-        //Add Commercial Cylinder
+        // Add Commercial Cylinder
         JButton addCommercialButton = new JButton("Add Commercial Cylinder");
         addCommercialButton.setBounds(460, 80, 200, 35);
         add(addCommercialButton);
 
-        //Calculate Bulk Discount
+        // Calculate Bulk Discount
         JButton calculateDiscountButton = new JButton("Calculate Bulk Discount");
         calculateDiscountButton.setBounds(460, 130, 200, 35);
         add(calculateDiscountButton);
 
-        //Calculate Price after Subsidy
+        // Calculate Price after Subsidy
         JButton calculatePriceButton = new JButton("Calculate Price after Subsidy");
         calculatePriceButton.setBounds(460, 180, 200, 35);
         add(calculatePriceButton);
 
-        //Identify Cylinder Type
+        // Identify Cylinder Type
         JButton identifyTypeButton = new JButton("Identify Cylinder Type");
         identifyTypeButton.setBounds(460, 230, 200, 35);
         add(identifyTypeButton);
 
-        //Display All
+        // Display All
         JButton displayAllButton = new JButton("Display All");
         displayAllButton.setBounds(460, 280, 200, 35);
         add(displayAllButton);
 
-        //Export to File
+        // Export to File
         JButton exportButton = new JButton("Export to File");
         exportButton.setBounds(460, 330, 200, 35);
         add(exportButton);
 
-        //Load From File
+        // Load From File
         JButton loadButton = new JButton("Load From File");
         loadButton.setBounds(460, 380, 200, 35);
         add(loadButton);
