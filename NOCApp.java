@@ -1,3 +1,15 @@
+/**
+ * NOCApp is the main GUI application for the Nepal Oil Corporation Cylinder Management System.
+ * It provides a graphical interface for managing LPG cylinder bookings including
+ * adding domestic/commercial cylinders, calculating discounts and subsidies,
+ * displaying records, and file operations.
+ * 
+ * All cylinder records are stored in an ArrayList collection.
+ * 
+ * @author Milan Rai
+ * @version 1.1.1.1
+ */
+import java.util.ArrayList;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
@@ -7,6 +19,7 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
 public class NOCApp extends JFrame {
+    ArrayList<LPGCylinder> cylinders = new ArrayList<LPGCylinder>();
 
     public NOCApp() {
 
@@ -17,14 +30,14 @@ public class NOCApp extends JFrame {
         setLayout(null);
 
         // customer type
-        JLabel customerTypeLabel = new JLabel("Customer Type:");
-        customerTypeLabel.setBounds(30, 30, 150, 30);
-        add(customerTypeLabel);
+        JLabel cylinderTypeLabel = new JLabel("Customer Type:");
+        cylinderTypeLabel.setBounds(30, 30, 150, 30);
+        add(cylinderTypeLabel);
 
-        String[] customerTypes = { "Select One", "Domestic", "Commercial" };
-        JComboBox<String> customerTypeComboBox = new JComboBox<>(customerTypes);
-        customerTypeComboBox.setBounds(200, 30, 200, 30);
-        add(customerTypeComboBox);
+        String[] cylinderTypes = { "Select One", "Domestic", "Commercial" };
+        JComboBox<String> cylinderTypeCombobox = new JComboBox<>(cylinderTypes);
+        cylinderTypeCombobox.setBounds(200, 30, 200, 30);
+        add(cylinderTypeCombobox);
 
         // Customer ID
         JLabel customerIdLabel = new JLabel("Customer ID:");
@@ -100,59 +113,77 @@ public class NOCApp extends JFrame {
         cylinderIdField.setBounds(200, 430, 200, 30);
         add(cylinderIdField);
 
-        // Cylinder Type
-        JLabel cylinderTypeLabel = new JLabel("Cylinder Type:");
-        cylinderTypeLabel.setBounds(30, 480, 150, 30);
-        add(cylinderTypeLabel);
-
-        String[] cylinderTypes = { "14.2 Kg", "19 Kg", "47.5 Kg" };
-        JComboBox<String> cylinderTypeComboBox = new JComboBox<>(cylinderTypes);
-        cylinderTypeComboBox.setBounds(200, 480, 200, 30);
-        add(cylinderTypeComboBox);
-
         // Quantity of Ordered Cylinders
         JLabel quantityLabel = new JLabel("Quantity of Order:");
-        quantityLabel.setBounds(30, 530, 200, 30);
+        quantityLabel.setBounds(30, 480, 150, 30);
         add(quantityLabel);
 
         JTextField quantityField = new JTextField();
-        quantityField.setBounds(200, 530, 200, 30);
+        quantityField.setBounds(200, 480, 200, 30); 
         add(quantityField);
 
         // Weight
-        // Weight
         JLabel weightLabel = new JLabel("Weight (Kg):");
-        weightLabel.setBounds(30, 580, 150, 30);
+        weightLabel.setBounds(30, 530, 150, 30);
         add(weightLabel);
 
-        String[] weight = { "14 kg", "16 Kg", "18 Kg" };
-        JComboBox<String> weightComboBox = new JComboBox<>(weight);
-        weightComboBox.setBounds(200, 580, 200, 30);
+        String[] weightList = { "14 kg", "16 Kg", "18 Kg" };
+        JComboBox<String> weightComboBox = new JComboBox<>(weightList);
+        weightComboBox.setBounds(200, 530, 200, 30);
         add(weightComboBox);
     
         // Base Price
         JLabel basePriceLabel = new JLabel("Base Price:");
-        basePriceLabel.setBounds(30, 630, 150, 30);
+        basePriceLabel.setBounds(30, 580, 150, 30); 
         add(basePriceLabel);
 
         JTextField basePriceField = new JTextField();
-        basePriceField.setBounds(200, 630, 200, 30);
+        basePriceField.setBounds(200, 580, 200, 30);
         add(basePriceField);
 
         // Subsidy Amount (Domestic only)
-        JLabel subsidyLabel = new JLabel("Subsidy Amount (Domestic):");
-        subsidyLabel.setBounds(30, 680, 200, 30);
+        JLabel subsidyLabel = new JLabel("Subsidy Amount:");
+        subsidyLabel.setBounds(30, 630, 200, 30); 
         add(subsidyLabel);
 
         JTextField subsidyField = new JTextField("0.0");
-        subsidyField.setBounds(200, 680, 200, 30);
+        subsidyField.setBounds(200, 630, 200, 30);  
         add(subsidyField);
-
 
         //Add Domestic Cylinder
         JButton addDomesticButton = new JButton("Add Domestic Cylinder");
         addDomesticButton.setBounds(460, 30, 200, 35);
         add(addDomesticButton);
+
+        //Listener register for adding domesticCylinder using lamda expression
+        addDomesticButton.addActionListener(e ->{
+            String cylinderType = (String) cylinderTypeCombobox.getSelectedItem();
+            System.out.println(cylinderType);
+            String customerID = customerIdField.getText();
+            System.out.println(customerID);
+            String customerName = customerNameField.getText();
+            System.out.println(customerName);
+            String citizenshipNumber = citizenshipField.getText();
+            System.out.println(citizenshipNumber);
+            String bookingId = bookingIdField.getText();
+            System.out.println(bookingId);
+            String bookingMonth = (String) monthComboBox.getSelectedItem();
+            System.out.println(bookingMonth);
+            String cylinderId = cylinderIdField.getText();
+            System.out.println(cylinderId);
+            int quantity = Integer.parseInt(quantityField.getText());
+            System.out.println(quantity);   
+            String weight = (String) weightComboBox.getSelectedItem();
+            System.out.println(weight);
+            double basePrice = Double.parseDouble(basePriceField.getText());
+            System.out.println(basePrice);  
+            double subsidyAmount = Double.parseDouble(subsidyField.getText());
+            System.out.println(subsidyAmount);
+            
+            if(!"Commercial".equals(cylinderType)){
+
+            }
+        });
 
         //Add Commercial Cylinder
         JButton addCommercialButton = new JButton("Add Commercial Cylinder");
