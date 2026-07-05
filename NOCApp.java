@@ -23,6 +23,13 @@ import javax.swing.JTextField;
 public class NOCApp extends JFrame {
     final int CITIZENSHIP_LENGTH = 12;
     ArrayList<LPGCylinder> cylinders = new ArrayList<LPGCylinder>();
+    // Add this method to NOCApp class
+private boolean isEligibleForSubsidy(String citizenshipNumber, int quantity) {
+    boolean validCitizenship = citizenshipNumber != null 
+            && citizenshipNumber.trim().length() == 12;
+    boolean withinQuota = quantity <= 2; // Assuming first order of the month
+    return validCitizenship && withinQuota;
+}
 
     public NOCApp() {
 
@@ -148,6 +155,7 @@ public class NOCApp extends JFrame {
         JButton addDomesticButton = new JButton("Add Domestic Cylinder");
         addDomesticButton.setBounds(460, 30, 200, 35);
         add(addDomesticButton);
+        
 
         // Listener register for adding domesticCylinder using lamda expression
         addDomesticButton.addActionListener(e -> {
@@ -221,6 +229,30 @@ public class NOCApp extends JFrame {
                 System.out.println("Quantity cannot be less than or equal to 0");
                 return;
             }
+
+            if(basePrice <= 0){
+                System.out.println("Base Price must be greater than 0'");
+                return;
+            }
+
+
+            
+
+            if( subsidyAmount <= 0){
+                System.out.println("Subsidy amount cannot be less than 0.");
+            } else if (subsidyAmount > basePrice){
+                System.out.println("Subsidy amount cannot be greater than base price");
+            }
+
+            if(!isEligibleForSubsidy(citizenshipNumber, quantity)){
+                System.out.println("No eligible for subsidy admount");
+                subsidyAmount = 0.0;
+                return;
+            }
+
+            DomesticCylinder domestic = new DomesticCylinder(cylinderId, cylinderType, bookingId, basePrice, weight, bookingMonth, customerName, subsidyAmount, citizenshipNumber, quantity);
+            cylinders.add(domestic);
+            
 
         });
 
