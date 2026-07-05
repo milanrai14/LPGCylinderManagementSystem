@@ -25,11 +25,43 @@ public class NOCApp extends JFrame {
     final int CITIZENSHIP_LENGTH = 12;
     ArrayList<LPGCylinder> cylinders = new ArrayList<LPGCylinder>();
 
-    private boolean isEligibleForSubsidy(String citizenshipNumber, int quantity) {
+    public boolean isEligibleForSubsidy(String citizenshipNumber, int quantity) {
         boolean validCitizenship = citizenshipNumber != null
                 && citizenshipNumber.trim().length() == 12;
         boolean withinQuota = quantity <= 2;
         return validCitizenship && withinQuota;
+    }
+
+    public void identifyCylinderType(String cylinderId) {
+        for (LPGCylinder cylinder : cylinders) {
+
+            if (cylinder.getCylinderId().equals(cylinderId)) {
+
+                if (cylinder instanceof DomesticCylinder) {
+                    JOptionPane.showMessageDialog(this,
+                            "Cylinder Type: Domestic Cylinder");
+                } else if (cylinder instanceof CommercialCylinder) {
+                    JOptionPane.showMessageDialog(this,
+                            "Cylinder Type: Commercial Cylinder");
+                } else {
+                    JOptionPane.showMessageDialog(this,
+                            "Unknown Cylinder Type");
+                }
+                return;
+            }
+        }
+        JOptionPane.showMessageDialog(this,
+                "Cylinder ID not found.");
+    }
+
+    public void displayAll() {
+        if (cylinders.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "No cylinder records found.");
+        }
+
+        for (LPGCylinder cylinder : cylinders) {
+            cylinder.display();
+        }
     }
 
     public NOCApp() {
@@ -161,7 +193,7 @@ public class NOCApp extends JFrame {
 
                 businessLicenseField.setEditable(false);
                 businessLicenseField.setBackground(Color.LIGHT_GRAY);
-                
+
                 customerNameField.setEditable(true);
                 customerNameField.setBackground(Color.WHITE);
 
@@ -179,6 +211,19 @@ public class NOCApp extends JFrame {
 
                 citizenshipField.setEditable(false);
                 citizenshipField.setBackground(Color.LIGHT_GRAY);
+            } else if ("Select One".equals(cylinderType)) {
+                customerNameField.setEditable(true);
+                customerNameField.setBackground(Color.WHITE);
+
+                citizenshipField.setEditable(true);
+                citizenshipField.setBackground(Color.WHITE);
+
+                organizationField.setEditable(true);
+                organizationField.setBackground(Color.WHITE);
+
+                businessLicenseField.setEditable(true);
+                businessLicenseField.setBackground(Color.WHITE);
+
             }
         });
 
@@ -197,6 +242,7 @@ public class NOCApp extends JFrame {
         addDomesticButton.setBounds(460, 30, 200, 35);
         add(addDomesticButton);
 
+        // domestic add button ko lagi addAvtionListner
         addDomesticButton.addActionListener(e -> {
 
             String cylinderType = (String) cylinderTypeCombobox.getSelectedItem();
@@ -347,6 +393,8 @@ public class NOCApp extends JFrame {
         addCommercialButton.setBounds(460, 80, 200, 35);
         add(addCommercialButton);
 
+        // commercial cylinder ko lagi addActionListner
+
         // Calculate Bulk Discount
         JButton calculateDiscountButton = new JButton("Calculate Bulk Discount");
         calculateDiscountButton.setBounds(460, 130, 200, 35);
@@ -361,6 +409,14 @@ public class NOCApp extends JFrame {
         JButton identifyTypeButton = new JButton("Identify Cylinder Type");
         identifyTypeButton.setBounds(460, 230, 200, 35);
         add(identifyTypeButton);
+
+        // Identifycylinder tpye ko lagi addAction Listner
+        identifyTypeButton.addActionListener(e -> {
+            String cylinderId = cylinderIdField.getText().trim();
+
+            identifyCylinderType(cylinderId);
+
+        });
 
         // Display All
         JButton displayAllButton = new JButton("Display All");
@@ -381,6 +437,29 @@ public class NOCApp extends JFrame {
         JButton clearButton = new JButton("Clear");
         clearButton.setBounds(460, 430, 200, 35);
         add(clearButton);
+
+        // clearbutton ko lagi addActionListner
+        clearButton.addActionListener(e -> {
+            customerNameField.setText("");
+            citizenshipField.setText("");
+            organizationField.setText("");
+            businessLicenseField.setText("");
+            bookingIdField.setText("");
+            cylinderIdField.setText("");
+            quantityField.setText("");
+            basePriceField.setText("");
+            subsidyField.setText("0.0");
+
+        
+            cylinderTypeCombobox.setSelectedIndex(0);
+            monthComboBox.setSelectedIndex(0);
+            weightComboBox.setSelectedIndex(0);
+
+            displayArea.setText("");
+
+            
+            customerNameField.requestFocus();
+        });
 
         setVisible(true);
     }
