@@ -10,6 +10,7 @@
  * @author Milan Rai
  * @version 1.1.1.1
  */
+import java.awt.Color;
 import java.util.ArrayList;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -24,11 +25,10 @@ public class NOCApp extends JFrame {
     final int CITIZENSHIP_LENGTH = 12;
     ArrayList<LPGCylinder> cylinders = new ArrayList<LPGCylinder>();
 
-    // Add this method to NOCApp class
     private boolean isEligibleForSubsidy(String citizenshipNumber, int quantity) {
         boolean validCitizenship = citizenshipNumber != null
                 && citizenshipNumber.trim().length() == 12;
-        boolean withinQuota = quantity <= 2; // Assuming first order of the month
+        boolean withinQuota = quantity <= 2;
         return validCitizenship && withinQuota;
     }
 
@@ -40,7 +40,7 @@ public class NOCApp extends JFrame {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLayout(null);
 
-        // customer type
+        // Cylinder Type
         JLabel cylinderTypeLabel = new JLabel("Customer Type:");
         cylinderTypeLabel.setBounds(30, 30, 150, 30);
         add(cylinderTypeLabel);
@@ -49,108 +49,139 @@ public class NOCApp extends JFrame {
         JComboBox<String> cylinderTypeCombobox = new JComboBox<>(cylinderTypes);
         cylinderTypeCombobox.setBounds(200, 30, 200, 30);
         add(cylinderTypeCombobox);
-
-        // Customer Name (Domestic only)
+        // Customer Name
         JLabel customerNameLabel = new JLabel("Customer Name:");
-        customerNameLabel.setBounds(30, 130, 180, 30);
+        customerNameLabel.setBounds(30, 80, 180, 30);
         add(customerNameLabel);
 
         JTextField customerNameField = new JTextField();
-        customerNameField.setBounds(200, 130, 200, 30);
+        customerNameField.setBounds(200, 80, 200, 30);
         add(customerNameField);
 
-        // Citizenship Number (Domestic only)
+        // Citizenship Number
         JLabel citizenshipLabel = new JLabel("Citizenship Number:");
-        citizenshipLabel.setBounds(30, 180, 200, 30);
+        citizenshipLabel.setBounds(30, 130, 200, 30);
         add(citizenshipLabel);
 
         JTextField citizenshipField = new JTextField();
-        citizenshipField.setBounds(200, 180, 200, 30);
+        citizenshipField.setBounds(200, 130, 200, 30);
         add(citizenshipField);
 
-        // Organization Name (Commercial only)
+        // Organization Name
         JLabel organizationLabel = new JLabel("Organization Name:");
-        organizationLabel.setBounds(30, 230, 210, 30);
+        organizationLabel.setBounds(30, 180, 210, 30);
         add(organizationLabel);
 
         JTextField organizationField = new JTextField();
-        organizationField.setBounds(200, 230, 200, 30);
+        organizationField.setBounds(200, 180, 200, 30);
         add(organizationField);
 
-        // Business License Number (Commercial only)
-        JLabel businessLabel = new JLabel("Business License Number:");
-        businessLabel.setBounds(30, 280, 230, 30);
-        add(businessLabel);
+        // Business License Number
+        JLabel businessLicenseLabel = new JLabel("Business License Number:");
+        businessLicenseLabel.setBounds(30, 230, 230, 30);
+        add(businessLicenseLabel);
 
-        JTextField businessField = new JTextField();
-        businessField.setBounds(200, 280, 200, 30);
-        add(businessField);
+        JTextField businessLicenseField = new JTextField();
+        businessLicenseField.setBounds(200, 230, 200, 30);
+        add(businessLicenseField);
 
         // Booking ID
         JLabel bookingIdLabel = new JLabel("Booking ID:");
-        bookingIdLabel.setBounds(30, 330, 150, 30);
+        bookingIdLabel.setBounds(30, 280, 150, 30);
         add(bookingIdLabel);
 
         JTextField bookingIdField = new JTextField();
-        bookingIdField.setBounds(200, 330, 200, 30);
+        bookingIdField.setBounds(200, 280, 200, 30);
         add(bookingIdField);
 
         // Month (JComboBox)
         JLabel monthLabel = new JLabel("Month:");
-        monthLabel.setBounds(30, 380, 150, 30);
+        monthLabel.setBounds(30, 330, 150, 30);
         add(monthLabel);
 
-        String[] months = { "January", "February", "March", "April", "May", "June", "July", "August", "September",
-                "October", "November", "December" };
+        String[] months = { "January", "February", "March", "April", "May", "June",
+                "July", "August", "September", "October", "November", "December" };
         JComboBox<String> monthComboBox = new JComboBox<>(months);
-        monthComboBox.setBounds(200, 380, 200, 30);
+        monthComboBox.setBounds(200, 330, 200, 30);
         add(monthComboBox);
 
         // Cylinder ID
         JLabel cylinderIdLabel = new JLabel("Cylinder ID:");
-        cylinderIdLabel.setBounds(30, 430, 150, 30);
+        cylinderIdLabel.setBounds(30, 380, 150, 30);
         add(cylinderIdLabel);
 
         JTextField cylinderIdField = new JTextField();
-        cylinderIdField.setBounds(200, 430, 200, 30);
+        cylinderIdField.setBounds(200, 380, 200, 30);
         add(cylinderIdField);
 
         // Quantity of Ordered Cylinders
         JLabel quantityLabel = new JLabel("Quantity of Order:");
-        quantityLabel.setBounds(30, 480, 150, 30);
+        quantityLabel.setBounds(30, 430, 150, 30);
         add(quantityLabel);
 
         JTextField quantityField = new JTextField();
-        quantityField.setBounds(200, 480, 200, 30);
+        quantityField.setBounds(200, 430, 200, 30);
         add(quantityField);
 
         // Weight
         JLabel weightLabel = new JLabel("Weight (Kg):");
-        weightLabel.setBounds(30, 530, 150, 30);
+        weightLabel.setBounds(30, 480, 150, 30);
         add(weightLabel);
 
-        Double[] weightList = { 14.0, 16.0, 18.0 }; // ← Use Double[] (capital D)
+        Double[] weightList = { 14.0, 16.0, 18.0 };
         JComboBox<Double> weightComboBox = new JComboBox<>(weightList);
-        weightComboBox.setBounds(200, 530, 200, 30);
+        weightComboBox.setBounds(200, 480, 200, 30);
         add(weightComboBox);
 
         // Base Price
         JLabel basePriceLabel = new JLabel("Base Price:");
-        basePriceLabel.setBounds(30, 580, 150, 30);
+        basePriceLabel.setBounds(30, 530, 150, 30);
         add(basePriceLabel);
 
         JTextField basePriceField = new JTextField();
-        basePriceField.setBounds(200, 580, 200, 30);
+        basePriceField.setBounds(200, 530, 200, 30);
         add(basePriceField);
 
         // Subsidy Amount (Domestic only)
         JLabel subsidyLabel = new JLabel("Subsidy Amount:");
-        subsidyLabel.setBounds(30, 630, 200, 30);
+        subsidyLabel.setBounds(30, 580, 200, 30);
         add(subsidyLabel);
 
         JTextField subsidyField = new JTextField("0.0");
-        subsidyField.setBounds(200, 630, 200, 30);
+        subsidyField.setBounds(200, 580, 200, 30);
         add(subsidyField);
+
+        // Adding listner for cylindertypeCombobox for not giving the access for
+        // unecessary thing
+        cylinderTypeCombobox.addActionListener(e -> {
+            String cylinderType = (String) cylinderTypeCombobox.getSelectedItem();
+            if ("Domestic".equals(cylinderType)) {
+                organizationField.setEditable(false);
+                organizationField.setBackground(Color.LIGHT_GRAY);
+
+                businessLicenseField.setEditable(false);
+                businessLicenseField.setBackground(Color.LIGHT_GRAY);
+                
+                customerNameField.setEditable(true);
+                customerNameField.setBackground(Color.WHITE);
+
+                citizenshipField.setEditable(true);
+                citizenshipField.setBackground(Color.WHITE);
+            } else if ("Commercial".equals(cylinderType)) {
+                organizationField.setEditable(true);
+                organizationField.setBackground(Color.WHITE);
+
+                businessLicenseField.setEditable(true);
+                businessLicenseField.setBackground(Color.WHITE);
+
+                customerNameField.setEditable(false);
+                customerNameField.setBackground(Color.LIGHT_GRAY);
+
+                citizenshipField.setEditable(false);
+                citizenshipField.setBackground(Color.LIGHT_GRAY);
+            }
+        });
+
         // Display Area
         JTextArea displayArea = new JTextArea();
         displayArea.setEditable(false);
@@ -177,6 +208,7 @@ public class NOCApp extends JFrame {
                         JOptionPane.ERROR_MESSAGE);
                 return;
             }
+
             String customerName = customerNameField.getText().trim();
             String citizenshipNumber = citizenshipField.getText().trim();
             String bookingId = bookingIdField.getText().trim();
@@ -275,9 +307,8 @@ public class NOCApp extends JFrame {
                 subsidyAmount = 0.0;
             }
 
-            DomesticCylinder domestic = new DomesticCylinder(cylinderId,
- cylinderType, bookingId, basePrice, weight, bookingMonth, customerName,
- subsidyAmount, citizenshipNumber, quantity);
+            DomesticCylinder domestic = new DomesticCylinder(cylinderId, cylinderType, bookingId, basePrice, weight,
+                    bookingMonth, customerName, subsidyAmount, citizenshipNumber, quantity);
             cylinders.add(domestic);
 
             // adding ti text area
