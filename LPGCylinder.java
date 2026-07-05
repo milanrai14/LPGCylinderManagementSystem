@@ -1,3 +1,4 @@
+
 /**
  * An abstract class named LPGCylinder, representing an LPG Cylinder.
  * It provides the structure for all the LPG Cylinder subclasses.
@@ -24,13 +25,15 @@ public abstract class LPGCylinder{
      * @param bookingId the customer's booking reference number
      * @param basePrice the original price before calculation
      * @param weight the cylinder weight in kilograms     
+     * @param month the month when the cylinder was ordered.
      */
-    public LPGCylinder(String cylinderId, String cylinderType, String bookingId, double basePrice, double weight){
+    public LPGCylinder(String cylinderId, String cylinderType, String bookingId, double basePrice, double weight, String month){
         setCylinderId(cylinderId);
         setCylinderType(cylinderType);
         setBookingId(bookingId);
         setBasePrice(basePrice);
         setWeight(weight);
+        setMonth(month);
 
     }
 
@@ -79,6 +82,15 @@ public abstract class LPGCylinder{
      */
     public double getWeight(){
         return weight;
+    }
+    
+    /**
+     * Return the month when the cylinder was ordered
+     * 
+     * @return the month
+     */
+    public String getMonth(){
+        return month;
     }
 
 
@@ -154,6 +166,19 @@ public abstract class LPGCylinder{
             return;
         }
         this.weight = weight;
+    }
+    /**
+     * sets the months of when the cylinder was ordered
+     * This method validates the month input and updates the month field.
+     * 
+     * @param month 
+     */
+    public void setMonth(String month){
+        if(month.trim().isEmpty() || month == null){
+            System.out.println("Month cannot be empty and null");
+        } else {
+            this.month = month;
+        }
     }
 
     /**

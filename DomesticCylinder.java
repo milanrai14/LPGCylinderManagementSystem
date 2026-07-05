@@ -8,7 +8,7 @@
  * @version 1.1.1.1
  */
 public class DomesticCylinder extends LPGCylinder {
-
+    private String customerName;
     private double subsidyAmount;
     private String citizenshipNumber;
     private int quantityOfOrderCylinder; // Number of cylinders ordered.
@@ -23,19 +23,34 @@ public class DomesticCylinder extends LPGCylinder {
      * @param basePrice               the base price of the domestic cylinder
      * @param weight                  the weight of the domestic cylinder in
      *                                kilograms
+     * @param month                   the month of ordered cylinder
+     * @param customerName            name of the customer who ordered the cylinder
      * @param subsidyAmount           the subsidy amount provided for the customer
      * @param citizenshipNumber       the customer's citizenship number
      * @param quantityOfOrderCylinder the number of cylinder ordered
+     * 
      */
     public DomesticCylinder(String cylinderId, String cylinderType, String bookingId, double basePrice, double weight,
+            String month,
+            String customerName,
             double subsidyAmount, String citizenshipNumber, int quantityOfOrderCylinder) {
-        super(cylinderId, cylinderType, bookingId, basePrice, weight);
+        super(cylinderId, cylinderType, bookingId, basePrice, weight, month);
+        setCustomerName(customerName);
         setCitizenshipNumber(citizenshipNumber);
         setSubsidyAmount(subsidyAmount);
         setQuantityOfOrderCylinder(quantityOfOrderCylinder);
     }
 
     // Getter methods
+    /**
+     * Returns the name of customer
+     * 
+     * @return the name of customer
+     */
+    public String getCustomerName() {
+        return customerName;
+    }
+
     /**
      * Retruns the subsidy amount
      *
@@ -73,6 +88,20 @@ public class DomesticCylinder extends LPGCylinder {
     }
 
     // Setter method
+
+    /**
+     * Sets the customer name.
+     * 
+     * @param customerName The name of the customer
+     */
+    public void setCustomerName(String customerName) {
+        if (customerName == null || customerName.trim().isEmpty()) {
+            System.out.println("Customer name cannot be empty");
+        } else {
+            this.customerName = customerName;
+        }
+    }
+
     /**
      * Sets the subsidy amount for the domestic cyclinder if customer is
      * eligible
@@ -85,7 +114,7 @@ public class DomesticCylinder extends LPGCylinder {
 
         } else if (subsidyAmount > getBasePrice()) {
             System.out.println("Subsidy amount cannot be greater than base price.");
-            
+
         } else if (!isEligibleForSubsidy()) {
             System.out.println("Customer is not eligble for subsidy.");
         } else {
@@ -110,7 +139,6 @@ public class DomesticCylinder extends LPGCylinder {
 
         }
     }
-
 
     /**
      * sets the quantity of cylinders ordered. Also updates monthly usage and
@@ -154,7 +182,9 @@ public class DomesticCylinder extends LPGCylinder {
      * @return true if the domestic cylinder contains valid data, otherwise false.
      */
     public boolean isValid() {
-        return getCylinderId() != null && getCylinderType() != null && getBookingId() != null && getCitizenshipNumber() != null && getBasePrice() > 0 && getWeight() > 0 && subsidyAmount > 0 && quantityOfOrderCylinder > 0;
+        return getCylinderId() != null && getCylinderType() != null && getBookingId() != null
+                && getCitizenshipNumber() != null && getBasePrice() > 0 && getWeight() > 0 && subsidyAmount > 0
+                && quantityOfOrderCylinder > 0;
     }
 
     /**
