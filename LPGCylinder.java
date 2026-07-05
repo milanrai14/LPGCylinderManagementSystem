@@ -12,6 +12,7 @@ public abstract class LPGCylinder{
     private String bookingId; // Booking reference ID associated with the cylinder.
     private double basePrice; // Base price of the cylinder.
     private double weight; // Weight of the cylinder in kilograms.
+    private String month; // Month of ordered cylinder
 
 
     /**
