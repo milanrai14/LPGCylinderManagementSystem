@@ -21,41 +21,14 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
-public class NOCApp extends JFrame {
+public class NOCApphaha extends JFrame {
     final int CITIZENSHIP_LENGTH = 12;
     ArrayList<LPGCylinder> cylinders = new ArrayList<LPGCylinder>();
+    
+    public void validateCylinderId(String cylinderId){
+      
+    }  
 
-    public boolean validateCylinderAndBookingIds(String cylinderId, String bookingId) {
-        if (cylinderId == null || cylinderId.trim().isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Cylinder ID cannit be empty");
-            return false;
-        }
-        if (!cylinderId.matches("NOC-\\d{3}")) {
-            JOptionPane.showMessageDialog(this, "Invalid Cylinder ID format. Use NOC-.000.");
-            return false;
-        }
-
-        for (LPGCylinder cylinder : cylinders) {
-            if (cylinder.getBookingId().equals(bookingId)) {
-                JOptionPane.showMessageDialog(this,
-                        "Booking ID already exists. Please use a unique ID.",
-                        "Duplicate ID", JOptionPane.ERROR_MESSAGE);
-                return false;
-            }
-        }
-
-        for (LPGCylinder cylinder : cylinders) {
-            if (cylinder.getCylinderId().equals(cylinderId)) {
-                JOptionPane.showMessageDialog(this,
-                        "Cylinder ID already exists. Please use a unique ID.",
-                        "Duplicate ID", JOptionPane.ERROR_MESSAGE);
-                return false;
-            }
-        }
-        return true;
-    }
-
-    public boolean validate
 
     public boolean isEligibleForSubsidy(String citizenshipNumber, int quantity) {
         boolean validCitizenship = citizenshipNumber != null
@@ -322,7 +295,33 @@ public class NOCApp extends JFrame {
                 return;
             }
 
-            if (!validateCylinderAndBookingIds(cylinderId, bookingId)) {
+            for (LPGCylinder cylinder : cylinders) {
+                if (cylinder.getBookingId().equals(bookingId)) {
+                    JOptionPane.showMessageDialog(this,
+                            "Booking ID already exists. Please use a unique ID.",
+                            "Duplicate ID", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+            }
+
+            for (LPGCylinder cylinder : cylinders) {
+                if (cylinder.getCylinderId().equals(cylinderId)) {
+                    JOptionPane.showMessageDialog(this,
+                            "Cylinder ID already exists. Please use a unique ID.",
+                            "Duplicate ID", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+            }
+
+            if (cylinderId.isEmpty()) {
+                JOptionPane.showMessageDialog(this, "Cylinder ID cannot be empty",
+                        "Validation Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+            if (!cylinderId.matches("NOC-\\d{3}")) {
+                JOptionPane.showMessageDialog(this,
+                        "Invalid Cylinder ID format. Use NOC-001",
+                        "Validation Error", JOptionPane.ERROR_MESSAGE);
                 return;
             }
 
