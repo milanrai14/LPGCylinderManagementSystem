@@ -55,7 +55,23 @@ public class NOCApp extends JFrame {
         return true;
     }
 
-    public boolean validate
+    public boolean validateQuantityAndBasePrice(int quantity, double basePrice) {
+        if (quantity <= 0) {
+            JOptionPane.showMessageDialog(this,
+                    "Quantity must be greater than 0",
+                    "Validation Error", JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+
+        if (basePrice <= 0) {
+            JOptionPane.showMessageDialog(this,
+                    "Base Price must be greater than 0",
+                    "Validation Error", JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+        return true;
+
+    }
 
     public boolean isEligibleForSubsidy(String citizenshipNumber, int quantity) {
         boolean validCitizenship = citizenshipNumber != null
@@ -322,21 +338,8 @@ public class NOCApp extends JFrame {
                 return;
             }
 
-            if (!validateCylinderAndBookingIds(cylinderId, bookingId)) {
-                return;
-            }
-
-            if (quantity <= 0) {
-                JOptionPane.showMessageDialog(this,
-                        "Quantity must be greater than 0",
-                        "Validation Error", JOptionPane.ERROR_MESSAGE);
-                return;
-            }
-
-            if (basePrice <= 0) {
-                JOptionPane.showMessageDialog(this,
-                        "Base Price must be greater than 0",
-                        "Validation Error", JOptionPane.ERROR_MESSAGE);
+            if (!validateCylinderAndBookingIds(cylinderId, bookingId)
+                    || !validateQuantityAndBasePrice(quantity, basePrice)) {
                 return;
             }
             if (subsidyAmount < 0) {
