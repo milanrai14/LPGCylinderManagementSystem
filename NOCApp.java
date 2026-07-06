@@ -4,9 +4,9 @@
  * It provides a graphical interface for managing LPG cylinder bookings including
  * adding domestic/commercial cylinders, calculating discounts and subsidies,
  * displaying records, and file operations.
- * 
+ *
  * All cylinder records are stored in an ArrayList collection.
- * 
+ *
  * @author Milan Rai
  * @version 1.1.1.1
  */
@@ -22,12 +22,13 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
 public class NOCApp extends JFrame {
+
     final int CITIZENSHIP_LENGTH = 12;
     ArrayList<LPGCylinder> cylinders = new ArrayList<LPGCylinder>();
 
     public boolean validateCylinderAndBookingIds(String cylinderId, String bookingId) {
         if (cylinderId == null || cylinderId.trim().isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Cylinder ID cannit be empty");
+            JOptionPane.showMessageDialog(this, "Cylinder ID cannot be empty");
             return false;
         }
         if (!cylinderId.matches("NOC-\\d{3}")) {
@@ -259,6 +260,9 @@ public class NOCApp extends JFrame {
 
                 citizenshipField.setEditable(false);
                 citizenshipField.setBackground(Color.LIGHT_GRAY);
+
+                subsidyField.setEditable(false);
+                subsidyField.setBackground(Color.LIGHT_GRAY);
             } else if ("Select One".equals(cylinderType)) {
                 customerNameField.setEditable(true);
                 customerNameField.setBackground(Color.WHITE);
@@ -296,8 +300,8 @@ public class NOCApp extends JFrame {
             String cylinderType = (String) cylinderTypeCombobox.getSelectedItem();
             if (!"Domestic".equalsIgnoreCase(cylinderType)) {
                 JOptionPane.showMessageDialog(this,
-                        "This button is only for Domestic Cylinder!\n" +
-                                "Please select 'Domestic' from the dropdown.",
+                        "This button is only for Domestic Cylinder!\n"
+                                + "Please select 'Domestic' from the dropdown.",
                         "Invalid Cylinder Type",
                         JOptionPane.ERROR_MESSAGE);
                 return;
@@ -390,8 +394,8 @@ public class NOCApp extends JFrame {
             cylinderTypeCombobox.setSelectedIndex(0);
 
             JOptionPane.showMessageDialog(this,
-                    "Domestic Cylinder added successfully!\n\n" +
-                            "Final Price: Rs " + domestic.calculateFinalPrice(),
+                    "Domestic Cylinder added successfully!\n\n"
+                            + "Final Price: Rs " + domestic.calculateFinalPrice(),
                     "Success",
                     JOptionPane.INFORMATION_MESSAGE);
 
@@ -406,8 +410,8 @@ public class NOCApp extends JFrame {
             String cylinderType = (String) cylinderTypeCombobox.getSelectedItem();
             if (!"Commercial".equalsIgnoreCase(cylinderType)) {
                 JOptionPane.showMessageDialog(this,
-                        "This button is only for Commercial Cylinder!\n" +
-                                "Please select 'Commercial' from the dropdown.",
+                        "This button is only for Commercial Cylinder!\n"
+                                + "Please select 'Commercial' from the dropdown.",
                         "Invalid Cylinder Type",
                         JOptionPane.ERROR_MESSAGE);
                 return;
@@ -420,12 +424,61 @@ public class NOCApp extends JFrame {
             String bookingMonth = (String) monthComboBox.getSelectedItem();
             System.out.println(bookingMonth);
             System.out.println(bookingId);
-            String cylinderId = customerNameField.getText();
+            String cylinderId = cylinderIdField.getText();
             System.out.println(cylinderId);
             int quantity = Integer.parseInt(quantityField.getText());
             System.out.println(quantity);
+            double weight = (Double) weightComboBox.getSelectedItem();
+
             double basePrice = Double.parseDouble(basePriceField.getText());
             System.out.println(basePrice);
+
+            if (organizationName.trim().isEmpty()) {
+                JOptionPane.showMessageDialog(this, "Organization Name cannot be empty!");
+                return;
+            }
+            if (businessLicenseNumber == null || businessLicenseNumber.trim().isEmpty()) {
+                JOptionPane.showMessageDialog(this, "Business License Number is mandatory.");
+            } else if (!businessLicenseNumber.matches("\\d+")) {
+                JOptionPane.showMessageDialog(this, "Business License only contains numbers.");
+            }
+
+            if (!validateCylinderAndBookingIds(cylinderId, bookingId)
+                    || !validateQuantityAndBasePrice(quantity, basePrice)) {
+                return;
+            }
+
+            CommercialCylinder commercial = new CommercialCylinder(cylinderId, cylinderType, bookingId, basePrice,
+                    basePrice, bookingMonth, organizationName, businessLicenseNumber, quantity);
+            cylinders.add(commercial);
+
+            // adding ti text area
+            displayArea.setText("Domestic Cylinder Added Successfully!\n\n");
+            displayArea.append("Cylinder ID: " + cylinderId + "\n");
+            displayArea.append("Organization Name: " + organizationName + "\n");
+            displayArea.append("Business License Number: " + businessLicenseNumber + "\n");
+            displayArea.append("Booking ID: " + bookingId + "\n");
+            displayArea.append("Month: " + bookingMonth + "\n");
+            displayArea.append("Quantity: " + quantity + "\n");
+            displayArea.append("Weight: " + weight + " kg\n");
+            displayArea.append("Base Price: Rs " + basePrice + "\n");
+            displayArea.append("Final Price: Rs " + commercial.calculateFinalPrice() + "\n");
+            displayArea.append("\nTotal Cylinders in System: " + cylinders.size());
+
+            organizationField.setText("");
+            businessLicenseField.setText("");
+            bookingIdField.setText("");
+            cylinderIdField.setText("");
+            quantityField.setText("");
+            basePriceField.setText("");
+            cylinderTypeCombobox.setSelectedIndex(0);
+
+            JOptionPane.showMessageDialog(this,
+                    "Commercial Cylinder added successfully!\n\n"
+                            + "Final Price: Rs " + commercial.calculateFinalPrice(),
+                    "Success",
+                    JOptionPane.INFORMATION_MESSAGE);
+
         });
 
         // Calculate Bulk Discount
