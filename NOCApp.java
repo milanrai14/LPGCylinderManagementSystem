@@ -98,6 +98,7 @@ public class NOCApp extends JFrame {
                 }
                 return;
             }
+
         }
         JOptionPane.showMessageDialog(this,
                 "Cylinder ID not found.");
@@ -491,6 +492,27 @@ public class NOCApp extends JFrame {
         calculatePriceButton.setBounds(460, 180, 200, 35);
         add(calculatePriceButton);
 
+        // addActionListner calculate price after subsidy ko lagi
+        calculatePriceButton.addActionListener(e -> {
+            String cylinderId = cylinderIdField.getText();
+            System.out.println("CylinderID: " + cylinderId);
+            for (LPGCylinder cylinder : cylinders) {
+                if (cylinder.getCylinderId().equals(cylinderId)) {
+                    if (cylinder instanceof DomesticCylinder) {
+                        cylinder.calculateFinalPrice();
+                        JOptionPane.showMessageDialog(this, "Price after subsidy: " + cylinder.calculateFinalPrice());
+                        cylinderIdField.setText(" ");
+
+                    } else if (cylinder instanceof CommercialCylinder) {
+                        JOptionPane.showMessageDialog(this,
+                                "This is a commercial cylinder. Please use the 'Calculate Bulk Discount' button.");
+                    }
+                    cylinderIdField.setText("");
+                    return;
+                }
+            }
+        });
+
         // Identify Cylinder Type
         JButton identifyTypeButton = new JButton("Identify Cylinder Type");
         identifyTypeButton.setBounds(460, 230, 200, 35);
@@ -499,8 +521,9 @@ public class NOCApp extends JFrame {
         // Identifycylinder tpye ko lagi addAction Listner
         identifyTypeButton.addActionListener(e -> {
             String cylinderId = cylinderIdField.getText().trim();
-
+            System.out.println("Cylinder from identify button: " + cylinderId);
             identifyCylinderType(cylinderId);
+            cylinderIdField.setText("");
 
         });
 
