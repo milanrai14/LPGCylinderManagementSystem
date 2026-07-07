@@ -486,6 +486,27 @@ public class NOCApp extends JFrame {
         calculateDiscountButton.setBounds(460, 130, 200, 35);
         add(calculateDiscountButton);
 
+        //bulk discoiunt ko lagi
+        calculateDiscountButton.addActionListener(e->{
+            String cylinderId = cylinderIdField.getText();
+            System.out.println("CylinderID: " + cylinderId);
+            for (LPGCylinder cylinder : cylinders) {
+                if (cylinder.getCylinderId().equals(cylinderId)) {
+                    if (cylinder instanceof CommercialCylinder) {
+                        cylinder.calculateFinalPrice();
+                        JOptionPane.showMessageDialog(this, "Price after bulk discount: " + cylinder.calculateFinalPrice());
+                        cylinderIdField.setText(" ");
+
+                    } else if (cylinder instanceof DomesticCylinder) {
+                        JOptionPane.showMessageDialog(this,
+                                "This is a Domestic cylinder. Please use the 'Calculate Price after Subsidy' button.");
+                    }
+                    cylinderIdField.setText("");
+                    return;
+                }
+            }
+        });
+
         // Calculate Price after Subsidy
         JButton calculatePriceButton = new JButton("Calculate Price after Subsidy");
         calculatePriceButton.setBounds(460, 180, 200, 35);
