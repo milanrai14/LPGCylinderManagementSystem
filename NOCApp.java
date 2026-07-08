@@ -276,6 +276,9 @@ public class NOCApp extends JFrame {
                 businessLicenseField.setEditable(true);
                 businessLicenseField.setBackground(Color.WHITE);
 
+                subsidyField.setEditable(true);
+                subsidyField.setBackground(Color.WHITE);
+
             }
         });
 
@@ -312,8 +315,8 @@ public class NOCApp extends JFrame {
             String bookingId = bookingIdField.getText().trim();
             String bookingMonth = (String) monthComboBox.getSelectedItem();
             String cylinderId = cylinderIdField.getText().trim();
-            int quantity = Integer.parseInt(quantityField.getText());
-            double weight = (Double) weightComboBox.getSelectedItem();
+            int quantity = Integer.parseInt(quantityField.getText()); //Integer is a wrapper class
+            double weight = (Double) weightComboBox.getSelectedItem(); 
             double basePrice = Double.parseDouble(basePriceField.getText());
             double subsidyAmount = Double.parseDouble(subsidyField.getText());
 
