@@ -118,7 +118,7 @@ public class NOCApp extends JFrame {
         setTitle("LPG Cylinder Booking Management System");
         setSize(1200, 800);
         setLocationRelativeTo(null);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);KO
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLayout(null);
 
         // Cylinder Type
