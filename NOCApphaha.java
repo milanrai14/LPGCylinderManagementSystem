@@ -69,7 +69,7 @@ public class NOCApphaha extends JFrame {
         }
     }
 
-    public NOCApp() {
+    public NOCApphaha() {
 
         setTitle("LPG Cylinder Booking Management System");
         setSize(1200, 800);
@@ -497,6 +497,6 @@ public class NOCApphaha extends JFrame {
     }
 
     public static void main(String[] args) {
-        new NOCApp();
+        new NOCApphaha();
     }
 }
