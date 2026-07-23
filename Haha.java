@@ -13,8 +13,42 @@ import javax.swing.JTextField;
 import javax.swing.border.TitledBorder;
 
 public class Haha extends JFrame {
+        final int CITIZENSHIP_LENGTH = 12;
+        ArrayList<LPGCylinder> cylinders = new ArrayList<LPGCylinder>();
+
+        public boolean validateCylinderAndBookingIds(String cylinderId, String bookingId) {
+                if (cylinderId == null || cylinderId.trim().isEmpty()) {
+                        JOptionPane.showMessageDialog(this, "Cylinder Id cannot be empty");
+                        return false;
+                }
+                if (!cylinderId.matches("NOC-\\d{3}")) {
+                        JOptionPane.showMessageDialog(this, "Invalid Cylinder ID Format. Use NOC-000 Format");
+                        return false;
+                }
+                for (LPGCylinder cylinder : cylinders) {
+                        if (cylinder.getCylinderId().equals(cylinderId)) {
+                                JOptionPane.showMessageDialog(this,
+                                                "Cylinder ID already exists. Please use a unique ID.",
+                                                "Duplicate ID", JOptionPane.ERROR_MESSAGE);
+                                return false;
+                        }
+                }
+
+                for (LPGCylinder cylinder: cylinders){
+                        if(cylinder.getBookingId().equals(bookingId)){
+                                JOptionPane.showMessageDialog(this, "Booking Id already exists. Please use a unique ID.",
+                                        "Duplicate ID", JOptionPane.ERROR_MESSAGE
+
+                                );
+                                return false;
+                        }
+                }
+                return true;
+
+
+        }
+
         public Haha() {
-                ArrayList<LPGCylinder> cylinders = new ArrayList<LPGCylinder>();
 
                 setTitle("LPG Cylinder Booking Management System");
                 setSize(1000, 820);
@@ -139,11 +173,29 @@ public class Haha extends JFrame {
                                 return;
                         }
 
-                        if
+                        if (citizenshipNumber.isEmpty()) {
+                                JOptionPane.showMessageDialog(this, "Citizenship number cannot be empty",
+                                                "Invalid Citizenship", JOptionPane.ERROR_MESSAGE);
+                                return;
+                        }
+
+                        if (citizenshipNumber.length() != CITIZENSHIP_LENGTH) {
+                                JOptionPane.showMessageDialog(this,
+                                                "Citizenship number must be " + CITIZENSHIP_LENGTH + " digits",
+                                                "Validation Error", JOptionPane.ERROR_MESSAGE);
+                                return;
+                        }
+                        if (!citizenshipNumber.matches("\\d+")) {
+                                JOptionPane.showMessageDialog(this,
+                                                "Citizenship number must contain only digits (0-9)",
+                                                "Validation Error", JOptionPane.ERROR_MESSAGE);
+                                return;
+                        }
 
                 });
 
-                JButton clearDomesticBtn = new JButton("Clear Domestic Form");
+                JButton clearDomesticBtn = new JButton(
+                                "Clear Domestic Form");
                 clearDomesticBtn.setBounds(230, 385, 160, 32);
                 domesticPanel.add(clearDomesticBtn);
 
@@ -154,6 +206,7 @@ public class Haha extends JFrame {
                                                 "Commercial Cylinder Booking", TitledBorder.CENTER, TitledBorder.TOP));
                 commercialPanel.setLayout(null);
                 commercialPanel.setBounds(510, 10, 450, 430);
+
                 add(commercialPanel);
 
                 // Commercial Fields
