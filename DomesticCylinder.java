@@ -207,22 +207,19 @@ public class DomesticCylinder extends LPGCylinder {
      * Display all the details of the domestic cylinder
      */
     @Override
-    public void display() {
-        System.out.println("===== Domestic Cylinder Details =====");
-        System.out.println("Cylinder ID: " + getCylinderId());
-        System.out.println("Cylinder Type: " + getCylinderType());
-        System.out.println("Booking ID: " + getBookingId());
-        System.out.println("Base Price: " + getBasePrice());
-        System.out.println("Weight: " + getWeight() + " kg");
-
-        System.out.println("Citizenship Number: " + this.citizenshipNumber);
-        System.out.println("Quantity Ordered: " + this.quantityOfOrderCylinder);
-        System.out.println("Monthly Usage: " + this.monthlyUsedCylinder);
-
-        System.out.println("Eligible for Subsidy: " + isEligibleForSubsidy());
-        System.out.println("Subsidy Amount: Rs " + this.subsidyAmount);
-
-        System.out.println("Final Price: Rs  " + calculateFinalPrice());
-        System.out.println("=====================================");
+    public String display() {
+        return "===== Domestic Cylinder Details =====\n" +
+                "Cylinder ID: " + getCylinderId() + "\n" +
+                "Cylinder Type: " + getCylinderType() + "\n" +
+                "Booking ID: " + getBookingId() + "\n" +
+                "Base Price: " + getBasePrice() + "\n" +
+                "Weight: " + getWeight() + " kg\n" +
+                "Citizenship Number: " + citizenshipNumber + "\n" +
+                "Quantity Ordered: " + quantityOfOrderCylinder + "\n" +
+                "Monthly Usage: " + monthlyUsedCylinder + "\n" +
+                "Eligible for Subsidy: " + isEligibleForSubsidy() + "\n" +
+                "Subsidy Amount: Rs " + subsidyAmount + "\n" +
+                "Final Price: Rs " + calculateFinalPrice() + "\n" +
+                "=====================================";
     }
 }

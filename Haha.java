@@ -59,6 +59,12 @@ public class Haha extends JFrame {
                 return true;
         }
 
+        public boolean isEligibleForSubsidy(String cizitenshipNumber, int quantity){
+                boolean validCitizenship = cizitenshipNumber != null && cizitenshipNumber.trim().length() == CITIZENSHIP_LENGTH;
+                boolean withInQuota = quantity <= 2;
+                return validCitizenship && withInQuota;
+        }
+
         public Haha() {
                 setTitle("LPG Cylinder Booking Management System");
                 setSize(1000, 820);
@@ -158,6 +164,12 @@ public class Haha extends JFrame {
                 addDomesticBtn.setBounds(50, 385, 160, 32);
                 domesticPanel.add(addDomesticBtn);
 
+                // Display Area
+                JTextArea displayArea = new JTextArea();
+                displayArea.setEditable(false);
+                displayArea.setLineWrap(true);
+                displayArea.setWrapStyleWord(true);
+
                 // Add domestic cylinder register
                 addDomesticBtn.addActionListener(e -> {
                         String customerType = (String) domCustTypeCombo.getSelectedItem();
@@ -211,7 +223,15 @@ public class Haha extends JFrame {
                                 JOptionPane.showMessageDialog(this, "Subsidy Amount cannot be greater than base price", "validation Error", JOptionPane.ERROR_MESSAGE);
                                 return;
                         }
+                        
+                        if(!isEligibleForSubsidy(citizenshipNumber, quantity)){
+                                JOptionPane.showMessageDialog(this, "Customer is not eligible for subsify. \n Subsidy will be set to 0.");
+                                subsidyAmount = 0.0;
+                        }
 
+                        DomesticCylinder domestic = new DomesticCylinder(cylinderId, cylinderId, bookingId, basePrice, weight, bookingMonth, customerName, subsidyAmount, citizenshipNumber, quantity);
+                        cylinders.add(domestic);
+                        displayArea.append("\n" + domestic.display());
 
                 });
 
@@ -319,11 +339,6 @@ public class Haha extends JFrame {
                 clearComBtn.setBounds(220, 385, 170, 35);
                 commercialPanel.add(clearComBtn);
 
-                // Display Area
-                JTextArea displayArea = new JTextArea();
-                displayArea.setEditable(false);
-                displayArea.setLineWrap(true);
-                displayArea.setWrapStyleWord(true);
 
                 JScrollPane scrollPane = new JScrollPane(displayArea);
                 scrollPane.setBounds(20, 460, 940, 200);

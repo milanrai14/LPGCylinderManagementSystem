@@ -195,7 +195,7 @@ public abstract class LPGCylinder{
      * This is an abstract method that must be implemented by subclasses
      * to show cylinder specific information.
      */
-    public abstract void display();
+    public abstract String display();
 
 
 }
