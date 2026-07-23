@@ -1,4 +1,5 @@
 import java.awt.Color;
+import java.util.ArrayList;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -12,6 +13,7 @@ import javax.swing.border.TitledBorder;
 
 public class Haha extends JFrame {
         public Haha() {
+                ArrayList<LPGCylinder> cylinders = new ArrayList<LPGCylinder>();
 
                 setTitle("LPG Cylinder Booking Management System");
                 setSize(1000, 820);
@@ -20,7 +22,6 @@ public class Haha extends JFrame {
                 setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
                 setLayout(null);
 
-                // ==================== DOMESTIC PANEL ====================
                 JPanel domesticPanel = new JPanel();
                 domesticPanel.setBorder(BorderFactory.createTitledBorder(
                                 BorderFactory.createLineBorder(Color.BLACK, 2),
@@ -28,11 +29,10 @@ public class Haha extends JFrame {
                                 TitledBorder.CENTER,
                                 TitledBorder.TOP));
                 domesticPanel.setLayout(null);
-                domesticPanel.setBounds(20, 10, 450, 430); // Increased height to fit Customer Type
+                domesticPanel.setBounds(20, 10, 450, 430);
                 add(domesticPanel);
 
-                // Domestic Fields - All exact positions
-                // Customer Type - Added at top
+
                 JLabel domCustTypeLabel = new JLabel("Customer Type:");
                 domCustTypeLabel.setBounds(20, 30, 140, 25);
                 domesticPanel.add(domCustTypeLabel);
@@ -42,7 +42,6 @@ public class Haha extends JFrame {
                 domCustTypeCombo.setBounds(170, 30, 230, 25);
                 domesticPanel.add(domCustTypeCombo);
 
-                // All other fields shifted down by 35px (y + 35)
                 JLabel domNameLabel = new JLabel("Customer Name:");
                 domNameLabel.setBounds(20, 65, 140, 25);
                 domesticPanel.add(domNameLabel);
@@ -109,7 +108,7 @@ public class Haha extends JFrame {
                 domSubsidyField.setBounds(170, 345, 230, 25);
                 domesticPanel.add(domSubsidyField);
 
-                // Domestic Buttons - shifted down
+                // Domestic Buttons
                 JButton addDomesticBtn = new JButton("Add Domestic Cylinder");
                 addDomesticBtn.setBounds(50, 385, 160, 32);
                 domesticPanel.add(addDomesticBtn);
@@ -118,7 +117,7 @@ public class Haha extends JFrame {
                 clearDomesticBtn.setBounds(230, 385, 160, 32);
                 domesticPanel.add(clearDomesticBtn);
 
-                // ==================== COMMERCIAL PANEL ====================
+                // COMMERCIAL PANEL
                 JPanel commercialPanel = new JPanel();
                 commercialPanel.setBorder(BorderFactory.createTitledBorder(
                                 BorderFactory.createLineBorder(Color.BLACK, 2),
@@ -126,10 +125,10 @@ public class Haha extends JFrame {
                                 TitledBorder.CENTER,
                                 TitledBorder.TOP));
                 commercialPanel.setLayout(null);
-                commercialPanel.setBounds(510, 10, 450, 430); // Increased height
+                commercialPanel.setBounds(510, 10, 450, 430);
                 add(commercialPanel);
 
-                // Commercial Fields - Customer Type at top
+                // Commercial Fields
                 JLabel comCustTypeLabel = new JLabel("Customer Type:");
                 comCustTypeLabel.setBounds(20, 30, 140, 25);
                 commercialPanel.add(comCustTypeLabel);
@@ -245,40 +244,40 @@ public class Haha extends JFrame {
                                                 "Actions",
                                                 TitledBorder.CENTER,
                                                 TitledBorder.TOP));
-                
+
                 actionPanel.setLayout(null);
 
-JLabel cylinderIdLabel = new JLabel("Cylinder ID:");
-cylinderIdLabel.setBounds(15, 30, 75, 25);
-actionPanel.add(cylinderIdLabel);
+                JLabel cylinderIdLabel = new JLabel("Cylinder ID:");
+                cylinderIdLabel.setBounds(15, 30, 75, 25);
+                actionPanel.add(cylinderIdLabel);
 
-JTextField cylinderIdField = new JTextField();
-cylinderIdField.setBounds(95, 30, 120, 28);
-actionPanel.add(cylinderIdField);
+                JTextField cylinderIdField = new JTextField();
+                cylinderIdField.setBounds(95, 30, 120, 28);
+                actionPanel.add(cylinderIdField);
 
-JButton bulkDiscountBtn = new JButton("Bulk Discount");
-bulkDiscountBtn.setBounds(225, 28, 130, 30);
-actionPanel.add(bulkDiscountBtn);
+                JButton bulkDiscountBtn = new JButton("Bulk Discount");
+                bulkDiscountBtn.setBounds(225, 28, 130, 30);
+                actionPanel.add(bulkDiscountBtn);
 
-JButton subsidyBtn = new JButton("Price After Subsidy");
-subsidyBtn.setBounds(365, 28, 155, 30);
-actionPanel.add(subsidyBtn);
+                JButton subsidyBtn = new JButton("Price After Subsidy");
+                subsidyBtn.setBounds(365, 28, 155, 30);
+                actionPanel.add(subsidyBtn);
 
-JButton displayBtn = new JButton("Display");
-displayBtn.setBounds(530, 28, 90, 30);
-actionPanel.add(displayBtn);
+                JButton displayBtn = new JButton("Display");
+                displayBtn.setBounds(530, 28, 90, 30);
+                actionPanel.add(displayBtn);
 
-JButton identifyBtn = new JButton("Identify Type");
-identifyBtn.setBounds(630, 28, 125, 30);
-actionPanel.add(identifyBtn);
+                JButton identifyBtn = new JButton("Identify Type");
+                identifyBtn.setBounds(630, 28, 125, 30);
+                actionPanel.add(identifyBtn);
 
-JButton exportBtn = new JButton("Export");
-exportBtn.setBounds(765, 28, 80, 30);
-actionPanel.add(exportBtn);
+                JButton exportBtn = new JButton("Export");
+                exportBtn.setBounds(765, 28, 80, 30);
+                actionPanel.add(exportBtn);
 
-JButton loadBtn = new JButton("Load");
-loadBtn.setBounds(850, 28, 75, 30);
-actionPanel.add(loadBtn);
+                JButton loadBtn = new JButton("Load");
+                loadBtn.setBounds(850, 28, 75, 30);
+                actionPanel.add(loadBtn);
 
                 add(actionPanel);
                 setVisible(true);
