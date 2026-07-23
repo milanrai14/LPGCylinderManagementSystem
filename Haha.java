@@ -5,6 +5,7 @@ import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
@@ -22,12 +23,13 @@ public class Haha extends JFrame {
                 setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
                 setLayout(null);
 
+                /**
+                 * Creating JPanel, which contains all components related to domestic cylinder
+                 * management, including input fields, action buttons.
+                 */
                 JPanel domesticPanel = new JPanel();
-                domesticPanel.setBorder(BorderFactory.createTitledBorder(
-                                BorderFactory.createLineBorder(Color.BLACK, 2),
-                                "Domestic Cylinder Booking",
-                                TitledBorder.CENTER,
-                                TitledBorder.TOP));
+                domesticPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(Color.BLACK, 2),
+                                "Domestic Cylinder Booking", TitledBorder.CENTER, TitledBorder.TOP));
                 domesticPanel.setLayout(null);
                 domesticPanel.setBounds(20, 10, 450, 430);
                 add(domesticPanel);
@@ -112,17 +114,44 @@ public class Haha extends JFrame {
                 addDomesticBtn.setBounds(50, 385, 160, 32);
                 domesticPanel.add(addDomesticBtn);
 
+                // Add domestic cylinder register
+                addDomesticBtn.addActionListener(e -> {
+                        String customerType = (String) domCustTypeCombo.getSelectedItem();
+                        if (!"Domestic".equals(customerType)) {
+                                JOptionPane.showMessageDialog(this,
+                                                "This section is only for Domestic Cylinder! \n"
+                                                                + "Please select 'Domestic' from the dropdown",
+                                                "Invalid Cylinder Type", JOptionPane.ERROR_MESSAGE);
+                        }
+                        String customerName = domNameField.getText().trim();
+                        String citizenshipNumber = domCitizenshipField.getText().trim();
+                        String bookingId = domBookingField.getText().trim();
+                        String bookingMonth = (String) domMonthCombo.getSelectedItem();
+                        String cylinderId = domCylinderField.getText().trim();
+                        int quantity = Integer.parseInt(domQtyField.getText());
+                        double weight = (Double) domWeightCombo.getSelectedItem();
+                        double basePrice = Double.parseDouble(domBasePriceField.getText());
+
+                        if (!customerName.matches("^[A-Za-z]+ [A-Za-z]+$")) {
+                                JOptionPane.showMessageDialog(this,
+                                                "Invalid name format. Please enter first and last name.",
+                                                "Validation Error", JOptionPane.ERROR_MESSAGE);
+                                return;
+                        }
+
+                        if
+
+                });
+
                 JButton clearDomesticBtn = new JButton("Clear Domestic Form");
                 clearDomesticBtn.setBounds(230, 385, 160, 32);
                 domesticPanel.add(clearDomesticBtn);
 
                 // COMMERCIAL PANEL
                 JPanel commercialPanel = new JPanel();
-                commercialPanel.setBorder(BorderFactory.createTitledBorder(
-                                BorderFactory.createLineBorder(Color.BLACK, 2),
-                                "Commercial Cylinder Booking",
-                                TitledBorder.CENTER,
-                                TitledBorder.TOP));
+                commercialPanel.setBorder(
+                                BorderFactory.createTitledBorder(BorderFactory.createLineBorder(Color.BLACK, 2),
+                                                "Commercial Cylinder Booking", TitledBorder.CENTER, TitledBorder.TOP));
                 commercialPanel.setLayout(null);
                 commercialPanel.setBounds(510, 10, 450, 430);
                 add(commercialPanel);
@@ -224,11 +253,8 @@ public class Haha extends JFrame {
 
                 JScrollPane scrollPane = new JScrollPane(displayArea);
                 scrollPane.setBounds(20, 460, 940, 200);
-                scrollPane.setBorder(BorderFactory.createTitledBorder(
-                                BorderFactory.createLineBorder(Color.BLACK, 2),
-                                "Booking Records Display",
-                                TitledBorder.CENTER,
-                                TitledBorder.TOP));
+                scrollPane.setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(Color.BLACK, 2),
+                                "Booking Records Display", TitledBorder.CENTER, TitledBorder.TOP));
 
                 add(scrollPane);
 
@@ -237,12 +263,8 @@ public class Haha extends JFrame {
                 actionPanel.setLayout(null);
                 actionPanel.setBounds(20, 680, 940, 80);
 
-                actionPanel.setBorder(
-                                BorderFactory.createTitledBorder(
-                                                BorderFactory.createLineBorder(Color.BLACK, 2),
-                                                "Actions",
-                                                TitledBorder.CENTER,
-                                                TitledBorder.TOP));
+                actionPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(Color.BLACK, 2),
+                                "Actions", TitledBorder.CENTER, TitledBorder.TOP));
 
                 actionPanel.setLayout(null);
 
