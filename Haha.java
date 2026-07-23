@@ -131,86 +131,93 @@ public class Haha extends JFrame {
 
         // Commercial Fields - Customer Type at top
         JLabel comCustTypeLabel = new JLabel("Customer Type:");
-        comCustTypeLabel.setBounds(20, 30, 140, 25);
-        commercialPanel.add(comCustTypeLabel);
+comCustTypeLabel.setBounds(20, 30, 140, 25);
+commercialPanel.add(comCustTypeLabel);
 
-        JComboBox<String> comCustTypeCombo = new JComboBox<>(customerTypes);
-        comCustTypeCombo.setBounds(170, 30, 230, 25);
-        commercialPanel.add(comCustTypeCombo);
+JComboBox<String> comCustTypeCombo = new JComboBox<>(customerTypes);
+comCustTypeCombo.setBounds(170, 30, 230, 25);
+commercialPanel.add(comCustTypeCombo);
 
-        // All commercial fields shifted down by 35px
-        JLabel comNameLabel = new JLabel("Organization Name:");
-        comNameLabel.setBounds(20, 65, 140, 25);
-        commercialPanel.add(comNameLabel);
-        JTextField comNameField = new JTextField();
-        comNameField.setBounds(170, 65, 230, 25);
-        commercialPanel.add(comNameField);
+JLabel comNameLabel = new JLabel("Company Name:");
+comNameLabel.setBounds(20, 65, 140, 25);
+commercialPanel.add(comNameLabel);
 
-        JLabel comCitizenshipLabel = new JLabel("Business Lincense: ");
-        comCitizenshipLabel.setBounds(20, 100, 140, 25);
-        commercialPanel.add(comCitizenshipLabel);
-        JTextField comCitizenshipField = new JTextField();
-        comCitizenshipField.setBounds(170, 100, 230, 25);
-        commercialPanel.add(comCitizenshipField);
+JTextField comNameField = new JTextField();
+comNameField.setBounds(170, 65, 230, 25);
+commercialPanel.add(comNameField);
 
-        JLabel comBookingLabel = new JLabel("Booking ID:");
-        comBookingLabel.setBounds(20, 135, 140, 25);
-        commercialPanel.add(comBookingLabel);
-        JTextField comBookingField = new JTextField();
-        comBookingField.setBounds(170, 135, 230, 25);
-        commercialPanel.add(comBookingField);
+JLabel comAddressLabel = new JLabel("Company Address:");
+comAddressLabel.setBounds(20, 100, 140, 25);
+commercialPanel.add(comAddressLabel);
 
-        JLabel comMonthLabel = new JLabel("Month:");
-        comMonthLabel.setBounds(20, 170, 140, 25);
-        commercialPanel.add(comMonthLabel);
-        JComboBox<String> comMonthCombo = new JComboBox<>(months);
-        comMonthCombo.setBounds(170, 170, 230, 25);
-        commercialPanel.add(comMonthCombo);
+JTextField comAddressField = new JTextField();
+comAddressField.setBounds(170, 100, 230, 25);
+commercialPanel.add(comAddressField);
 
-        JLabel comCylinderLabel = new JLabel("Cylinder ID:");
-        comCylinderLabel.setBounds(20, 205, 140, 25);
-        commercialPanel.add(comCylinderLabel);
-        JTextField comCylinderField = new JTextField();
-        comCylinderField.setBounds(170, 205, 230, 25);
-        commercialPanel.add(comCylinderField);
+JLabel comLicenseLabel = new JLabel("Business License:");
+comLicenseLabel.setBounds(20, 135, 140, 25);
+commercialPanel.add(comLicenseLabel);
 
-        JLabel comQtyLabel = new JLabel("Quantity of Order:");
-        comQtyLabel.setBounds(20, 240, 140, 25);
-        commercialPanel.add(comQtyLabel);
-        JTextField comQtyField = new JTextField();
-        comQtyField.setBounds(170, 240, 230, 25);
-        commercialPanel.add(comQtyField);
+JTextField comLicenseField = new JTextField();
+comLicenseField.setBounds(170, 135, 230, 25);
+commercialPanel.add(comLicenseField);
 
-        JLabel comWeightLabel = new JLabel("Weight (Kg):");
-        comWeightLabel.setBounds(20, 275, 140, 25);
-        commercialPanel.add(comWeightLabel);
-        JComboBox<Double> comWeightCombo = new JComboBox<>(weightList);
-        comWeightCombo.setBounds(170, 275, 230, 25);
-        commercialPanel.add(comWeightCombo);
+JLabel comBookingIdLabel = new JLabel("Booking ID:");
+comBookingIdLabel.setBounds(20, 170, 140, 25);
+commercialPanel.add(comBookingIdLabel);
 
-        JLabel comBasePriceLabel = new JLabel("Base Price:");
-        comBasePriceLabel.setBounds(20, 310, 140, 25);
-        commercialPanel.add(comBasePriceLabel);
-        JTextField comBasePriceField = new JTextField();
-        comBasePriceField.setBounds(170, 310, 230, 25);
-        commercialPanel.add(comBasePriceField);
+JTextField comBookingIdField = new JTextField();
+comBookingIdField.setBounds(170, 170, 230, 25);
+commercialPanel.add(comBookingIdField);
 
-        JLabel comSubsidyLabel = new JLabel("Subsidy Amount:");
-        comSubsidyLabel.setBounds(20, 345, 140, 25);
-        commercialPanel.add(comSubsidyLabel);
-        JTextField comSubsidyField = new JTextField("0.0");
-        comSubsidyField.setBounds(170, 345, 230, 25);
-        commercialPanel.add(comSubsidyField);
+JLabel comCylinderIdLabel = new JLabel("Cylinder ID:");
+comCylinderIdLabel.setBounds(20, 205, 140, 25);
+commercialPanel.add(comCylinderIdLabel);
 
-        // Commercial Buttons - shifted down
-        JButton addComBtn = new JButton("Add Commercial Cylinder");
-        addComBtn.setBounds(50, 385, 160, 32);
-        commercialPanel.add(addComBtn);
+JTextField comCylinderIdField = new JTextField();
+comCylinderIdField.setBounds(170, 205, 230, 25);
+commercialPanel.add(comCylinderIdField);
 
-        JButton clearComBtn = new JButton("Clear Commercial Form");
-        clearComBtn.setBounds(230, 385, 160, 32);
-        commercialPanel.add(clearComBtn);
+JLabel comMonthLabel = new JLabel("Month:");
+comMonthLabel.setBounds(20, 240, 140, 25);
+commercialPanel.add(comMonthLabel);
 
+JComboBox<String> comMonthCombo = new JComboBox<>(months);
+comMonthCombo.setBounds(170, 240, 230, 25);
+commercialPanel.add(comMonthCombo);
+
+JLabel comQuantityLabel = new JLabel("Quantity of Cylinders:");
+comQuantityLabel.setBounds(20, 275, 140, 25);
+commercialPanel.add(comQuantityLabel);
+
+JTextField comQuantityField = new JTextField();
+comQuantityField.setBounds(170, 275, 230, 25);
+commercialPanel.add(comQuantityField);
+
+JLabel comWeightLabel = new JLabel("Cylinder Weight:");
+comWeightLabel.setBounds(20, 310, 140, 25);
+commercialPanel.add(comWeightLabel);
+
+JComboBox<Double> comWeightCombo = new JComboBox<>(weightList);
+comWeightCombo.setBounds(170, 310, 230, 25);
+commercialPanel.add(comWeightCombo);
+
+JLabel comBasePriceLabel = new JLabel("Base Price:");
+comBasePriceLabel.setBounds(20, 345, 140, 25);
+commercialPanel.add(comBasePriceLabel);
+
+JTextField comBasePriceField = new JTextField();
+comBasePriceField.setBounds(170, 345, 230, 25);
+commercialPanel.add(comBasePriceField);
+
+JButton addComBtn = new JButton("Add Commercial Cylinder");
+addComBtn.setBounds(40, 385, 170, 35);
+commercialPanel.add(addComBtn);
+
+JButton clearComBtn = new JButton("Clear Form");
+clearComBtn.setBounds(220, 385, 170, 35);
+commercialPanel.add(clearComBtn);
+  
         // Display Area
         JPanel displayPanel = new JPanel();
         displayPanel.setLayout(null);
