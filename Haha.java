@@ -34,22 +34,32 @@ public class Haha extends JFrame {
                         }
                 }
 
-                for (LPGCylinder cylinder: cylinders){
-                        if(cylinder.getBookingId().equals(bookingId)){
-                                JOptionPane.showMessageDialog(this, "Booking Id already exists. Please use a unique ID.",
-                                        "Duplicate ID", JOptionPane.ERROR_MESSAGE
-
-                                );
+                for (LPGCylinder cylinder : cylinders) {
+                        if (cylinder.getBookingId().equals(bookingId)) {
+                                JOptionPane.showMessageDialog(this,
+                                                "Booking Id already exists. Please use a unique ID.",
+                                                "Duplicate ID", JOptionPane.ERROR_MESSAGE);
                                 return false;
                         }
                 }
                 return true;
+        }
 
-
+        public boolean validateQuantityAndBasePrice(int quantity, double basePrice) {
+                if (quantity <= 0) {
+                        JOptionPane.showMessageDialog(this, "Quantity must be greater than 0", "Validation Error",
+                                        JOptionPane.ERROR_MESSAGE);
+                        return false;
+                }
+                if (basePrice <= 0) {
+                        JOptionPane.showMessageDialog(this, "Base Price must be greater than 0", "Validation Error",
+                                        JOptionPane.ERROR_MESSAGE);
+                        return false;
+                }
+                return true;
         }
 
         public Haha() {
-
                 setTitle("LPG Cylinder Booking Management System");
                 setSize(1000, 820);
                 setLocationRelativeTo(null);
@@ -165,6 +175,7 @@ public class Haha extends JFrame {
                         int quantity = Integer.parseInt(domQtyField.getText());
                         double weight = (Double) domWeightCombo.getSelectedItem();
                         double basePrice = Double.parseDouble(domBasePriceField.getText());
+                        double subsidyAmount = Double.parseDouble(domSubsidyField.getText());
 
                         if (!customerName.matches("^[A-Za-z]+ [A-Za-z]+$")) {
                                 JOptionPane.showMessageDialog(this,
@@ -191,6 +202,16 @@ public class Haha extends JFrame {
                                                 "Validation Error", JOptionPane.ERROR_MESSAGE);
                                 return;
                         }
+
+                        if (!validateCylinderAndBookingIds(cylinderId, bookingId)|| !validateQuantityAndBasePrice(quantity, basePrice)) {
+                                return;
+                        }
+
+                        if(basePrice < subsidyAmount){
+                                JOptionPane.showMessageDialog(this, "Subsidy Amount cannot be greater than base price", "validation Error", JOptionPane.ERROR_MESSAGE);
+                                return;
+                        }
+
 
                 });
 
