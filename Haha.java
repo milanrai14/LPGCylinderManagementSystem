@@ -233,6 +233,54 @@ public class Haha extends JFrame {
                                 TitledBorder.TOP));
 
                 add(scrollPane);
+
+                // Action Buttons
+                JPanel actionPanel = new JPanel();
+                actionPanel.setLayout(null);
+                actionPanel.setBounds(20, 680, 940, 80);
+
+                actionPanel.setBorder(
+                                BorderFactory.createTitledBorder(
+                                                BorderFactory.createLineBorder(Color.BLACK, 2),
+                                                "Actions",
+                                                TitledBorder.CENTER,
+                                                TitledBorder.TOP));
+                
+                actionPanel.setLayout(null);
+
+JLabel cylinderIdLabel = new JLabel("Cylinder ID:");
+cylinderIdLabel.setBounds(15, 30, 75, 25);
+actionPanel.add(cylinderIdLabel);
+
+JTextField cylinderIdField = new JTextField();
+cylinderIdField.setBounds(95, 30, 120, 28);
+actionPanel.add(cylinderIdField);
+
+JButton bulkDiscountBtn = new JButton("Bulk Discount");
+bulkDiscountBtn.setBounds(225, 28, 130, 30);
+actionPanel.add(bulkDiscountBtn);
+
+JButton subsidyBtn = new JButton("Price After Subsidy");
+subsidyBtn.setBounds(365, 28, 155, 30);
+actionPanel.add(subsidyBtn);
+
+JButton displayBtn = new JButton("Display");
+displayBtn.setBounds(530, 28, 90, 30);
+actionPanel.add(displayBtn);
+
+JButton identifyBtn = new JButton("Identify Type");
+identifyBtn.setBounds(630, 28, 125, 30);
+actionPanel.add(identifyBtn);
+
+JButton exportBtn = new JButton("Export");
+exportBtn.setBounds(765, 28, 80, 30);
+actionPanel.add(exportBtn);
+
+JButton loadBtn = new JButton("Load");
+loadBtn.setBounds(850, 28, 75, 30);
+actionPanel.add(loadBtn);
+
+                add(actionPanel);
                 setVisible(true);
         }
 
