@@ -32,7 +32,6 @@ public class Haha extends JFrame {
                 domesticPanel.setBounds(20, 10, 450, 430);
                 add(domesticPanel);
 
-
                 JLabel domCustTypeLabel = new JLabel("Customer Type:");
                 domCustTypeLabel.setBounds(20, 30, 140, 25);
                 domesticPanel.add(domCustTypeLabel);
