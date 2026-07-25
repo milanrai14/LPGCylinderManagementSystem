@@ -82,6 +82,17 @@ public class Haha extends JFrame {
                 JOptionPane.showMessageDialog(this, "No cylinder with that Cylinder ID.");
         }
 
+        public void displayAll(){
+                if(cylinders.isEmpty()){
+                        JOptionPane.showMessageDialog(this, "No cylinder records");
+                        return;
+                }
+                for(LPGCylinder cylinder: cylinders){
+                        cylinder.display();
+               
+                }
+        }
+
         public Haha() {
                 setTitle("Nepal Oil Corporation Management System");
                 setSize(1000, 820);
@@ -478,6 +489,11 @@ public class Haha extends JFrame {
                 JButton displayBtn = new JButton("Display");
                 displayBtn.setBounds(530, 28, 90, 30);
                 actionPanel.add(displayBtn);
+
+                //addActionListner for displayall btn
+                displayBtn.addActionListener(e->{
+                        displayAll();
+                });
 
                 JButton identifyBtn = new JButton("Identify Type");
                 identifyBtn.setBounds(630, 28, 125, 30);
