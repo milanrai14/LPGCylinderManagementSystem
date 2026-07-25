@@ -66,6 +66,19 @@ public class Haha extends JFrame {
                 return validCitizenship && withInQuota;
         }
 
+        public void identifyCylinderType(String cylinderId){
+                for(LPGCylinder cylinder: cylinders){
+                        if(cylinder.getCylinderId().equals(cylinder)){
+                                if(cylinder instanceof DomesticCylinder){
+                                        JOptionPane.showMessageDialog(this, "Cylinder Type: Domestic Cylinder");
+                                } else {
+                                        JOptionPane.showMessageDialog(this, "Cylinder Type: Commercial Cylinder");
+                                }
+                               return;
+                        }
+                        JOptionPane.showMessageDialog(this, "No cylinder with that Cylinder ID.");
+                }
+        }
         public Haha() {
                 setTitle("Nepal Oil Corporation Management System");
                 setSize(1000, 820);
@@ -245,7 +258,8 @@ public class Haha extends JFrame {
                         DomesticCylinder domestic = new DomesticCylinder(cylinderId, customerType, bookingId, basePrice,
                                         weight, bookingMonth, customerName, subsidyAmount, citizenshipNumber, quantity);
                         cylinders.add(domestic);
-                        JOptionPane.showMessageDialog(this, "Domestic Cylinder ordered Successfully!", "Success", JOptionPane.INFORMATION_MESSAGE);
+                        JOptionPane.showMessageDialog(this, "Domestic Cylinder ordered Successfully!", "Success",
+                                        JOptionPane.INFORMATION_MESSAGE);
                         displayArea.append("\n" + domestic.display());
 
                 });
@@ -365,8 +379,8 @@ public class Haha extends JFrame {
                 commercialPanel.add(addComBtn);
                 // Add Comercial Cylinder
                 addComBtn.addActionListener(e -> {
-                        String customertype = (String) comCustTypeCombo.getSelectedItem();
-                        if (!"Commercial".equals(customertype)) {
+                        String customerType = (String) comCustTypeCombo.getSelectedItem();
+                        if (!"Commercial".equals(customerType)) {
                                 JOptionPane.showMessageDialog(this,
                                                 "This section is only for Commerical Cylinder! \n"
                                                                 + "Please select 'Commercial' from the dropdown",
@@ -383,29 +397,44 @@ public class Haha extends JFrame {
                         String comWeight = (String) comWeightCombo.getSelectedItem();
                         double basePrice = Double.parseDouble(comBasePriceField.getText());
 
-
-                        if(comLicense == null && !comLicense.matches("^[0-9]{6}$")){
-                                JOptionPane.showMessageDialog(this, "Invalid Company License Number. Format: 6 digits", "Validation Errot", JOptionPane.ERROR_MESSAGE);
+                        if (comLicense == null && !comLicense.matches("^[0-9]{6}$")) {
+                                JOptionPane.showMessageDialog(this, "Invalid Company License Number. Format: 6 digits",
+                                                "Validation Errot", JOptionPane.ERROR_MESSAGE);
                                 return;
                         }
-                        if(!validateCylinderAndBookingIds(comCylinderId, comBooking)){
+                        if (!validateCylinderAndBookingIds(comCylinderId, comBooking)) {
                                 return;
-                       }
-                       if(!validateQuantityAndBasePrice(quantity, basePrice)){
-                        return;
-                       }
+                        }
+                        if (!validateQuantityAndBasePrice(quantity, basePrice)) {
+                                return;
+                        }
 
-                    CommercialCylinder cylinder = new CommercialCylinder(comCylinderId, customertype, comBooking, basePrice, comWeight, comMonth, companyName, companyAddress, comLicense, customertype, quantity);
-                    cylinders.add(cylinder);
-                    JOptionPane.showMessageDialog(this, "Commercial Cylinder ordered successfully!", "Suceess", JOptionPane.INFORMATION_MESSAGE);
-                    displayArea.append( "\n"+ cylinder.display());
-
+                        CommercialCylinder cylinder = new CommercialCylinder(comCylinderId, customertype, comBooking,
+                                        basePrice, comWeight, comMonth, companyName, companyAddress, comLicense,
+                                        customertype, quantity);
+                        cylinders.add(cylinder);
+                        JOptionPane.showMessageDialog(this, "Commercial Cylinder ordered successfully!", "Suceess",
+                                        JOptionPane.INFORMATION_MESSAGE);
+                        displayArea.append("\n" + cylinder.display());
 
                 });
 
                 JButton clearComBtn = new JButton("Clear Form");
                 clearComBtn.setBounds(220, 385, 170, 35);
                 commercialPanel.add(clearComBtn);
+                clearComBtn.addActionListener(e -> {
+                        comCustTypeCombo.setSelectedIndex(0);
+                        comCompanyField.setText("");
+                        comAddressField.setText("");
+                        comLicenseField.setText("");
+                        comBookingIdField.setText("");
+                        comCylinderIdField.setText("");
+                        comMonthCombo.setSelectedIndex(0);
+                        comQuantityField.setText("0");
+                        comWeightCombo.setSelectedIndex(0);
+                        comBasePriceField.setText("");
+
+                });
 
                 JScrollPane scrollPane = new JScrollPane(displayArea);
                 scrollPane.setBounds(20, 460, 940, 200);
@@ -447,6 +476,11 @@ public class Haha extends JFrame {
                 JButton identifyBtn = new JButton("Identify Type");
                 identifyBtn.setBounds(630, 28, 125, 30);
                 actionPanel.add(identifyBtn);
+                identifyBtn.addActionListener(e->{
+                        String cylinderId = comCylinderIdField.getText();
+                        identifyCylinderType(cylinderId);
+                        comCylinderIdField.setText("");
+                });
 
                 JButton exportBtn = new JButton("Export");
                 exportBtn.setBounds(765, 28, 80, 30);
