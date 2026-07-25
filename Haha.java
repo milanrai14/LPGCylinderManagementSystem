@@ -67,10 +67,11 @@ public class Haha extends JFrame {
         }
 
         public Haha() {
-                setTitle("LPG Cylinder Booking Management System");
+                setTitle("Nepal Oil Corporation Management System");
                 setSize(1000, 820);
                 setLocationRelativeTo(null);
-                getRootPane().setBorder(BorderFactory.createLineBorder(Color.BLACK, 3));
+                getRootPane().setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(Color.BLACK, 3),
+                                "Nepal Oil Corporation Management System", TitledBorder.CENTER, TitledBorder.TOP));
                 setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
                 setLayout(null);
 
@@ -89,7 +90,7 @@ public class Haha extends JFrame {
                 domCustTypeLabel.setBounds(20, 30, 140, 25);
                 domesticPanel.add(domCustTypeLabel);
 
-                String[] customerTypes = { "Select One", "Domestic", "Comercial" };
+                String[] customerTypes = { "Select One", "Domestic", "Commercial" };
                 JComboBox<String> domCustTypeCombo = new JComboBox<>(customerTypes);
                 domCustTypeCombo.setBounds(170, 30, 230, 25);
                 domesticPanel.add(domCustTypeCombo);
@@ -141,8 +142,8 @@ public class Haha extends JFrame {
                 JLabel domWeightLabel = new JLabel("Weight (Kg):");
                 domWeightLabel.setBounds(20, 275, 140, 25);
                 domesticPanel.add(domWeightLabel);
-                Double[] weightList = { 14.0, 16.0, 18.0 };
-                JComboBox<Double> domWeightCombo = new JComboBox<>(weightList);
+                String[] weightList = { "14.0", "16.0", "18.0" };
+                JComboBox<String> domWeightCombo = new JComboBox<>(weightList);
                 domWeightCombo.setBounds(170, 275, 230, 25);
                 domesticPanel.add(domWeightCombo);
 
@@ -186,7 +187,7 @@ public class Haha extends JFrame {
                         String bookingMonth = (String) domMonthCombo.getSelectedItem();
                         String cylinderId = domCylinderField.getText().trim();
                         int quantity = Integer.parseInt(domQtyField.getText());
-                        double weight = (Double) domWeightCombo.getSelectedItem();
+                        String weight = (String) domWeightCombo.getSelectedItem();
                         double basePrice = Double.parseDouble(domBasePriceField.getText());
                         double subsidyAmount = Double.parseDouble(domSubsidyField.getText());
 
@@ -221,7 +222,7 @@ public class Haha extends JFrame {
                                 return;
                         }
 
-                        if (quantity >= 2) {
+                        if (quantity > 2) {
                                 JOptionPane.showMessageDialog(this,
                                                 "Domestic Customer cannot order and used more than 2 cylinder per month",
                                                 "'Validation Error", JOptionPane.ERROR_MESSAGE);
@@ -238,13 +239,13 @@ public class Haha extends JFrame {
                         if (!isEligibleForSubsidy(citizenshipNumber, quantity)) {
                                 JOptionPane.showMessageDialog(this,
                                                 "Customer is not eligible for subsify. \n Subsidy will be set to 0.");
-                                subsidyAmount = 0.0;
                                 return;
                         }
 
-                        DomesticCylinder domestic = new DomesticCylinder(cylinderId, cylinderId, bookingId, basePrice,
+                        DomesticCylinder domestic = new DomesticCylinder(cylinderId, customerType, bookingId, basePrice,
                                         weight, bookingMonth, customerName, subsidyAmount, citizenshipNumber, quantity);
                         cylinders.add(domestic);
+                        JOptionPane.showMessageDialog(this, "Domestic Cylinder ordered Successfully!", "Success", JOptionPane.INFORMATION_MESSAGE);
                         displayArea.append("\n" + domestic.display());
 
                 });
@@ -253,6 +254,20 @@ public class Haha extends JFrame {
                                 "Clear Domestic Form");
                 clearDomesticBtn.setBounds(230, 385, 160, 32);
                 domesticPanel.add(clearDomesticBtn);
+
+                // addAction listner to clear the input field
+                clearDomesticBtn.addActionListener(e -> {
+                        domCustTypeCombo.setSelectedIndex(0);
+                        domNameField.setText(" ");
+                        domCitizenshipField.setText(" ");
+                        domBookingField.setText("");
+                        domCylinderField.setText(" ");
+                        domMonthCombo.setSelectedIndex(0);
+                        domWeightCombo.setSelectedIndex(0);
+                        domQtyField.setText("");
+                        domBasePriceField.setText(" ");
+                        domSubsidyField.setText("0.0");
+                });
 
                 // COMMERCIAL PANEL
                 JPanel commercialPanel = new JPanel();
@@ -273,13 +288,13 @@ public class Haha extends JFrame {
                 comCustTypeCombo.setBounds(170, 30, 230, 25);
                 commercialPanel.add(comCustTypeCombo);
 
-                JLabel comNameLabel = new JLabel("Company Name:");
-                comNameLabel.setBounds(20, 65, 140, 25);
-                commercialPanel.add(comNameLabel);
+                JLabel comCompanyLabel = new JLabel("Company Name:");
+                comCompanyLabel.setBounds(20, 65, 140, 25);
+                commercialPanel.add(comCompanyLabel);
 
-                JTextField comNameField = new JTextField();
-                comNameField.setBounds(170, 65, 230, 25);
-                commercialPanel.add(comNameField);
+                JTextField comCompanyField = new JTextField();
+                comCompanyField.setBounds(170, 65, 230, 25);
+                commercialPanel.add(comCompanyField);
 
                 JLabel comAddressLabel = new JLabel("Company Address:");
                 comAddressLabel.setBounds(20, 100, 140, 25);
@@ -333,7 +348,7 @@ public class Haha extends JFrame {
                 comWeightLabel.setBounds(20, 310, 140, 25);
                 commercialPanel.add(comWeightLabel);
 
-                JComboBox<Double> comWeightCombo = new JComboBox<>(weightList);
+                JComboBox<String> comWeightCombo = new JComboBox<>(weightList);
                 comWeightCombo.setBounds(170, 310, 230, 25);
                 commercialPanel.add(comWeightCombo);
 
@@ -348,6 +363,45 @@ public class Haha extends JFrame {
                 JButton addComBtn = new JButton("Add Commercial Cylinder");
                 addComBtn.setBounds(40, 385, 170, 35);
                 commercialPanel.add(addComBtn);
+                // Add Comercial Cylinder
+                addComBtn.addActionListener(e -> {
+                        String customertype = (String) comCustTypeCombo.getSelectedItem();
+                        if (!"Commercial".equals(customertype)) {
+                                JOptionPane.showMessageDialog(this,
+                                                "This section is only for Commerical Cylinder! \n"
+                                                                + "Please select 'Commercial' from the dropdown",
+                                                "Invalid Cylinder Type", JOptionPane.ERROR_MESSAGE);
+                        }
+
+                        String companyName = comCompanyField.getText();
+                        String companyAddress = comAddressField.getText();
+                        String comLicense = comLicenseField.getText();
+                        String comBooking = comBookingIdField.getText();
+                        String comCylinderId = comCylinderIdField.getText();
+                        String comMonth = (String) comMonthCombo.getSelectedItem();
+                        int quantity = Integer.parseInt(comQuantityField.getText());
+                        String comWeight = (String) comWeightCombo.getSelectedItem();
+                        double basePrice = Double.parseDouble(comBasePriceField.getText());
+
+
+                        if(comLicense == null && !comLicense.matches("^[0-9]{6}$")){
+                                JOptionPane.showMessageDialog(this, "Invalid Company License Number. Format: 6 digits", "Validation Errot", JOptionPane.ERROR_MESSAGE);
+                                return;
+                        }
+                        if(!validateCylinderAndBookingIds(comCylinderId, comBooking)){
+                                return;
+                       }
+                       if(!validateQuantityAndBasePrice(quantity, basePrice)){
+                        return;
+                       }
+
+                    CommercialCylinder cylinder = new CommercialCylinder(comCylinderId, customertype, comBooking, basePrice, comWeight, comMonth, companyName, companyAddress, comLicense, customertype, quantity);
+                    cylinders.add(cylinder);
+                    JOptionPane.showMessageDialog(this, "Commercial Cylinder ordered successfully!", "Suceess", JOptionPane.INFORMATION_MESSAGE);
+                    displayArea.append( "\n"+ cylinder.display());
+
+
+                });
 
                 JButton clearComBtn = new JButton("Clear Form");
                 clearComBtn.setBounds(220, 385, 170, 35);

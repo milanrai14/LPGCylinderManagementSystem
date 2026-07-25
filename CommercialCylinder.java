@@ -8,6 +8,7 @@
  */
 public class CommercialCylinder extends LPGCylinder {
     private String organizationName;
+    private String address;
     private String businessLicense;
     private int quantity;
     private double commercialDiscount = 0.0;
@@ -15,22 +16,22 @@ public class CommercialCylinder extends LPGCylinder {
 
     /**
      * Initialize a Commerical cylinder with LPG Cylinder and customer details.
-     *
      * @param cylinderId      the unique identifier of the cylinder
      * @param cylinderType    the type of the cylinder
      * @param bookingId       the booking ID assigned to the cylinder
      * @param basePrice       the base price of the commercial cylinder
      * @param weight          the weight of the commercial cylinder in kilograms
      * @param organization    the name of the organization who ordered the cylinder
+     * @param address         the address of the organization
      * @param businessLicense the business licecnse of the business or company
      * @param quantity        the number of ordered cylinder
+     * 
      */
-    public CommercialCylinder(String cylinderId, String cylinderType,
-            String bookingId, double basePrice, double weight, String month, String organizationName,
-            String businessLicense, int quantity) {
+    public CommercialCylinder(String cylinderId, String cylinderType, String bookingId, double basePrice,String weight, String month, String organizationName, String address, String businessLicense, String comLicense, int quantity) {
 
         super(cylinderId, cylinderType, bookingId, basePrice, weight, month);
         setOrganizationName(organizationName);
+        setAddress(address);
         setBusinessLicense(businessLicense);
         setQuantity(quantity);
     }
@@ -42,8 +43,17 @@ public class CommercialCylinder extends LPGCylinder {
      * 
      * @return the name of organization
      */
-    public String getOrganizationName(){
+    public String getOrganizationName() {
         return organizationName;
+    }
+
+    /**
+     * Return the address of the organization
+     * 
+     * @return address of organization
+     */
+    public String getAddress(){
+        return address;
     }
 
     /**
@@ -89,12 +99,23 @@ public class CommercialCylinder extends LPGCylinder {
      * 
      * @param organizationName
      */
-    public void setOrganizationName(String organizationName){
-        if(organizationName == null || organizationName.trim().isEmpty()){
+    public void setOrganizationName(String organizationName) {
+        if (organizationName == null || organizationName.trim().isEmpty()) {
             System.out.println("Organization name cannot be empty");
             return;
         }
         this.organizationName = organizationName.trim();
+    }
+
+    /**
+     * sets the address of the organization
+     * 
+     * @param address
+     */
+    public void setAddress(String address){
+        if(!address.trim().isEmpty()){
+            this.address = address.trim();
+        }
     }
 
     /**
@@ -151,9 +172,6 @@ public class CommercialCylinder extends LPGCylinder {
      * @return true if all required fields contain valid values,
      *         otherwise false
      */
-    public boolean isValid() {
-        return getCylinderId() != null && getCylinderType() != null && getBookingId() != null && getBasePrice() > 0 && getWeight() > 0 && businessLicense != null && quantity > 0;
-    }
 
     /**
      * Calculates the final price after applying commercial discount.
@@ -175,24 +193,18 @@ public class CommercialCylinder extends LPGCylinder {
      * @return the details of the Commercial Cylinder.
      */
     @Override
-    public void display() {
-        System.out.println("===== Commercial Cylinder Details =====");
-
-        System.out.println("Cylinder ID: " + getCylinderId());
-        System.out.println("Cylinder Type: " + getCylinderType());
-        System.out.println("Booking ID: " + getBookingId());
-        System.out.println("Base Price: " + getBasePrice());
-        System.out.println("Weight: " + getWeight());
-
-        System.out.println("Business License: " + this.businessLicense);
-        System.out.println("Quantity Ordered: " + this.quantity);
-        System.out.println("Total Orders Till Now: " + this.totalOrderCyliner);
-
-        applyCommercialDiscount();
-
-        System.out.println("Commercial Discount: " + this.commercialDiscount * 100 + "%");
-        System.out.println("Final Price: " + calculateFinalPrice());
-        System.out.println("=======================================");
+    public String display() {
+        return "===== Commercial Cylinder Details =====\n" +
+                "Cylinder ID: " + getCylinderId() + "\n" +
+                "Cylinder Type: " + getCylinderType() + "\n" +
+                "Booking ID: " + getBookingId() + "\n" +
+                "Base Price: Rs " + getBasePrice() + "\n" +
+                "Weight: " + getWeight() + " kg\n" +
+                "Business License: " + businessLicense + "\n" +
+                "Quantity Ordered: " + quantity + "\n" +
+                "Commercial Discount: " + (commercialDiscount * 100) + "%\n" +
+                "Final Price: Rs " + calculateFinalPrice() + "\n" +
+                "=======================================";
     }
 
 }

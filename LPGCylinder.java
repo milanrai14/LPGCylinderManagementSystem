@@ -12,7 +12,7 @@ public abstract class LPGCylinder{
     private String cylinderType; // type of cylinder.
     private String bookingId; // Booking reference ID associated with the cylinder.
     private double basePrice; // Base price of the cylinder.
-    private double weight; // Weight of the cylinder in kilograms.
+    private String weight; // Weight of the cylinder in kilograms.
     private String month; // Month of ordered cylinder
 
 
@@ -27,7 +27,7 @@ public abstract class LPGCylinder{
      * @param weight the cylinder weight in kilograms     
      * @param month the month when the cylinder was ordered.
      */
-    public LPGCylinder(String cylinderId, String cylinderType, String bookingId, double basePrice, double weight, String month){
+    public LPGCylinder(String cylinderId, String cylinderType, String bookingId, double basePrice, String weight, String month){
         setCylinderId(cylinderId);
         setCylinderType(cylinderType);
         setBookingId(bookingId);
@@ -80,7 +80,7 @@ public abstract class LPGCylinder{
      * 
      * @return the weight
      */
-    public double getWeight(){
+    public String getWeight(){
         return weight;
     }
     
@@ -160,11 +160,7 @@ public abstract class LPGCylinder{
      * 
      * @param weight weight of the cylunder.
      */
-    public void setWeight(double weight){
-        if(weight <= 0){
-            System.out.println("Invalid weight. Weight must be greater than 0 kilograms.");
-            return;
-        }
+    public void setWeight(String weight){
         this.weight = weight;
     }
     /**

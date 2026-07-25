@@ -368,8 +368,8 @@ public class NOCApp extends JFrame {
                 subsidyAmount = 0.0;
             }
 
-            DomesticCylinder domestic = new DomesticCylinder(cylinderId, cylinderType, bookingId, basePrice, weight,
-                    bookingMonth, customerName, subsidyAmount, citizenshipNumber, quantity);
+            DomesticCylinder domestic = new DomesticCylinder(cylinderId, cylinderType, bookingId, basePrice,
+                    bookingMonth, customerName, citizenshipNumber, weight, citizenshipNumber, quantity);
             cylinders.add(domestic);
 
             // adding ti text area

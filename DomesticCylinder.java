@@ -30,15 +30,12 @@ public class DomesticCylinder extends LPGCylinder {
      * @param quantityOfOrderCylinder the number of cylinder ordered
      * 
      */
-    public DomesticCylinder(String cylinderId, String cylinderType, String bookingId, double basePrice, double weight,
-            String month,
-            String customerName,
-            double subsidyAmount, String citizenshipNumber, int quantityOfOrderCylinder) {
+    public DomesticCylinder(String cylinderId, String cylinderType, String bookingId, double basePrice, String weight, String month, String customerName, double subsidyAmount, String citizenshipNumber, int quantityOfOrderCylinder) {
         super(cylinderId, cylinderType, bookingId, basePrice, weight, month);
         setCustomerName(customerName);
         setCitizenshipNumber(citizenshipNumber);
-        setSubsidyAmount(subsidyAmount);
         setQuantityOfOrderCylinder(quantityOfOrderCylinder);
+        setSubsidyAmount(subsidyAmount);
     }
 
     // Getter methods
@@ -181,11 +178,6 @@ public class DomesticCylinder extends LPGCylinder {
      * 
      * @return true if the domestic cylinder contains valid data, otherwise false.
      */
-    public boolean isValid() {
-        return getCylinderId() != null && getCylinderType() != null && getBookingId() != null
-                && getCitizenshipNumber() != null && getBasePrice() > 0 && getWeight() > 0 && subsidyAmount > 0
-                && quantityOfOrderCylinder > 0;
-    }
 
     /**
      * Calculate the final price of the domestic cylinder. If the customer is
