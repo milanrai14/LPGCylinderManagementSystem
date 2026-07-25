@@ -82,6 +82,18 @@ public class Haha extends JFrame {
                 JOptionPane.showMessageDialog(this, "No cylinder with that Cylinder ID.");
         }
 
+        public void caluclateBulkDiscount(String cylinderId){
+                for(LPGCylinder cylinder: cylinders){
+                        if(cylinder.getCylinderId().equals(cylinderId)){
+                                if(cylinder instanceof CommercialCylinder){
+                                        // not understanding
+                                       
+                                }
+                        }
+                }
+
+        }
+
         public Haha() {
                 setTitle("Nepal Oil Corporation Management System");
                 setSize(1000, 820);
@@ -515,3 +527,73 @@ public class Haha extends JFrame {
                 new Haha();
         }
 }
+
+/*
+*JPanel actionPanel = new JPanel();
+actionPanel.setLayout(null);
+actionPanel.setBounds(20, 680, 940, 80);
+
+actionPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(Color.BLACK, 2),
+                "Actions", TitledBorder.CENTER, TitledBorder.TOP));
+
+actionPanel.setLayout(null);
+
+JLabel cylinderIdLabel = new JLabel("Cylinder ID:");
+cylinderIdLabel.setBounds(15, 30, 75, 25);
+actionPanel.add(cylinderIdLabel);
+
+JTextField cylinderIdField = new JTextField();
+cylinderIdField.setBounds(95, 30, 120, 28);
+actionPanel.add(cylinderIdField);
+
+JButton bulkDiscountBtn = new JButton("Bulk Discount");
+bulkDiscountBtn.setBounds(225, 28, 110, 30);  // Reduced size
+actionPanel.add(bulkDiscountBtn);
+
+JButton subsidyBtn = new JButton("Price After Subsidy");
+subsidyBtn.setBounds(340, 28, 130, 30);  // Reduced size
+actionPanel.add(subsidyBtn);
+
+JButton displayBtn = new JButton("Display");
+displayBtn.setBounds(475, 28, 80, 30);  // Reduced size
+actionPanel.add(displayBtn);
+
+// addActionListner for displayall btn
+displayBtn.addActionListener(e -> {
+        if (cylinders.isEmpty()) {
+                JOptionPane.showMessageDialog(this, "No cylinder records");
+                return;
+        }
+        for (LPGCylinder cylinder : cylinders) {
+                displayArea.append(cylinder.display());
+        }
+});
+
+JButton identifyBtn = new JButton("Identify Type");
+identifyBtn.setBounds(560, 28, 100, 30);  // Reduced size
+actionPanel.add(identifyBtn);
+identifyBtn.addActionListener(e -> {
+        String cylinderId = cylinderIdField.getText();
+        identifyCylinderType(cylinderId);
+        cylinderIdField.setText("");
+});
+
+// NEW: Clear Display Button - Added
+JButton clearDisplayBtn = new JButton("Clear");
+clearDisplayBtn.setBounds(665, 28, 80, 30);  // Smaller size
+actionPanel.add(clearDisplayBtn);
+
+clearDisplayBtn.addActionListener(e -> {
+        displayArea.setText("");
+});
+
+JButton exportBtn = new JButton("Export");
+exportBtn.setBounds(750, 28, 80, 30);  // Reduced size
+actionPanel.add(exportBtn);
+
+JButton loadBtn = new JButton("Load");
+loadBtn.setBounds(835, 28, 80, 30);  // Reduced size
+actionPanel.add(loadBtn);
+
+add(actionPanel);
+*/

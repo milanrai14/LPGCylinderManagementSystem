@@ -16,6 +16,7 @@ public class CommercialCylinder extends LPGCylinder {
 
     /**
      * Initialize a Commerical cylinder with LPG Cylinder and customer details.
+     * 
      * @param cylinderId      the unique identifier of the cylinder
      * @param cylinderType    the type of the cylinder
      * @param bookingId       the booking ID assigned to the cylinder
@@ -27,7 +28,8 @@ public class CommercialCylinder extends LPGCylinder {
      * @param quantity        the number of ordered cylinder
      * 
      */
-    public CommercialCylinder(String cylinderId, String cylinderType, String bookingId, double basePrice,String weight, String month, String organizationName, String address, String businessLicense, int quantity) {
+    public CommercialCylinder(String cylinderId, String cylinderType, String bookingId, double basePrice, String weight,
+            String month, String organizationName, String address, String businessLicense, int quantity) {
 
         super(cylinderId, cylinderType, bookingId, basePrice, weight, month);
         setOrganizationName(organizationName);
@@ -52,7 +54,7 @@ public class CommercialCylinder extends LPGCylinder {
      * 
      * @return address of organization
      */
-    public String getAddress(){
+    public String getAddress() {
         return address;
     }
 
@@ -112,8 +114,8 @@ public class CommercialCylinder extends LPGCylinder {
      * 
      * @param address
      */
-    public void setAddress(String address){
-        if(!address.trim().isEmpty()){
+    public void setAddress(String address) {
+        if (!address.trim().isEmpty()) {
             this.address = address.trim();
         }
     }
@@ -193,7 +195,10 @@ public class CommercialCylinder extends LPGCylinder {
      * @return the details of the Commercial Cylinder.
      */
     @Override
+
     public String display() {
+        applyCommercialDiscount();
+        double finalPrice = calculateFinalPrice();
         return "===== Commercial Cylinder Details =====\n" +
                 "Cylinder ID: " + getCylinderId() + "\n" +
                 "Cylinder Type: " + getCylinderType() + "\n" +
@@ -203,7 +208,7 @@ public class CommercialCylinder extends LPGCylinder {
                 "Business License: " + businessLicense + "\n" +
                 "Quantity Ordered: " + quantity + "\n" +
                 "Commercial Discount: " + (commercialDiscount * 100) + "%\n" +
-                "Final Price: Rs " + calculateFinalPrice() + "\n" +
+                "Final Price: Rs " + finalPrice + "\n" +
                 "=======================================";
     }
 
