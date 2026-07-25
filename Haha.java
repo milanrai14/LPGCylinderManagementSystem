@@ -66,19 +66,22 @@ public class Haha extends JFrame {
                 return validCitizenship && withInQuota;
         }
 
-        public void identifyCylinderType(String cylinderId){
-                for(LPGCylinder cylinder: cylinders){
-                        if(cylinder.getCylinderId().equals(cylinder)){
-                                if(cylinder instanceof DomesticCylinder){
+        public void identifyCylinderType(String cylinderId) {
+                for (LPGCylinder cylinder : cylinders) {
+                        System.out.println("Cylinder ID: " + cylinderId);
+                        if (cylinder.getCylinderId().equals(cylinderId)) {
+                                if (cylinder instanceof DomesticCylinder) {
                                         JOptionPane.showMessageDialog(this, "Cylinder Type: Domestic Cylinder");
                                 } else {
                                         JOptionPane.showMessageDialog(this, "Cylinder Type: Commercial Cylinder");
                                 }
-                               return;
+                                return;
                         }
-                        JOptionPane.showMessageDialog(this, "No cylinder with that Cylinder ID.");
                 }
+
+                JOptionPane.showMessageDialog(this, "No cylinder with that Cylinder ID.");
         }
+
         public Haha() {
                 setTitle("Nepal Oil Corporation Management System");
                 setSize(1000, 820);
@@ -193,6 +196,7 @@ public class Haha extends JFrame {
                                                 "This section is only for Domestic Cylinder! \n"
                                                                 + "Please select 'Domestic' from the dropdown",
                                                 "Invalid Cylinder Type", JOptionPane.ERROR_MESSAGE);
+                                return;
                         }
                         String customerName = domNameField.getText().trim();
                         String citizenshipNumber = domCitizenshipField.getText().trim();
@@ -257,7 +261,9 @@ public class Haha extends JFrame {
 
                         DomesticCylinder domestic = new DomesticCylinder(cylinderId, customerType, bookingId, basePrice,
                                         weight, bookingMonth, customerName, subsidyAmount, citizenshipNumber, quantity);
+
                         cylinders.add(domestic);
+                        System.out.println("Cylinder Domesti: " + domestic.getCylinderId());
                         JOptionPane.showMessageDialog(this, "Domestic Cylinder ordered Successfully!", "Success",
                                         JOptionPane.INFORMATION_MESSAGE);
                         displayArea.append("\n" + domestic.display());
@@ -409,9 +415,9 @@ public class Haha extends JFrame {
                                 return;
                         }
 
-                        CommercialCylinder cylinder = new CommercialCylinder(comCylinderId, customertype, comBooking,
+                        CommercialCylinder cylinder = new CommercialCylinder(comCylinderId, customerType, comBooking,
                                         basePrice, comWeight, comMonth, companyName, companyAddress, comLicense,
-                                        customertype, quantity);
+                                        quantity);
                         cylinders.add(cylinder);
                         JOptionPane.showMessageDialog(this, "Commercial Cylinder ordered successfully!", "Suceess",
                                         JOptionPane.INFORMATION_MESSAGE);
@@ -476,10 +482,10 @@ public class Haha extends JFrame {
                 JButton identifyBtn = new JButton("Identify Type");
                 identifyBtn.setBounds(630, 28, 125, 30);
                 actionPanel.add(identifyBtn);
-                identifyBtn.addActionListener(e->{
-                        String cylinderId = comCylinderIdField.getText();
+                identifyBtn.addActionListener(e -> {
+                        String cylinderId = cylinderIdField.getText();
                         identifyCylinderType(cylinderId);
-                        comCylinderIdField.setText("");
+                        cylinderIdField.setText("");
                 });
 
                 JButton exportBtn = new JButton("Export");

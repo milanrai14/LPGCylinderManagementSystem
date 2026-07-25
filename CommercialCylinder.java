@@ -27,7 +27,7 @@ public class CommercialCylinder extends LPGCylinder {
      * @param quantity        the number of ordered cylinder
      * 
      */
-    public CommercialCylinder(String cylinderId, String cylinderType, String bookingId, double basePrice,String weight, String month, String organizationName, String address, String businessLicense, String comLicense, int quantity) {
+    public CommercialCylinder(String cylinderId, String cylinderType, String bookingId, double basePrice,String weight, String month, String organizationName, String address, String businessLicense, int quantity) {
 
         super(cylinderId, cylinderType, bookingId, basePrice, weight, month);
         setOrganizationName(organizationName);
