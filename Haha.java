@@ -59,8 +59,9 @@ public class Haha extends JFrame {
                 return true;
         }
 
-        public boolean isEligibleForSubsidy(String cizitenshipNumber, int quantity){
-                boolean validCitizenship = cizitenshipNumber != null && cizitenshipNumber.trim().length() == CITIZENSHIP_LENGTH;
+        public boolean isEligibleForSubsidy(String cizitenshipNumber, int quantity) {
+                boolean validCitizenship = cizitenshipNumber != null
+                                && cizitenshipNumber.trim().length() == CITIZENSHIP_LENGTH;
                 boolean withInQuota = quantity <= 2;
                 return validCitizenship && withInQuota;
         }
@@ -215,21 +216,34 @@ public class Haha extends JFrame {
                                 return;
                         }
 
-                        if (!validateCylinderAndBookingIds(cylinderId, bookingId)|| !validateQuantityAndBasePrice(quantity, basePrice)) {
+                        if (!validateCylinderAndBookingIds(cylinderId, bookingId)
+                                        || !validateQuantityAndBasePrice(quantity, basePrice)) {
                                 return;
                         }
 
-                        if(basePrice < subsidyAmount){
-                                JOptionPane.showMessageDialog(this, "Subsidy Amount cannot be greater than base price", "validation Error", JOptionPane.ERROR_MESSAGE);
+                        if (quantity >= 2) {
+                                JOptionPane.showMessageDialog(this,
+                                                "Domestic Customer cannot order and used more than 2 cylinder per month",
+                                                "'Validation Error", JOptionPane.ERROR_MESSAGE);
+                                return;
+
+                        }
+
+                        if (basePrice < subsidyAmount) {
+                                JOptionPane.showMessageDialog(this, "Subsidy Amount cannot be greater than base price",
+                                                "validation Error", JOptionPane.ERROR_MESSAGE);
                                 return;
                         }
-                        
-                        if(!isEligibleForSubsidy(citizenshipNumber, quantity)){
-                                JOptionPane.showMessageDialog(this, "Customer is not eligible for subsify. \n Subsidy will be set to 0.");
+
+                        if (!isEligibleForSubsidy(citizenshipNumber, quantity)) {
+                                JOptionPane.showMessageDialog(this,
+                                                "Customer is not eligible for subsify. \n Subsidy will be set to 0.");
                                 subsidyAmount = 0.0;
+                                return;
                         }
 
-                        DomesticCylinder domestic = new DomesticCylinder(cylinderId, cylinderId, bookingId, basePrice, weight, bookingMonth, customerName, subsidyAmount, citizenshipNumber, quantity);
+                        DomesticCylinder domestic = new DomesticCylinder(cylinderId, cylinderId, bookingId, basePrice,
+                                        weight, bookingMonth, customerName, subsidyAmount, citizenshipNumber, quantity);
                         cylinders.add(domestic);
                         displayArea.append("\n" + domestic.display());
 
@@ -338,7 +352,6 @@ public class Haha extends JFrame {
                 JButton clearComBtn = new JButton("Clear Form");
                 clearComBtn.setBounds(220, 385, 170, 35);
                 commercialPanel.add(clearComBtn);
-
 
                 JScrollPane scrollPane = new JScrollPane(displayArea);
                 scrollPane.setBounds(20, 460, 940, 200);
