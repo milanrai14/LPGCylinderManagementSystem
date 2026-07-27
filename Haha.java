@@ -90,15 +90,39 @@ public class Haha extends JFrame {
                                         commerical.applyCommercialDiscount();
                                         double totalPrice = commerical.getBasePrice() * commerical.getQuantity();
                                         double discountAmount = totalPrice * commerical.getCommercialDiscount();
-                                        JOptionPane.showMessageDialog(this, "Organization Name: "+commerical.getOrganizationName() + "\n" + "Total Qunaity: "+commerical.getQuantity() + "\n" + "Discount Amount : Rs "+discountAmount + "\n" + "Final price: Rs "+commerical.calculateFinalPrice(), "Bulk Discount", JOptionPane.INFORMATION_MESSAGE);
+                                        JOptionPane.showMessageDialog(this,
+                                                        "Organization Name: " + commerical.getOrganizationName() + "\n"
+                                                                        + "Total Qunaity: " + commerical.getQuantity()
+                                                                        + "\n" + "Discount Amount : Rs "
+                                                                        + discountAmount + "\n" + "Final price: Rs "
+                                                                        + commerical.calculateFinalPrice(),
+                                                        "Bulk Discount", JOptionPane.INFORMATION_MESSAGE);
                                 } else {
                                         JOptionPane.showMessageDialog(this,
-                                                        "This cylinder is not a commercial cylinder.", "Ivalid Cylinder ID", JOptionPane.INFORMATION_MESSAGE);
+                                                        "This cylinder is not a commercial cylinder.",
+                                                        "Ivalid Cylinder ID", JOptionPane.INFORMATION_MESSAGE);
                                 }
                                 return;
                         }
                 }
-                JOptionPane.showMessageDialog(this, "Cylinder Id not found.", "NO cylinder ID", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(this, "No Cylinder with this cylinder Id", "NO cylinder ID",
+                                JOptionPane.ERROR_MESSAGE);
+        }
+
+        public void subsidyDiscount(String cylindeId){
+                for(LPGCylinder cylinder: cylinders){
+                        if(cylinder instanceof DomesticCylinder){
+                                DomesticCylinder domestic = (DomesticCylinder) cylinder;
+                                JOptionPane.showMessageDialog(this, "Customer Name: "+domestic.getCustomerName() + "\n" + "Total Quanity: "+domestic.getQuantityOfOrderCylinder() + "\n" + "Discount Amount: "+domestic.getSubsidyAmount()+ "\n"+ "Final Price: "+domestic.calculateFinalPrice());
+
+                        } else {
+                                JOptionPane.showMessageDialog(this, "This cylinder Id is not domestic cylinder");
+                        }
+                        return;
+                }
+                JOptionPane.showMessageDialog(this, "No cylinder with this cylinder Id.");
+                
+
         }
 
         public Haha() {
