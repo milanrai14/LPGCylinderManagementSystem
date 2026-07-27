@@ -82,23 +82,24 @@ public class Haha extends JFrame {
                 JOptionPane.showMessageDialog(this, "No cylinder with that Cylinder ID.");
         }
 
-        public void  bulkDiscount(String cylinderId){
-                for(LPGCylinder cylinder: cylinders){
-                        if(cylinder.getCylinderId().equals(cylinderId)){
-                                if(cylinder instanceof CommercialCylinder){
+        public void bulkDiscount(String cylinderId, int quantity) {
+                for (LPGCylinder cylinder : cylinders) {
+                        if (cylinder.getCylinderId().equals(cylinderId)) {
+                                if (cylinder instanceof CommercialCylinder) {
                                         CommercialCylinder commerical = (CommercialCylinder) cylinder;
                                         commerical.applyCommercialDiscount();
-                                        JOptionPane.showMessageDialog(this, "Organization: "+commerical.getOrganizationName() + "\n" + "Quantity: "+commerical.getQuantity() + "\n" + "Discount: "+(commerical.getCommercialDiscount() * 100)  + "\n" + "Final Price: "+commerical.calculateFinalPrice());
+                                        double totalPrice = commerical.getBasePrice() * commerical.getQuantity();
+                                        double discountAmount = totalPrice * commerical.getCommercialDiscount();
+                                        JOptionPane.showMessageDialog(this, "Organization Name: "+commerical.getOrganizationName() + "\n" + "Total Qunaity: "+commerical.getQuantity() + "\n" + "Discount Amount : Rs "+discountAmount + "\n" + "Final price: Rs "+commerical.calculateFinalPrice());
                                 } else {
-                                        JOptionPane.showMessageDialog(this, "This cylinder is not a commercial cylinder.");
+                                        JOptionPane.showMessageDialog(this,
+                                                        "This cylinder is not a commercial cylinder.");
                                 }
                                 return;
                         }
                 }
                 JOptionPane.showMessageDialog(this, "Cylinder Id not found.");
         }
-
-        
 
         public Haha() {
                 setTitle("Nepal Oil Corporation Management System");
@@ -409,6 +410,7 @@ public class Haha extends JFrame {
                                                 "This section is only for Commerical Cylinder! \n"
                                                                 + "Please select 'Commercial' from the dropdown",
                                                 "Invalid Cylinder Type", JOptionPane.ERROR_MESSAGE);
+                                return;
                         }
 
                         String companyName = comCompanyField.getText();
@@ -489,8 +491,8 @@ public class Haha extends JFrame {
                 bulkDiscountBtn.setBounds(225, 28, 130, 30);
                 actionPanel.add(bulkDiscountBtn);
 
-                //register with bulkDiscount
-                bulkDiscountBtn.addActionListener(e->{
+                // register with bulkDiscount
+                bulkDiscountBtn.addActionListener(e -> {
                         String cylinderId = cylinderIdField.getText();
                         bulkDiscount(cylinderId);
                 });
@@ -539,4 +541,3 @@ public class Haha extends JFrame {
                 new Haha();
         }
 }
-
