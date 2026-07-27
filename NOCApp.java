@@ -1,606 +1,571 @@
-/**
- * NOCApp is the main GUI application for the Nepal Oil Corporation Cylinder Management System.
- * It provides a graphical interface for managing LPG cylinder bookings including
- * adding domestic/commercial cylinders, calculating discounts and subsidies,
- * displaying records, and file operations.
- *
- * All cylinder records are stored in an ArrayList collection.
- * @author Milan Rai
- * @version 1.1.1.1
- */
 import java.awt.Color;
 import java.util.ArrayList;
+import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
+import javax.swing.border.TitledBorder;
 
 public class NOCApp extends JFrame {
+        final int CITIZENSHIP_LENGTH = 12;
+        ArrayList<LPGCylinder> cylinders = new ArrayList<LPGCylinder>();
 
-    final int CITIZENSHIP_LENGTH = 12;
-    ArrayList<LPGCylinder> cylinders = new ArrayList<LPGCylinder>();
-
-    public boolean validateCylinderAndBookingIds(String cylinderId, String bookingId) {
-        if (cylinderId == null || cylinderId.trim().isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Cylinder ID cannot be empty");
-            return false;
-        }
-        if (!cylinderId.matches("NOC-\\d{3}")) {
-            JOptionPane.showMessageDialog(this, "Invalid Cylinder ID format. Use NOC-.000.");
-            return false;
-        }
-
-        for (LPGCylinder cylinder : cylinders) {
-            if (cylinder.getBookingId().equals(bookingId)) {
-                JOptionPane.showMessageDialog(this,
-                        "Booking ID already exists. Please use a unique ID.",
-                        "Duplicate ID", JOptionPane.ERROR_MESSAGE);
-                return false;
-            }
-        }
-
-        for (LPGCylinder cylinder : cylinders) {
-            if (cylinder.getCylinderId().equals(cylinderId)) {
-                JOptionPane.showMessageDialog(this,
-                        "Cylinder ID already exists. Please use a unique ID.",
-                        "Duplicate ID", JOptionPane.ERROR_MESSAGE);
-                return false;
-            }
-        }
-        return true;
-    }
-
-    public boolean validateQuantityAndBasePrice(int quantity, double basePrice) {
-        if (quantity <= 0) {
-            JOptionPane.showMessageDialog(this,
-                    "Quantity must be greater than 0",
-                    "Validation Error", JOptionPane.ERROR_MESSAGE);
-            return false;
-        }
-
-        if (basePrice <= 0) {
-            JOptionPane.showMessageDialog(this,
-                    "Base Price must be greater than 0",
-                    "Validation Error", JOptionPane.ERROR_MESSAGE);
-            return false;
-        }
-        return true;
-
-    }
-
-    public boolean isEligibleForSubsidy(String citizenshipNumber, int quantity) {
-        boolean validCitizenship = citizenshipNumber != null
-                && citizenshipNumber.trim().length() == 12;
-        boolean withinQuota = quantity <= 2;
-        return validCitizenship && withinQuota;
-    }
-
-    public void identifyCylinderType(String cylinderId) {
-        for (LPGCylinder cylinder : cylinders) {
-
-            if (cylinder.getCylinderId().equals(cylinderId)) {
-
-                if (cylinder instanceof DomesticCylinder) {
-                    
-                    JOptionPane.showMessageDialog(this,
-                            "Cylinder Type: Domestic Cylinder");
-                } else if (cylinder instanceof CommercialCylinder) {
-                    JOptionPane.showMessageDialog(this,
-                            "Cylinder Type: Commercial Cylinder");
-                } else {
-                    JOptionPane.showMessageDialog(this,
-                            "Unknown Cylinder Type");
+        public boolean validateCylinderAndBookingIds(String cylinderId, String bookingId) {
+                if (cylinderId == null || cylinderId.trim().isEmpty()) {
+                        JOptionPane.showMessageDialog(this, "Cylinder Id cannot be empty");
+                        return false;
                 }
-                return;
-            }
-
-        }
-        JOptionPane.showMessageDialog(this,
-                "Cylinder ID not found.");
-    }
-
-    public void displayAll() {
-        if (cylinders.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "No cylinder records found.");
-            return;
-        }
-
-        for (LPGCylinder cylinder : cylinders) {
-            cylinder.display();
-        }
-    }
-
-    public NOCApp() {
-
-        setTitle("LPG Cylinder Booking Management System");
-        setSize(1200, 800);
-        setLocationRelativeTo(null);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setLayout(null);
-
-        // Cylinder Type
-        JLabel cylinderTypeLabel = new JLabel("Customer Type:");
-        cylinderTypeLabel.setBounds(30, 30, 150, 30);
-        add(cylinderTypeLabel);
-
-        String[] cylinderTypes = { "Select One", "Domestic", "Commercial" };
-        JComboBox<String> cylinderTypeCombobox = new JComboBox<>(cylinderTypes);
-        cylinderTypeCombobox.setBounds(200, 30, 200, 30);
-        add(cylinderTypeCombobox);
-        // Customer Name
-        JLabel customerNameLabel = new JLabel("Customer Name:");
-        customerNameLabel.setBounds(30, 80, 180, 30);
-        add(customerNameLabel);
-
-        JTextField customerNameField = new JTextField();
-        customerNameField.setBounds(200, 80, 200, 30);
-        add(customerNameField);
-
-        // Citizenship Number
-        JLabel citizenshipLabel = new JLabel("Citizenship Number:");
-        citizenshipLabel.setBounds(30, 130, 200, 30);
-        add(citizenshipLabel);
-
-        JTextField citizenshipField = new JTextField();
-        citizenshipField.setBounds(200, 130, 200, 30);
-        add(citizenshipField);
-
-        // Organization Name
-        JLabel organizationLabel = new JLabel("Organization Name:");
-        organizationLabel.setBounds(30, 180, 210, 30);
-        add(organizationLabel);
-
-        JTextField organizationField = new JTextField();
-        organizationField.setBounds(200, 180, 200, 30);
-        add(organizationField);
-
-        // Business License Number
-        JLabel businessLicenseLabel = new JLabel("Business License Number:");
-        businessLicenseLabel.setBounds(30, 230, 230, 30);
-        add(businessLicenseLabel);
-
-        JTextField businessLicenseField = new JTextField();
-        businessLicenseField.setBounds(200, 230, 200, 30);
-        add(businessLicenseField);
-
-        // Booking ID
-        JLabel bookingIdLabel = new JLabel("Booking ID:");
-        bookingIdLabel.setBounds(30, 280, 150, 30);
-        add(bookingIdLabel);
-
-        JTextField bookingIdField = new JTextField();
-        bookingIdField.setBounds(200, 280, 200, 30);
-        add(bookingIdField);
-
-        // Month (JComboBox)
-        JLabel monthLabel = new JLabel("Month:");
-        monthLabel.setBounds(30, 330, 150, 30);
-        add(monthLabel);
-
-        String[] months = { "January", "February", "March", "April", "May", "June",
-                "July", "August", "September", "October", "November", "December" };
-        JComboBox<String> monthComboBox = new JComboBox<>(months);
-        monthComboBox.setBounds(200, 330, 200, 30);
-        add(monthComboBox);
-
-        // Cylinder ID
-        JLabel cylinderIdLabel = new JLabel("Cylinder ID:");
-        cylinderIdLabel.setBounds(30, 380, 150, 30);
-        add(cylinderIdLabel);
-
-        JTextField cylinderIdField = new JTextField();
-        cylinderIdField.setBounds(200, 380, 200, 30);
-        add(cylinderIdField);
-
-        // Quantity of Ordered Cylinders
-        JLabel quantityLabel = new JLabel("Quantity of Order:");
-        quantityLabel.setBounds(30, 430, 150, 30);
-        add(quantityLabel);
-
-        JTextField quantityField = new JTextField();
-        quantityField.setBounds(200, 430, 200, 30);
-        add(quantityField);
-
-        // Weight
-        JLabel weightLabel = new JLabel("Weight (Kg):");
-        weightLabel.setBounds(30, 480, 150, 30);
-        add(weightLabel);
-
-        Double[] weightList = { 14.0, 16.0, 18.0 };
-        JComboBox<Double> weightComboBox = new JComboBox<>(weightList);
-        weightComboBox.setBounds(200, 480, 200, 30);
-        add(weightComboBox);
-
-        // Base Price
-        JLabel basePriceLabel = new JLabel("Base Price:");
-        basePriceLabel.setBounds(30, 530, 150, 30);
-        add(basePriceLabel);
-
-        JTextField basePriceField = new JTextField();
-        basePriceField.setBounds(200, 530, 200, 30);
-        add(basePriceField);
-
-        // Subsidy Amount (Domestic only)
-        JLabel subsidyLabel = new JLabel("Subsidy Amount:");
-        subsidyLabel.setBounds(30, 580, 200, 30);
-        add(subsidyLabel);
-
-        JTextField subsidyField = new JTextField("0.0");
-        subsidyField.setBounds(200, 580, 200, 30);
-        add(subsidyField);
-
-        // Adding listner for cylindertypeCombobox for not giving the access for
-        // unecessary thing
-        cylinderTypeCombobox.addActionListener(e -> {
-            String cylinderType = (String) cylinderTypeCombobox.getSelectedItem();
-            if ("Domestic".equals(cylinderType)) {
-                organizationField.setEditable(false);
-                organizationField.setBackground(Color.LIGHT_GRAY);
-
-                businessLicenseField.setEditable(false);
-                businessLicenseField.setBackground(Color.LIGHT_GRAY);
-
-                customerNameField.setEditable(true);
-                customerNameField.setBackground(Color.WHITE);
-
-                citizenshipField.setEditable(true);
-                citizenshipField.setBackground(Color.WHITE);
-            } else if ("Commercial".equals(cylinderType)) {
-                organizationField.setEditable(true);
-                organizationField.setBackground(Color.WHITE);
-
-                businessLicenseField.setEditable(true);
-                businessLicenseField.setBackground(Color.WHITE);
-
-                customerNameField.setEditable(false);
-                customerNameField.setBackground(Color.LIGHT_GRAY);
-
-                citizenshipField.setEditable(false);
-                citizenshipField.setBackground(Color.LIGHT_GRAY);
-
-                subsidyField.setEditable(false);
-                subsidyField.setBackground(Color.LIGHT_GRAY);
-            } else if ("Select One".equals(cylinderType)) {
-                customerNameField.setEditable(true);
-                customerNameField.setBackground(Color.WHITE);
-
-                citizenshipField.setEditable(true);
-                citizenshipField.setBackground(Color.WHITE);
-
-                organizationField.setEditable(true);
-                organizationField.setBackground(Color.WHITE);
-
-                businessLicenseField.setEditable(true);
-                businessLicenseField.setBackground(Color.WHITE);
-
-                subsidyField.setEditable(true);
-                subsidyField.setBackground(Color.WHITE);
-
-            }
-        });
-
-        // Display Area
-        JTextArea displayArea = new JTextArea();
-        displayArea.setEditable(false);
-        displayArea.setLineWrap(true);
-        displayArea.setWrapStyleWord(true);
-
-        JScrollPane scrollPane = new JScrollPane(displayArea);
-        scrollPane.setBounds(700, 30, 450, 680);
-        add(scrollPane);
-
-        // Add Domestic Cylinder
-        JButton addDomesticButton = new JButton("Add Domestic Cylinder");
-        addDomesticButton.setBounds(460, 30, 200, 35);
-        add(addDomesticButton);
-
-        // domestic add button ko lagi addAvtionListner
-        addDomesticButton.addActionListener(e -> {
-
-            String cylinderType = (String) cylinderTypeCombobox.getSelectedItem();
-            if (!"Domestic".equalsIgnoreCase(cylinderType)) {
-                JOptionPane.showMessageDialog(this,
-                        "This button is only for Domestic Cylinder!\n"
-                                + "Please select 'Domestic' from the dropdown.",
-                        "Invalid Cylinder Type",
-                        JOptionPane.ERROR_MESSAGE);
-                return;
-            }
-
-            String customerName = customerNameField.getText().trim();
-            String citizenshipNumber = citizenshipField.getText().trim();
-            String bookingId = bookingIdField.getText().trim();
-            String bookingMonth = (String) monthComboBox.getSelectedItem();
-            String cylinderId = cylinderIdField.getText().trim();
-            int quantity = Integer.parseInt(quantityField.getText()); //Integer is a wrapper class
-            double weight = (Double) weightComboBox.getSelectedItem(); 
-            double basePrice = Double.parseDouble(basePriceField.getText());
-            double subsidyAmount = Double.parseDouble(subsidyField.getText());
-
-            if (!customerName.matches("^[A-Za-z]+ [A-Za-z]+$")) {
-                JOptionPane.showMessageDialog(this,
-                        "Invalid name format. Please enter first and last name.",
-                        "Validation Error", JOptionPane.ERROR_MESSAGE);
-                return;
-            }
-
-            if (citizenshipNumber.isEmpty()) {
-                JOptionPane.showMessageDialog(this, "Citizenship number cannot be empty",
-                        "Validation Error", JOptionPane.ERROR_MESSAGE);
-                return;
-            }
-            if (citizenshipNumber.length() != CITIZENSHIP_LENGTH) {
-                JOptionPane.showMessageDialog(this,
-                        "Citizenship number must be " + CITIZENSHIP_LENGTH + " digits",
-                        "Validation Error", JOptionPane.ERROR_MESSAGE);
-                return;
-            }
-            if (!citizenshipNumber.matches("\\d+")) {
-                JOptionPane.showMessageDialog(this,
-                        "Citizenship number must contain only digits (0-9)",
-                        "Validation Error", JOptionPane.ERROR_MESSAGE);
-                return;
-            }
-
-            if (!validateCylinderAndBookingIds(cylinderId, bookingId)
-                    || !validateQuantityAndBasePrice(quantity, basePrice)) {
-                return;
-            }
-            if (subsidyAmount < 0) {
-                JOptionPane.showMessageDialog(this,
-                        "Subsidy amount cannot be less than 0",
-                        "Validation Error", JOptionPane.ERROR_MESSAGE);
-                return;
-            }
-            if (subsidyAmount > basePrice) {
-                JOptionPane.showMessageDialog(this,
-                        "Subsidy amount cannot be greater than base price",
-                        "Validation Error", JOptionPane.ERROR_MESSAGE);
-                return;
-            }
-
-            if (!isEligibleForSubsidy(citizenshipNumber, quantity)) {
-                JOptionPane.showMessageDialog(this,
-                        "Customer is not eligible for subsidy.\nSubsidy will be set to 0.",
-                        "Not Eligible", JOptionPane.WARNING_MESSAGE);
-                subsidyAmount = 0.0;
-            }
-
-            DomesticCylinder domestic = new DomesticCylinder(cylinderId, cylinderType, bookingId, basePrice,
-                    bookingMonth, customerName, citizenshipNumber, weight, citizenshipNumber, quantity);
-            cylinders.add(domestic);
-
-            // adding ti text area
-            displayArea.setText("Domestic Cylinder Added Successfully!\n\n");
-            displayArea.append("Cylinder ID: " + cylinderId + "\n");
-            displayArea.append("Customer: " + customerName + "\n");
-            displayArea.append("Citizenship: " + citizenshipNumber + "\n");
-            displayArea.append("Booking ID: " + bookingId + "\n");
-            displayArea.append("Month: " + bookingMonth + "\n");
-            displayArea.append("Quantity: " + quantity + "\n");
-            displayArea.append("Weight: " + weight + " kg\n");
-            displayArea.append("Base Price: Rs " + basePrice + "\n");
-            displayArea.append("Subsidy: Rs " + subsidyAmount + "\n");
-            displayArea.append("Final Price: Rs " + domestic.calculateFinalPrice() + "\n");
-            displayArea.append("\nTotal Cylinders in System: " + cylinders.size());
-
-            customerNameField.setText("");
-            citizenshipField.setText("");
-            bookingIdField.setText("");
-            cylinderIdField.setText("");
-            quantityField.setText("");
-            basePriceField.setText("");
-            subsidyField.setText("0.0");
-            cylinderTypeCombobox.setSelectedIndex(0);
-
-            JOptionPane.showMessageDialog(this,
-                    "Domestic Cylinder added successfully!\n\n"
-                            + "Final Price: Rs " + domestic.calculateFinalPrice(),
-                    "Success",
-                    JOptionPane.INFORMATION_MESSAGE);
-
-        });
-
-        // Add Commercial Cylinder
-        JButton addCommercialButton = new JButton("Add Commercial Cylinder");
-        addCommercialButton.setBounds(460, 80, 200, 35);
-        add(addCommercialButton);
-        // commercial cylinder ko lagi addActionListner
-        addCommercialButton.addActionListener(e -> {
-            String cylinderType = (String) cylinderTypeCombobox.getSelectedItem();
-            if (!"Commercial".equalsIgnoreCase(cylinderType)) {
-                JOptionPane.showMessageDialog(this,
-                        "This button is only for Commercial Cylinder!\n"
-                                + "Please select 'Commercial' from the dropdown.",
-                        "Invalid Cylinder Type",
-                        JOptionPane.ERROR_MESSAGE);
-                return;
-            }
-
-            String organizationName = organizationField.getText();
-            System.out.println(organizationName);
-            String businessLicenseNumber = businessLicenseField.getText();
-            String bookingId = bookingIdField.getText();
-            String bookingMonth = (String) monthComboBox.getSelectedItem();
-            System.out.println(bookingMonth);
-            System.out.println(bookingId);
-            String cylinderId = cylinderIdField.getText();
-            System.out.println(cylinderId);
-            int quantity = Integer.parseInt(quantityField.getText());
-            System.out.println(quantity);
-            double weight = (Double) weightComboBox.getSelectedItem();
-
-            double basePrice = Double.parseDouble(basePriceField.getText());
-            System.out.println(basePrice);
-
-            if (organizationName.trim().isEmpty()) {
-                JOptionPane.showMessageDialog(this, "Organization Name cannot be empty!");
-                return;
-            }
-            if (businessLicenseNumber == null || businessLicenseNumber.trim().isEmpty()) {
-                JOptionPane.showMessageDialog(this, "Business License Number is mandatory.");
-            } else if (!businessLicenseNumber.matches("\\d+")) {
-                JOptionPane.showMessageDialog(this, "Business License only contains numbers.");
-            }
-
-            if (!validateCylinderAndBookingIds(cylinderId, bookingId)
-                    || !validateQuantityAndBasePrice(quantity, basePrice)) {
-                return;
-            }
-
-            CommercialCylinder commercial = new CommercialCylinder(cylinderId, cylinderType, bookingId, basePrice,
-                    basePrice, bookingMonth, organizationName, businessLicenseNumber, quantity);
-            cylinders.add(commercial);
-
-            // adding ti text area
-            displayArea.setText("Domestic Cylinder Added Successfully!\n\n");
-            displayArea.append("Cylinder ID: " + cylinderId + "\n");
-            displayArea.append("Organization Name: " + organizationName + "\n");
-            displayArea.append("Business License Number: " + businessLicenseNumber + "\n");
-            displayArea.append("Booking ID: " + bookingId + "\n");
-            displayArea.append("Month: " + bookingMonth + "\n");
-            displayArea.append("Quantity: " + quantity + "\n");
-            displayArea.append("Weight: " + weight + " kg\n");
-            displayArea.append("Base Price: Rs " + basePrice + "\n");
-            displayArea.append("Final Price: Rs " + commercial.calculateFinalPrice() + "\n");
-            displayArea.append("\nTotal Cylinders in System: " + cylinders.size());
-
-            organizationField.setText("");
-            businessLicenseField.setText("");
-            bookingIdField.setText("");
-            cylinderIdField.setText("");
-            quantityField.setText("");
-            basePriceField.setText("");
-            cylinderTypeCombobox.setSelectedIndex(0);
-
-            JOptionPane.showMessageDialog(this,
-                    "Commercial Cylinder added successfully!\n\n"
-                            + "Final Price: Rs " + commercial.calculateFinalPrice(),
-                    "Success",
-                    JOptionPane.INFORMATION_MESSAGE);
-
-        });
-
-        // Calculate Bulk Discount
-        JButton calculateDiscountButton = new JButton("Calculate Bulk Discount");
-        calculateDiscountButton.setBounds(460, 130, 200, 35);
-        add(calculateDiscountButton);
-
-        //bulk discoiunt ko lagi
-        calculateDiscountButton.addActionListener(e->{
-            String cylinderId = cylinderIdField.getText();
-            System.out.println("CylinderID: " + cylinderId);
-            for (LPGCylinder cylinder : cylinders) {
-                if (cylinder.getCylinderId().equals(cylinderId)) {
-                    if (cylinder instanceof CommercialCylinder) {
-                        cylinder.calculateFinalPrice();
-                        JOptionPane.showMessageDialog(this, "Price after bulk discount: " + cylinder.calculateFinalPrice());
-                        cylinderIdField.setText(" ");
-
-                    } else if (cylinder instanceof DomesticCylinder) {
-                        JOptionPane.showMessageDialog(this,
-                                "This is a Domestic cylinder. Please use the 'Calculate Price after Subsidy' button.");
-                    }
-                    cylinderIdField.setText("");
-                    return;
+                if (!cylinderId.matches("NOC-\\d{3}")) {
+                        JOptionPane.showMessageDialog(this, "Invalid Cylinder ID Format. Use NOC-000 Format");
+                        return false;
                 }
-            }
-        });
-
-        // Calculate Price after Subsidy
-        JButton calculatePriceButton = new JButton("Calculate Price after Subsidy");
-        calculatePriceButton.setBounds(460, 180, 200, 35);
-        add(calculatePriceButton);
-
-        // addActionListner calculate price after subsidy ko lagi
-        calculatePriceButton.addActionListener(e -> {
-            String cylinderId = cylinderIdField.getText();
-            System.out.println("CylinderID: " + cylinderId);
-            for (LPGCylinder cylinder : cylinders) {
-                if (cylinder.getCylinderId().equals(cylinderId)) {
-                    if (cylinder instanceof DomesticCylinder) {
-                        cylinder.calculateFinalPrice();
-                        JOptionPane.showMessageDialog(this, "Price after subsidy: " + cylinder.calculateFinalPrice());
-                        cylinderIdField.setText(" ");
-
-                    } else if (cylinder instanceof CommercialCylinder) {
-                        JOptionPane.showMessageDialog(this,
-                                "This is a commercial cylinder. Please use the 'Calculate Bulk Discount' button.");
-                    }
-                    cylinderIdField.setText("");
-                    return;
+                for (LPGCylinder cylinder : cylinders) {
+                        if (cylinder.getCylinderId().equals(cylinderId)) {
+                                JOptionPane.showMessageDialog(this,
+                                                "Cylinder ID already exists. Please use a unique ID.",
+                                                "Duplicate ID", JOptionPane.ERROR_MESSAGE);
+                                return false;
+                        }
                 }
-            }
-        });
 
-        // Identify Cylinder Type
-        JButton identifyTypeButton = new JButton("Identify Cylinder Type");
-        identifyTypeButton.setBounds(460, 230, 200, 35);
-        add(identifyTypeButton);
+                for (LPGCylinder cylinder : cylinders) {
+                        if (cylinder.getBookingId().equals(bookingId)) {
+                                JOptionPane.showMessageDialog(this,
+                                                "Booking Id already exists. Please use a unique ID.",
+                                                "Duplicate ID", JOptionPane.ERROR_MESSAGE);
+                                return false;
+                        }
+                }
+                return true;
+        }
 
-        // Identifycylinder tpye ko lagi addAction Listner
-        identifyTypeButton.addActionListener(e -> {
-            String cylinderId = cylinderIdField.getText().trim();
-            System.out.println("Cylinder from identify button: " + cylinderId);
-            identifyCylinderType(cylinderId);
-            cylinderIdField.setText("");
+        public boolean validateQuantityAndBasePrice(int quantity, double basePrice) {
+                if (quantity <= 0) {
+                        JOptionPane.showMessageDialog(this, "Quantity must be greater than 0", "Validation Error",
+                                        JOptionPane.ERROR_MESSAGE);
+                        return false;
+                }
+                if (basePrice <= 0) {
+                        JOptionPane.showMessageDialog(this, "Base Price must be greater than 0", "Validation Error",
+                                        JOptionPane.ERROR_MESSAGE);
+                        return false;
+                }
+                return true;
+        }
 
-        });
+        public boolean isEligibleForSubsidy(String cizitenshipNumber, int quantity) {
+                boolean validCitizenship = cizitenshipNumber != null
+                                && cizitenshipNumber.trim().length() == CITIZENSHIP_LENGTH;
+                boolean withInQuota = quantity <= 2;
+                return validCitizenship && withInQuota;
+        }
 
-        // Display All
-        JButton displayAllButton = new JButton("Display All");
-        displayAllButton.setBounds(460, 280, 200, 35);
-        add(displayAllButton);
+        public void identifyCylinderType(String cylinderId) {
+                for (LPGCylinder cylinder : cylinders) {
+                        System.out.println("Cylinder ID: " + cylinderId);
+                        if (cylinder.getCylinderId().equals(cylinderId)) {
+                                if (cylinder instanceof DomesticCylinder) {
+                                        JOptionPane.showMessageDialog(this, "Cylinder Type: Domestic Cylinder");
+                                } else {
+                                        JOptionPane.showMessageDialog(this, "Cylinder Type: Commercial Cylinder");
+                                }
+                                return;
+                        }
+                }
 
-        // displayAllbutton ko lagi addActionListner
-        displayAllButton.addActionListener(e -> {
-            displayAll();
-        });
+                JOptionPane.showMessageDialog(this, "No cylinder with that Cylinder ID.");
+        }
 
-        // Export to File
-        JButton exportButton = new JButton("Export to File");
-        exportButton.setBounds(460, 330, 200, 35);
-        add(exportButton);
+        public void bulkDiscount(String cylinderId) {
+                for (LPGCylinder cylinder : cylinders) {
+                        if (cylinder.getCylinderId().equals(cylinderId)) {
+                                if (cylinder instanceof CommercialCylinder) {
+                                        CommercialCylinder commerical = (CommercialCylinder) cylinder;
+                                        commerical.applyCommercialDiscount();
+                                        double totalPrice = commerical.getBasePrice() * commerical.getQuantity();
+                                        double discountAmount = totalPrice * commerical.getCommercialDiscount();
+                                        JOptionPane.showMessageDialog(this,
+                                                        "Organization Name: " + commerical.getOrganizationName() + "\n"
+                                                                        + "Total Qunaity: " + commerical.getQuantity()
+                                                                        + "\n" + "Discount Amount : Rs "
+                                                                        + discountAmount + "\n" + "Final price: Rs "
+                                                                        + commerical.calculateFinalPrice(),
+                                                        "Bulk Discount", JOptionPane.INFORMATION_MESSAGE);
+                                } else {
+                                        JOptionPane.showMessageDialog(this,
+                                                        "This cylinder is not a commercial cylinder.",
+                                                        "Ivalid Cylinder ID", JOptionPane.INFORMATION_MESSAGE);
+                                }
+                                return;
+                        }
+                }
+                JOptionPane.showMessageDialog(this, "No Cylinder with this cylinder Id", "NO cylinder ID",
+                                JOptionPane.ERROR_MESSAGE);
+        }
 
-        // Load From File
-        JButton loadButton = new JButton("Load From File");
-        loadButton.setBounds(460, 380, 200, 35);
-        add(loadButton);
+        public void subsidyDiscount(String cylindeId){
+                for(LPGCylinder cylinder: cylinders){
+                        if(cylinder instanceof DomesticCylinder){
+                                DomesticCylinder domestic = (DomesticCylinder) cylinder;
+                                JOptionPane.showMessageDialog(this, "Customer Name: "+domestic.getCustomerName() + "\n" + "Total Quanity: "+domestic.getQuantityOfOrderCylinder() + "\n" + "Discount Amount: "+domestic.getSubsidyAmount()+ "\n"+ "Final Price: "+domestic.calculateFinalPrice());
 
-        // Clear
-        JButton clearButton = new JButton("Clear");
-        clearButton.setBounds(460, 430, 200, 35);
-        add(clearButton);
+                        } else {
+                                JOptionPane.showMessageDialog(this, "This cylinder Id is not domestic cylinder");
+                        }
+                        return;
+                }
+                JOptionPane.showMessageDialog(this, "No cylinder with this cylinder Id.");
+                
 
-        // clearbutton ko lagi addActionListner
-        clearButton.addActionListener(e -> {
-            customerNameField.setText("");
-            citizenshipField.setText("");
-            organizationField.setText("");
-            businessLicenseField.setText("");
-            bookingIdField.setText("");
-            cylinderIdField.setText("");
-            quantityField.setText("");
-            basePriceField.setText("");
-            subsidyField.setText("0.0");
+        }
 
-            cylinderTypeCombobox.setSelectedIndex(0);
-            monthComboBox.setSelectedIndex(0);
-            weightComboBox.setSelectedIndex(0);
+        public NOCApp() {
+                setTitle("Nepal Oil Corporation Management System");
+                setSize(1000, 820);
+                setLocationRelativeTo(null);
+                getRootPane().setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(Color.BLACK, 3),
+                                "Nepal Oil Corporation Management System", TitledBorder.CENTER, TitledBorder.TOP));
+                setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+                setLayout(null);
 
-            displayArea.setText("");
+                /**
+                 * Creating JPanel, which contains all components related to domestic cylinder
+                 * management, including input fields, action buttons.
+                 */
+                JPanel domesticPanel = new JPanel();
+                domesticPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(Color.BLACK, 2),
+                                "Domestic Cylinder Booking", TitledBorder.CENTER, TitledBorder.TOP));
+                domesticPanel.setLayout(null);
+                domesticPanel.setBounds(20, 10, 450, 430);
+                add(domesticPanel);
 
-            customerNameField.requestFocus();
-        });
+                JLabel domCustTypeLabel = new JLabel("Customer Type:");
+                domCustTypeLabel.setBounds(20, 30, 140, 25);
+                domesticPanel.add(domCustTypeLabel);
 
-        setVisible(true);
-    }
+                String[] customerTypes = { "Select One", "Domestic", "Commercial" };
+                JComboBox<String> domCustTypeCombo = new JComboBox<>(customerTypes);
+                domCustTypeCombo.setBounds(170, 30, 230, 25);
+                domesticPanel.add(domCustTypeCombo);
 
-    public static void main(String[] args) {
-        new NOCApp();
-    }
+                JLabel domNameLabel = new JLabel("Customer Name:");
+                domNameLabel.setBounds(20, 65, 140, 25);
+                domesticPanel.add(domNameLabel);
+                JTextField domNameField = new JTextField();
+                domNameField.setBounds(170, 65, 230, 25);
+                domesticPanel.add(domNameField);
+
+                JLabel domCitizenshipLabel = new JLabel("Citizenship Number:");
+                domCitizenshipLabel.setBounds(20, 100, 140, 25);
+                domesticPanel.add(domCitizenshipLabel);
+                JTextField domCitizenshipField = new JTextField();
+                domCitizenshipField.setBounds(170, 100, 230, 25);
+                domesticPanel.add(domCitizenshipField);
+
+                JLabel domBookingLabel = new JLabel("Booking ID:");
+                domBookingLabel.setBounds(20, 135, 140, 25);
+                domesticPanel.add(domBookingLabel);
+                JTextField domBookingField = new JTextField();
+                domBookingField.setBounds(170, 135, 230, 25);
+                domesticPanel.add(domBookingField);
+
+                JLabel domMonthLabel = new JLabel("Month:");
+                domMonthLabel.setBounds(20, 170, 140, 25);
+                domesticPanel.add(domMonthLabel);
+                String[] months = { "January", "February", "March", "April", "May", "June",
+                                "July", "August", "September", "October", "November", "December" };
+                JComboBox<String> domMonthCombo = new JComboBox<>(months);
+                domMonthCombo.setBounds(170, 170, 230, 25);
+                domesticPanel.add(domMonthCombo);
+
+                JLabel domCylinderLabel = new JLabel("Cylinder ID:");
+                domCylinderLabel.setBounds(20, 205, 140, 25);
+                domesticPanel.add(domCylinderLabel);
+                JTextField domCylinderField = new JTextField();
+                domCylinderField.setBounds(170, 205, 230, 25);
+                domesticPanel.add(domCylinderField);
+
+                JLabel domQtyLabel = new JLabel("Quantity of Order:");
+                domQtyLabel.setBounds(20, 240, 140, 25);
+                domesticPanel.add(domQtyLabel);
+                JTextField domQtyField = new JTextField();
+                domQtyField.setBounds(170, 240, 230, 25);
+                domesticPanel.add(domQtyField);
+
+                JLabel domWeightLabel = new JLabel("Weight (Kg):");
+                domWeightLabel.setBounds(20, 275, 140, 25);
+                domesticPanel.add(domWeightLabel);
+                String[] weightList = { "14.0", "16.0", "18.0" };
+                JComboBox<String> domWeightCombo = new JComboBox<>(weightList);
+                domWeightCombo.setBounds(170, 275, 230, 25);
+                domesticPanel.add(domWeightCombo);
+
+                JLabel domBasePriceLabel = new JLabel("Base Price:");
+                domBasePriceLabel.setBounds(20, 310, 140, 25);
+                domesticPanel.add(domBasePriceLabel);
+                JTextField domBasePriceField = new JTextField();
+                domBasePriceField.setBounds(170, 310, 230, 25);
+                domesticPanel.add(domBasePriceField);
+
+                JLabel domSubsidyLabel = new JLabel("Subsidy Amount:");
+                domSubsidyLabel.setBounds(20, 345, 140, 25);
+                domesticPanel.add(domSubsidyLabel);
+                JTextField domSubsidyField = new JTextField("0.0");
+                domSubsidyField.setBounds(170, 345, 230, 25);
+                domesticPanel.add(domSubsidyField);
+
+                // Domestic Buttons
+                JButton addDomesticBtn = new JButton("Add Domestic");
+                addDomesticBtn.setBounds(50, 385, 160, 32);
+                domesticPanel.add(addDomesticBtn);
+
+                // Display Area
+                JTextArea displayArea = new JTextArea();
+                displayArea.setEditable(false);
+                displayArea.setLineWrap(true);
+                displayArea.setWrapStyleWord(true);
+
+                // Add domestic cylinder register
+                addDomesticBtn.addActionListener(e -> {
+                        String customerType = (String) domCustTypeCombo.getSelectedItem();
+                        if (!"Domestic".equals(customerType)) {
+                                JOptionPane.showMessageDialog(this,
+                                                "This section is only for Domestic Cylinder! \n"
+                                                                + "Please select 'Domestic' from the dropdown",
+                                                "Invalid Cylinder Type", JOptionPane.ERROR_MESSAGE);
+                                return;
+                        }
+                        String customerName = domNameField.getText().trim();
+                        String citizenshipNumber = domCitizenshipField.getText().trim();
+                        String bookingId = domBookingField.getText().trim();
+                        String bookingMonth = (String) domMonthCombo.getSelectedItem();
+                        String cylinderId = domCylinderField.getText().trim();
+                        int quantity = Integer.parseInt(domQtyField.getText());
+                        String weight = (String) domWeightCombo.getSelectedItem();
+                        double basePrice = Double.parseDouble(domBasePriceField.getText());
+                        double subsidyAmount = Double.parseDouble(domSubsidyField.getText());
+
+                        if (!customerName.matches("^[A-Za-z]+ [A-Za-z]+$")) {
+                                JOptionPane.showMessageDialog(this,
+                                                "Invalid name format. Please enter first and last name.",
+                                                "Validation Error", JOptionPane.ERROR_MESSAGE);
+                                return;
+                        }
+
+                        if (citizenshipNumber.isEmpty()) {
+                                JOptionPane.showMessageDialog(this, "Citizenship number cannot be empty",
+                                                "Invalid Citizenship", JOptionPane.ERROR_MESSAGE);
+                                return;
+                        }
+
+                        if (citizenshipNumber.length() != CITIZENSHIP_LENGTH) {
+                                JOptionPane.showMessageDialog(this,
+                                                "Citizenship number must be " + CITIZENSHIP_LENGTH + " digits",
+                                                "Validation Error", JOptionPane.ERROR_MESSAGE);
+                                return;
+                        }
+                        if (!citizenshipNumber.matches("\\d+")) {
+                                JOptionPane.showMessageDialog(this,
+                                                "Citizenship number must contain only digits (0-9)",
+                                                "Validation Error", JOptionPane.ERROR_MESSAGE);
+                                return;
+                        }
+
+                        if (!validateCylinderAndBookingIds(cylinderId, bookingId)
+                                        || !validateQuantityAndBasePrice(quantity, basePrice)) {
+                                return;
+                        }
+
+                        if (quantity > 2) {
+                                JOptionPane.showMessageDialog(this,
+                                                "Domestic Customer cannot order and used more than 2 cylinder per month",
+                                                "'Validation Error", JOptionPane.ERROR_MESSAGE);
+                                return;
+
+                        }
+
+                        if (basePrice < subsidyAmount) {
+                                JOptionPane.showMessageDialog(this, "Subsidy Amount cannot be greater than base price",
+                                                "validation Error", JOptionPane.ERROR_MESSAGE);
+                                return;
+                        }
+
+                        if (!isEligibleForSubsidy(citizenshipNumber, quantity)) {
+                                JOptionPane.showMessageDialog(this,
+                                                "Customer is not eligible for subsify. \n Subsidy will be set to 0.");
+                                return;
+                        }
+
+                        DomesticCylinder domestic = new DomesticCylinder(cylinderId, customerType, bookingId, basePrice,
+                                        weight, bookingMonth, customerName, subsidyAmount, citizenshipNumber, quantity);
+
+                        cylinders.add(domestic);
+                        System.out.println("Cylinder Domesti: " + domestic.getCylinderId());
+                        JOptionPane.showMessageDialog(this, "Domestic Cylinder ordered Successfully!", "Success",
+                                        JOptionPane.INFORMATION_MESSAGE);
+                        displayArea.append("\n" + domestic.display());
+
+                });
+
+                JButton clearDomesticBtn = new JButton(
+                                "Clear Form");
+                clearDomesticBtn.setBounds(230, 385, 160, 32);
+                domesticPanel.add(clearDomesticBtn);
+
+                // addAction listner to clear the input field
+                clearDomesticBtn.addActionListener(e -> {
+                        domCustTypeCombo.setSelectedIndex(0);
+                        domNameField.setText(" ");
+                        domCitizenshipField.setText(" ");
+                        domBookingField.setText("");
+                        domCylinderField.setText(" ");
+                        domMonthCombo.setSelectedIndex(0);
+                        domWeightCombo.setSelectedIndex(0);
+                        domQtyField.setText("");
+                        domBasePriceField.setText(" ");
+                        domSubsidyField.setText("0.0");
+                });
+
+                // COMMERCIAL PANEL
+                JPanel commercialPanel = new JPanel();
+                commercialPanel.setBorder(
+                                BorderFactory.createTitledBorder(BorderFactory.createLineBorder(Color.BLACK, 2),
+                                                "Commercial Cylinder Booking", TitledBorder.CENTER, TitledBorder.TOP));
+                commercialPanel.setLayout(null);
+                commercialPanel.setBounds(510, 10, 450, 430);
+
+                add(commercialPanel);
+
+                // Commercial Fields
+                JLabel comCustTypeLabel = new JLabel("Customer Type:");
+                comCustTypeLabel.setBounds(20, 30, 140, 25);
+                commercialPanel.add(comCustTypeLabel);
+
+                JComboBox<String> comCustTypeCombo = new JComboBox<>(customerTypes);
+                comCustTypeCombo.setBounds(170, 30, 230, 25);
+                commercialPanel.add(comCustTypeCombo);
+
+                JLabel comCompanyLabel = new JLabel("Company Name:");
+                comCompanyLabel.setBounds(20, 65, 140, 25);
+                commercialPanel.add(comCompanyLabel);
+
+                JTextField comCompanyField = new JTextField();
+                comCompanyField.setBounds(170, 65, 230, 25);
+                commercialPanel.add(comCompanyField);
+
+                JLabel comAddressLabel = new JLabel("Company Address:");
+                comAddressLabel.setBounds(20, 100, 140, 25);
+                commercialPanel.add(comAddressLabel);
+
+                JTextField comAddressField = new JTextField();
+                comAddressField.setBounds(170, 100, 230, 25);
+                commercialPanel.add(comAddressField);
+
+                JLabel comLicenseLabel = new JLabel("Business License:");
+                comLicenseLabel.setBounds(20, 135, 140, 25);
+                commercialPanel.add(comLicenseLabel);
+
+                JTextField comLicenseField = new JTextField();
+                comLicenseField.setBounds(170, 135, 230, 25);
+                commercialPanel.add(comLicenseField);
+
+                JLabel comBookingIdLabel = new JLabel("Booking ID:");
+                comBookingIdLabel.setBounds(20, 170, 140, 25);
+                commercialPanel.add(comBookingIdLabel);
+
+                JTextField comBookingIdField = new JTextField();
+                comBookingIdField.setBounds(170, 170, 230, 25);
+                commercialPanel.add(comBookingIdField);
+
+                JLabel comCylinderIdLabel = new JLabel("Cylinder ID:");
+                comCylinderIdLabel.setBounds(20, 205, 140, 25);
+                commercialPanel.add(comCylinderIdLabel);
+
+                JTextField comCylinderIdField = new JTextField();
+                comCylinderIdField.setBounds(170, 205, 230, 25);
+                commercialPanel.add(comCylinderIdField);
+
+                JLabel comMonthLabel = new JLabel("Month:");
+                comMonthLabel.setBounds(20, 240, 140, 25);
+                commercialPanel.add(comMonthLabel);
+
+                JComboBox<String> comMonthCombo = new JComboBox<>(months);
+                comMonthCombo.setBounds(170, 240, 230, 25);
+                commercialPanel.add(comMonthCombo);
+
+                JLabel comQuantityLabel = new JLabel("Quantity of Cylinders:");
+                comQuantityLabel.setBounds(20, 275, 140, 25);
+                commercialPanel.add(comQuantityLabel);
+
+                JTextField comQuantityField = new JTextField();
+                comQuantityField.setBounds(170, 275, 230, 25);
+                commercialPanel.add(comQuantityField);
+
+                JLabel comWeightLabel = new JLabel("Cylinder Weight:");
+                comWeightLabel.setBounds(20, 310, 140, 25);
+                commercialPanel.add(comWeightLabel);
+
+                JComboBox<String> comWeightCombo = new JComboBox<>(weightList);
+                comWeightCombo.setBounds(170, 310, 230, 25);
+                commercialPanel.add(comWeightCombo);
+
+                JLabel comBasePriceLabel = new JLabel("Base Price:");
+                comBasePriceLabel.setBounds(20, 345, 140, 25);
+                commercialPanel.add(comBasePriceLabel);
+
+                JTextField comBasePriceField = new JTextField();
+                comBasePriceField.setBounds(170, 345, 230, 25);
+                commercialPanel.add(comBasePriceField);
+
+                JButton addComBtn = new JButton("Add Commercial");
+                addComBtn.setBounds(40, 385, 170, 35);
+                commercialPanel.add(addComBtn);
+                // Add Comercial Cylinder
+                addComBtn.addActionListener(e -> {
+                        String customerType = (String) comCustTypeCombo.getSelectedItem();
+                        if (!"Commercial".equals(customerType)) {
+                                JOptionPane.showMessageDialog(this,
+                                                "This section is only for Commerical Cylinder! \n"
+                                                                + "Please select 'Commercial' from the dropdown",
+                                                "Invalid Cylinder Type", JOptionPane.ERROR_MESSAGE);
+                                return;
+                        }
+
+                        String companyName = comCompanyField.getText();
+                        String companyAddress = comAddressField.getText();
+                        String comLicense = comLicenseField.getText();
+                        String comBooking = comBookingIdField.getText();
+                        String comCylinderId = comCylinderIdField.getText();
+                        String comMonth = (String) comMonthCombo.getSelectedItem();
+                        int quantity = Integer.parseInt(comQuantityField.getText());
+                        String comWeight = (String) comWeightCombo.getSelectedItem();
+                        double basePrice = Double.parseDouble(comBasePriceField.getText());
+
+                        if (comLicense == null && !comLicense.matches("^[0-9]{6}$")) {
+                                JOptionPane.showMessageDialog(this, "Invalid Company License Number. Format: 6 digits",
+                                                "Validation Errot", JOptionPane.ERROR_MESSAGE);
+                                return;
+                        }
+                        if (!validateCylinderAndBookingIds(comCylinderId, comBooking)) {
+                                return;
+                        }
+                        if (!validateQuantityAndBasePrice(quantity, basePrice)) {
+                                return;
+                        }
+
+                        CommercialCylinder cylinder = new CommercialCylinder(comCylinderId, customerType, comBooking,
+                                        basePrice, comWeight, comMonth, companyName, companyAddress, comLicense,
+                                        quantity);
+                        cylinders.add(cylinder);
+                        JOptionPane.showMessageDialog(this, "Commercial Cylinder ordered successfully!", "Suceess",
+                                        JOptionPane.INFORMATION_MESSAGE);
+                        displayArea.append("\n" + cylinder.display());
+
+                });
+
+                JButton clearComBtn = new JButton("Clear Form");
+                clearComBtn.setBounds(220, 385, 170, 35);
+                commercialPanel.add(clearComBtn);
+                clearComBtn.addActionListener(e -> {
+                        comCustTypeCombo.setSelectedIndex(0);
+                        comCompanyField.setText("");
+                        comAddressField.setText("");
+                        comLicenseField.setText("");
+                        comBookingIdField.setText("");
+                        comCylinderIdField.setText("");
+                        comMonthCombo.setSelectedIndex(0);
+                        comQuantityField.setText("0");
+                        comWeightCombo.setSelectedIndex(0);
+                        comBasePriceField.setText("");
+
+                });
+
+                JScrollPane scrollPane = new JScrollPane(displayArea);
+                scrollPane.setBounds(20, 460, 940, 200);
+                scrollPane.setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(Color.BLACK, 2),
+                                "Booking Records Display", TitledBorder.CENTER, TitledBorder.TOP));
+
+                add(scrollPane);
+
+                // Action Buttons
+                JPanel actionPanel = new JPanel();
+                actionPanel.setLayout(null);
+                actionPanel.setBounds(20, 680, 940, 80);
+
+                actionPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(Color.BLACK, 2),
+                                "Actions", TitledBorder.CENTER, TitledBorder.TOP));
+
+                actionPanel.setLayout(null);
+
+                JLabel cylinderIdLabel = new JLabel("Cylinder ID:");
+                cylinderIdLabel.setBounds(15, 30, 75, 25);
+                actionPanel.add(cylinderIdLabel);
+
+                JTextField cylinderIdField = new JTextField();
+                cylinderIdField.setBounds(95, 30, 120, 28);
+                actionPanel.add(cylinderIdField);
+
+                JButton bulkDiscountBtn = new JButton("Bulk Discount");
+                bulkDiscountBtn.setBounds(225, 28, 130, 30);
+                actionPanel.add(bulkDiscountBtn);
+
+                // register with bulkDiscount
+                bulkDiscountBtn.addActionListener(e -> {
+                        String cylinderId = cylinderIdField.getText();
+                        bulkDiscount(cylinderId);
+                });
+
+                JButton subsidyBtn = new JButton("Price After Subsidy");
+                subsidyBtn.setBounds(365, 28, 155, 30);
+                actionPanel.add(subsidyBtn);
+                subsidyBtn.addActionListener(e->{
+                        String cylinderId = cylinderIdField.getText();
+                        subsidyDiscount(cylinderId);
+                });
+
+                JButton displayBtn = new JButton("Display");
+                displayBtn.setBounds(530, 28, 90, 30);
+                actionPanel.add(displayBtn);
+
+                // addActionListner for displayall btn
+                displayBtn.addActionListener(e -> {
+                        if (cylinders.isEmpty()) {
+                                JOptionPane.showMessageDialog(this, "No cylinder records");
+                                return;
+                        }
+                        for (LPGCylinder cylinder : cylinders) {
+                                displayArea.append(cylinder.display());
+                        }
+                });
+
+                JButton identifyBtn = new JButton("Identify Type");
+                identifyBtn.setBounds(630, 28, 125, 30);
+                actionPanel.add(identifyBtn);
+                identifyBtn.addActionListener(e -> {
+                        String cylinderId = cylinderIdField.getText();
+                        identifyCylinderType(cylinderId);
+                        cylinderIdField.setText("");
+                });
+
+                JButton exportBtn = new JButton("Export");
+                exportBtn.setBounds(765, 28, 80, 30);
+                actionPanel.add(exportBtn);
+
+                JButton loadBtn = new JButton("Load");
+                loadBtn.setBounds(850, 28, 75, 30);
+                actionPanel.add(loadBtn);
+
+                add(actionPanel);
+                setVisible(true);
+        }
+
+        public static void main(String[] args) {
+                new NOCApp();
+        }
 }

@@ -12,7 +12,7 @@ public class CommercialCylinder extends LPGCylinder {
     private String businessLicense;
     private int quantity;
     private double commercialDiscount = 0.0;
-    private int totalOrderCyliner = 0;
+    
 
     /**
      * Initialize a Commerical cylinder with LPG Cylinder and customer details.
@@ -85,14 +85,6 @@ public class CommercialCylinder extends LPGCylinder {
         return commercialDiscount;
     }
 
-    /**
-     * Returns the total number of order cylinder.
-     * 
-     * @return the total order cylinder up to now
-     */
-    public int getTotalOrderCylinder() {
-        return totalOrderCyliner;
-    }
 
     // Setter method
 
