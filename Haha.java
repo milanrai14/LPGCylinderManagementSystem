@@ -82,7 +82,7 @@ public class Haha extends JFrame {
                 JOptionPane.showMessageDialog(this, "No cylinder with that Cylinder ID.");
         }
 
-        public void bulkDiscount(String cylinderId, int quantity) {
+        public void bulkDiscount(String cylinderId) {
                 for (LPGCylinder cylinder : cylinders) {
                         if (cylinder.getCylinderId().equals(cylinderId)) {
                                 if (cylinder instanceof CommercialCylinder) {
@@ -90,15 +90,15 @@ public class Haha extends JFrame {
                                         commerical.applyCommercialDiscount();
                                         double totalPrice = commerical.getBasePrice() * commerical.getQuantity();
                                         double discountAmount = totalPrice * commerical.getCommercialDiscount();
-                                        JOptionPane.showMessageDialog(this, "Organization Name: "+commerical.getOrganizationName() + "\n" + "Total Qunaity: "+commerical.getQuantity() + "\n" + "Discount Amount : Rs "+discountAmount + "\n" + "Final price: Rs "+commerical.calculateFinalPrice());
+                                        JOptionPane.showMessageDialog(this, "Organization Name: "+commerical.getOrganizationName() + "\n" + "Total Qunaity: "+commerical.getQuantity() + "\n" + "Discount Amount : Rs "+discountAmount + "\n" + "Final price: Rs "+commerical.calculateFinalPrice(), "Bulk Discount", JOptionPane.INFORMATION_MESSAGE);
                                 } else {
                                         JOptionPane.showMessageDialog(this,
-                                                        "This cylinder is not a commercial cylinder.");
+                                                        "This cylinder is not a commercial cylinder.", "Ivalid Cylinder ID", JOptionPane.INFORMATION_MESSAGE);
                                 }
                                 return;
                         }
                 }
-                JOptionPane.showMessageDialog(this, "Cylinder Id not found.");
+                JOptionPane.showMessageDialog(this, "Cylinder Id not found.", "NO cylinder ID", JOptionPane.ERROR_MESSAGE);
         }
 
         public Haha() {
