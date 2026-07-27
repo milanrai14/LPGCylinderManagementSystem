@@ -85,6 +85,7 @@ public class NOCApp extends JFrame {
             if (cylinder.getCylinderId().equals(cylinderId)) {
 
                 if (cylinder instanceof DomesticCylinder) {
+                    
                     JOptionPane.showMessageDialog(this,
                             "Cylinder Type: Domestic Cylinder");
                 } else if (cylinder instanceof CommercialCylinder) {
@@ -105,6 +106,7 @@ public class NOCApp extends JFrame {
     public void displayAll() {
         if (cylinders.isEmpty()) {
             JOptionPane.showMessageDialog(this, "No cylinder records found.");
+            return;
         }
 
         for (LPGCylinder cylinder : cylinders) {
