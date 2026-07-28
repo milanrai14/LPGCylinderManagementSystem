@@ -109,11 +109,14 @@ public class NOCApp extends JFrame {
                                 JOptionPane.ERROR_MESSAGE);
         }
 
-        public void subsidyDiscount(String cylindeId){
-                for(LPGCylinder cylinder: cylinders){
-                        if(cylinder instanceof DomesticCylinder){
+        public void subsidyDiscount(String cylindeId) {
+                for (LPGCylinder cylinder : cylinders) {
+                        if (cylinder instanceof DomesticCylinder) {
                                 DomesticCylinder domestic = (DomesticCylinder) cylinder;
-                                JOptionPane.showMessageDialog(this, "Customer Name: "+domestic.getCustomerName() + "\n" + "Total Quanity: "+domestic.getQuantityOfOrderCylinder() + "\n" + "Discount Amount: "+domestic.getSubsidyAmount()+ "\n"+ "Final Price: "+domestic.calculateFinalPrice());
+                                JOptionPane.showMessageDialog(this, "Customer Name: " + domestic.getCustomerName()
+                                                + "\n" + "Total Quanity: " + domestic.getQuantityOfOrderCylinder()
+                                                + "\n" + "Discount Amount: " + domestic.getSubsidyAmount() + "\n"
+                                                + "Final Price: " + domestic.calculateFinalPrice());
 
                         } else {
                                 JOptionPane.showMessageDialog(this, "This cylinder Id is not domestic cylinder");
@@ -121,7 +124,6 @@ public class NOCApp extends JFrame {
                         return;
                 }
                 JOptionPane.showMessageDialog(this, "No cylinder with this cylinder Id.");
-                
 
         }
 
@@ -246,9 +248,22 @@ public class NOCApp extends JFrame {
                         String bookingId = domBookingField.getText().trim();
                         String bookingMonth = (String) domMonthCombo.getSelectedItem();
                         String cylinderId = domCylinderField.getText().trim();
-                        int quantity = Integer.parseInt(domQtyField.getText());
+                        int quantity=0;
+                        try {
+                                quantity = Integer.parseInt(domQtyField.getText());
+                        } catch (NumberFormatException ex) {
+                                JOptionPane.showMessageDialog(this,"Qunatity can only integer: "+ex.getMessage());
+                                return;
+                        }
+
                         String weight = (String) domWeightCombo.getSelectedItem();
-                        double basePrice = Double.parseDouble(domBasePriceField.getText());
+                        double basePrice = 0.0;
+                         try {
+                             basePrice = Double.parseDouble(domBasePriceField.getText());
+                         } catch (NumberFormatException ex) {
+                                JOptionPane.showMessageDialog(this, "Base price should be number");
+                                return;
+                         }
                         double subsidyAmount = Double.parseDouble(domSubsidyField.getText());
 
                         if (!customerName.matches("^[A-Za-z]+ [A-Za-z]+$")) {
@@ -524,7 +539,7 @@ public class NOCApp extends JFrame {
                 JButton subsidyBtn = new JButton("Price After Subsidy");
                 subsidyBtn.setBounds(365, 28, 155, 30);
                 actionPanel.add(subsidyBtn);
-                subsidyBtn.addActionListener(e->{
+                subsidyBtn.addActionListener(e -> {
                         String cylinderId = cylinderIdField.getText();
                         subsidyDiscount(cylinderId);
                 });

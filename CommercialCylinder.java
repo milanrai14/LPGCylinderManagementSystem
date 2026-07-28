@@ -137,7 +137,6 @@ public class CommercialCylinder extends LPGCylinder {
             System.out.println("Order must be greater than 0.");
         } else {
             this.quantity = quantity;
-            this.totalOrderCyliner += quantity;
         }
 
     }
