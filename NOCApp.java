@@ -236,34 +236,36 @@ public class NOCApp extends JFrame {
                 // Add domestic cylinder register
                 addDomesticBtn.addActionListener(e -> {
                         String customerType = (String) domCustTypeCombo.getSelectedItem();
-                        if (!"Domestic".equals(customerType)) {
+                        if (!"Domestic".equalsIgnoreCase(customerType)) {
                                 JOptionPane.showMessageDialog(this,
-                                                "This section is only for Domestic Cylinder! \n"
-                                                                + "Please select 'Domestic' from the dropdown",
-                                                "Invalid Cylinder Type", JOptionPane.ERROR_MESSAGE);
+                                                "This button is only for Domestic Cylinder!\n"
+                                                                + "Please select 'Domestic' from the dropdown.",
+                                                "Invalid Cylinder Type",
+                                                JOptionPane.ERROR_MESSAGE);
                                 return;
                         }
+
                         String customerName = domNameField.getText().trim();
                         String citizenshipNumber = domCitizenshipField.getText().trim();
                         String bookingId = domBookingField.getText().trim();
                         String bookingMonth = (String) domMonthCombo.getSelectedItem();
                         String cylinderId = domCylinderField.getText().trim();
-                        int quantity=0;
+                        int quantity = 0;
                         try {
                                 quantity = Integer.parseInt(domQtyField.getText());
                         } catch (NumberFormatException ex) {
-                                JOptionPane.showMessageDialog(this,"Qunatity can only integer: "+ex.getMessage());
+                                JOptionPane.showMessageDialog(this, "Qunatity can only integer: " + ex.getMessage());
                                 return;
                         }
 
                         String weight = (String) domWeightCombo.getSelectedItem();
                         double basePrice = 0.0;
-                         try {
-                             basePrice = Double.parseDouble(domBasePriceField.getText());
-                         } catch (NumberFormatException ex) {
+                        try {
+                                basePrice = Double.parseDouble(domBasePriceField.getText());
+                        } catch (NumberFormatException ex) {
                                 JOptionPane.showMessageDialog(this, "Base price should be number");
                                 return;
-                         }
+                        }
                         double subsidyAmount = Double.parseDouble(domSubsidyField.getText());
 
                         if (!customerName.matches("^[A-Za-z]+ [A-Za-z]+$")) {
