@@ -127,6 +127,14 @@ public class NOCApp extends JFrame {
 
         }
 
+        public boolean  isCylinderIdEmpty(String cylinderId) {
+                if (cylinderId.isEmpty()) {
+                        JOptionPane.showMessageDialog(this, "Cylinder ID Cannot be Null or empty");
+                        return true;
+                }
+                return false;
+        }
+
         public NOCApp() {
                 setTitle("Nepal Oil Corporation Management System");
                 setSize(1000, 820);
@@ -540,6 +548,7 @@ public class NOCApp extends JFrame {
                 // register with bulkDiscount
                 bulkDiscountBtn.addActionListener(e -> {
                         String cylinderId = cylinderIdField.getText();
+                        if(isCylinderIdEmpty(cylinderId)) return;
                         bulkDiscount(cylinderId);
                 });
 
@@ -548,6 +557,8 @@ public class NOCApp extends JFrame {
                 actionPanel.add(subsidyBtn);
                 subsidyBtn.addActionListener(e -> {
                         String cylinderId = cylinderIdField.getText();
+                        if(isCylinderIdEmpty(cylinderId)) return;
+
                         subsidyDiscount(cylinderId);
                 });
 
@@ -571,6 +582,8 @@ public class NOCApp extends JFrame {
                 actionPanel.add(identifyBtn);
                 identifyBtn.addActionListener(e -> {
                         String cylinderId = cylinderIdField.getText();
+                        if(isCylinderIdEmpty(cylinderId)) return;
+
                         identifyCylinderType(cylinderId);
                         cylinderIdField.setText("");
                 });
