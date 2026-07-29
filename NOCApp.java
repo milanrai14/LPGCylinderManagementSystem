@@ -245,88 +245,84 @@ public class NOCApp extends JFrame {
                                 return;
                         }
 
-                        String customerName = domNameField.getText().trim();
-                        String citizenshipNumber = domCitizenshipField.getText().trim();
-                        String bookingId = domBookingField.getText().trim();
-                        String bookingMonth = (String) domMonthCombo.getSelectedItem();
-                        String cylinderId = domCylinderField.getText().trim();
-                        int quantity = 0;
                         try {
-                                quantity = Integer.parseInt(domQtyField.getText());
+                                String customerName = domNameField.getText().trim();
+                                String citizenshipNumber = domCitizenshipField.getText().trim();
+                                String bookingId = domBookingField.getText().trim();
+                                String bookingMonth = (String) domMonthCombo.getSelectedItem();
+                                String cylinderId = domCylinderField.getText().trim();
+                                int quantity = Integer.parseInt(domQtyField.getText());
+                                String weight = (String) domWeightCombo.getSelectedItem();
+                                double basePrice = Double.parseDouble(domBasePriceField.getText());
+                                double subsidyAmount = Double.parseDouble(domSubsidyField.getText());
+                                if (!customerName.matches("^[A-Za-z]+ [A-Za-z]+$")) {
+                                        JOptionPane.showMessageDialog(this,
+                                                        "Invalid name format. Please enter first and last name.",
+                                                        "Validation Error", JOptionPane.ERROR_MESSAGE);
+                                        return;
+                                }
+
+                                if (citizenshipNumber.isEmpty()) {
+                                        JOptionPane.showMessageDialog(this, "Citizenship number cannot be empty",
+                                                        "Invalid Citizenship", JOptionPane.ERROR_MESSAGE);
+                                        return;
+                                }
+
+                                if (citizenshipNumber.length() != CITIZENSHIP_LENGTH) {
+                                        JOptionPane.showMessageDialog(this,
+                                                        "Citizenship number must be " + CITIZENSHIP_LENGTH + " digits",
+                                                        "Validation Error", JOptionPane.ERROR_MESSAGE);
+                                        return;
+                                }
+                                if (!citizenshipNumber.matches("\\d+")) {
+                                        JOptionPane.showMessageDialog(this,
+                                                        "Citizenship number must contain only digits (0-9)",
+                                                        "Validation Error", JOptionPane.ERROR_MESSAGE);
+                                        return;
+                                }
+
+                                if (!validateCylinderAndBookingIds(cylinderId, bookingId)
+                                                || !validateQuantityAndBasePrice(quantity, basePrice)) {
+                                        return;
+                                }
+
+                                if (quantity > 2) {
+                                        JOptionPane.showMessageDialog(this,
+                                                        "Domestic Customer cannot order and used more than 2 cylinder per month",
+                                                        "'Validation Error", JOptionPane.ERROR_MESSAGE);
+                                        return;
+
+                                }
+
+                                if (basePrice < subsidyAmount) {
+                                        JOptionPane.showMessageDialog(this,
+                                                        "Subsidy Amount cannot be greater than base price",
+                                                        "validation Error", JOptionPane.ERROR_MESSAGE);
+                                        return;
+                                }
+
+                                if (!isEligibleForSubsidy(citizenshipNumber, quantity)) {
+                                        JOptionPane.showMessageDialog(this,
+                                                        "Customer is not eligible for subsify. \n Subsidy will be set to 0.");
+                                        return;
+                                }
+
+                                DomesticCylinder domestic = new DomesticCylinder(cylinderId, customerType, bookingId,
+                                                basePrice,
+                                                weight, bookingMonth, customerName, subsidyAmount, citizenshipNumber,
+                                                quantity);
+
+                                cylinders.add(domestic);
+                                System.out.println("Cylinder Domesti: " + domestic.getCylinderId());
+                                JOptionPane.showMessageDialog(this, "Domestic Cylinder ordered Successfully!",
+                                                "Success",
+                                                JOptionPane.INFORMATION_MESSAGE);
+                                displayArea.append("\n" + domestic.display());
                         } catch (NumberFormatException ex) {
-                                JOptionPane.showMessageDialog(this, "Qunatity can only integer: " + ex.getMessage());
-                                return;
+                                JOptionPane.showMessageDialog(this, "Please enter valid numeric values.");
+                        } catch (NullPointerException ex) {
+                                JOptionPane.showMessageDialog(this, "Input field cannot be empty.");
                         }
-
-                        String weight = (String) domWeightCombo.getSelectedItem();
-                        double basePrice = 0.0;
-                        try {
-                                basePrice = Double.parseDouble(domBasePriceField.getText());
-                        } catch (NumberFormatException ex) {
-                                JOptionPane.showMessageDialog(this, "Base price should be number");
-                                return;
-                        }
-                        double subsidyAmount = Double.parseDouble(domSubsidyField.getText());
-
-                        if (!customerName.matches("^[A-Za-z]+ [A-Za-z]+$")) {
-                                JOptionPane.showMessageDialog(this,
-                                                "Invalid name format. Please enter first and last name.",
-                                                "Validation Error", JOptionPane.ERROR_MESSAGE);
-                                return;
-                        }
-
-                        if (citizenshipNumber.isEmpty()) {
-                                JOptionPane.showMessageDialog(this, "Citizenship number cannot be empty",
-                                                "Invalid Citizenship", JOptionPane.ERROR_MESSAGE);
-                                return;
-                        }
-
-                        if (citizenshipNumber.length() != CITIZENSHIP_LENGTH) {
-                                JOptionPane.showMessageDialog(this,
-                                                "Citizenship number must be " + CITIZENSHIP_LENGTH + " digits",
-                                                "Validation Error", JOptionPane.ERROR_MESSAGE);
-                                return;
-                        }
-                        if (!citizenshipNumber.matches("\\d+")) {
-                                JOptionPane.showMessageDialog(this,
-                                                "Citizenship number must contain only digits (0-9)",
-                                                "Validation Error", JOptionPane.ERROR_MESSAGE);
-                                return;
-                        }
-
-                        if (!validateCylinderAndBookingIds(cylinderId, bookingId)
-                                        || !validateQuantityAndBasePrice(quantity, basePrice)) {
-                                return;
-                        }
-
-                        if (quantity > 2) {
-                                JOptionPane.showMessageDialog(this,
-                                                "Domestic Customer cannot order and used more than 2 cylinder per month",
-                                                "'Validation Error", JOptionPane.ERROR_MESSAGE);
-                                return;
-
-                        }
-
-                        if (basePrice < subsidyAmount) {
-                                JOptionPane.showMessageDialog(this, "Subsidy Amount cannot be greater than base price",
-                                                "validation Error", JOptionPane.ERROR_MESSAGE);
-                                return;
-                        }
-
-                        if (!isEligibleForSubsidy(citizenshipNumber, quantity)) {
-                                JOptionPane.showMessageDialog(this,
-                                                "Customer is not eligible for subsify. \n Subsidy will be set to 0.");
-                                return;
-                        }
-
-                        DomesticCylinder domestic = new DomesticCylinder(cylinderId, customerType, bookingId, basePrice,
-                                        weight, bookingMonth, customerName, subsidyAmount, citizenshipNumber, quantity);
-
-                        cylinders.add(domestic);
-                        System.out.println("Cylinder Domesti: " + domestic.getCylinderId());
-                        JOptionPane.showMessageDialog(this, "Domestic Cylinder ordered Successfully!", "Success",
-                                        JOptionPane.INFORMATION_MESSAGE);
-                        displayArea.append("\n" + domestic.display());
 
                 });
 
@@ -445,44 +441,53 @@ public class NOCApp extends JFrame {
                 commercialPanel.add(addComBtn);
                 // Add Comercial Cylinder
                 addComBtn.addActionListener(e -> {
-                        String customerType = (String) comCustTypeCombo.getSelectedItem();
-                        if (!"Commercial".equals(customerType)) {
-                                JOptionPane.showMessageDialog(this,
-                                                "This section is only for Commerical Cylinder! \n"
-                                                                + "Please select 'Commercial' from the dropdown",
-                                                "Invalid Cylinder Type", JOptionPane.ERROR_MESSAGE);
-                                return;
-                        }
+                        try {
+                                String customerType = (String) comCustTypeCombo.getSelectedItem();
+                                if (!"Commercial".equals(customerType)) {
+                                        JOptionPane.showMessageDialog(this,
+                                                        "This section is only for Commerical Cylinder! \n"
+                                                                        + "Please select 'Commercial' from the dropdown",
+                                                        "Invalid Cylinder Type", JOptionPane.ERROR_MESSAGE);
+                                        return;
+                                }
 
-                        String companyName = comCompanyField.getText();
-                        String companyAddress = comAddressField.getText();
-                        String comLicense = comLicenseField.getText();
-                        String comBooking = comBookingIdField.getText();
-                        String comCylinderId = comCylinderIdField.getText();
-                        String comMonth = (String) comMonthCombo.getSelectedItem();
-                        int quantity = Integer.parseInt(comQuantityField.getText());
-                        String comWeight = (String) comWeightCombo.getSelectedItem();
-                        double basePrice = Double.parseDouble(comBasePriceField.getText());
+                                String companyName = comCompanyField.getText();
+                                String companyAddress = comAddressField.getText();
+                                String comLicense = comLicenseField.getText();
+                                String comBooking = comBookingIdField.getText();
+                                String comCylinderId = comCylinderIdField.getText();
+                                String comMonth = (String) comMonthCombo.getSelectedItem();
+                                int quantity = Integer.parseInt(comQuantityField.getText());
+                                String comWeight = (String) comWeightCombo.getSelectedItem();
+                                double basePrice = Double.parseDouble(comBasePriceField.getText());
 
-                        if (comLicense == null && !comLicense.matches("^[0-9]{6}$")) {
-                                JOptionPane.showMessageDialog(this, "Invalid Company License Number. Format: 6 digits",
-                                                "Validation Errot", JOptionPane.ERROR_MESSAGE);
-                                return;
-                        }
-                        if (!validateCylinderAndBookingIds(comCylinderId, comBooking)) {
-                                return;
-                        }
-                        if (!validateQuantityAndBasePrice(quantity, basePrice)) {
-                                return;
-                        }
+                                if (comLicense == null && !comLicense.matches("^[0-9]{6}$")) {
+                                        JOptionPane.showMessageDialog(this,
+                                                        "Invalid Company License Number. Format: 6 digits",
+                                                        "Validation Errot", JOptionPane.ERROR_MESSAGE);
+                                        return;
+                                }
+                                if (!validateCylinderAndBookingIds(comCylinderId, comBooking)) {
+                                        return;
+                                }
+                                if (!validateQuantityAndBasePrice(quantity, basePrice)) {
+                                        return;
+                                }
 
-                        CommercialCylinder cylinder = new CommercialCylinder(comCylinderId, customerType, comBooking,
-                                        basePrice, comWeight, comMonth, companyName, companyAddress, comLicense,
-                                        quantity);
-                        cylinders.add(cylinder);
-                        JOptionPane.showMessageDialog(this, "Commercial Cylinder ordered successfully!", "Suceess",
-                                        JOptionPane.INFORMATION_MESSAGE);
-                        displayArea.append("\n" + cylinder.display());
+                                CommercialCylinder cylinder = new CommercialCylinder(comCylinderId, customerType,
+                                                comBooking,
+                                                basePrice, comWeight, comMonth, companyName, companyAddress, comLicense,
+                                                quantity);
+                                cylinders.add(cylinder);
+                                JOptionPane.showMessageDialog(this, "Commercial Cylinder ordered successfully!",
+                                                "Suceess",
+                                                JOptionPane.INFORMATION_MESSAGE);
+                                displayArea.append("\n" + cylinder.display());
+                        } catch (NumberFormatException eX) {
+                                JOptionPane.showMessageDialog(this, "Please enter the valid numeric values");
+                        } catch (NullPointerException ex) {
+                                JOptionPane.showMessageDialog(this, "Input field cannot be empty");
+                        }
 
                 });
 
