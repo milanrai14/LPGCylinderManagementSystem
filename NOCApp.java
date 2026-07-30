@@ -409,7 +409,6 @@ public class NOCApp extends JFrame {
                                 JOptionPane.showMessageDialog(this, "Domestic Cylinder ordered Successfully!",
                                                 "Success",
                                                 JOptionPane.INFORMATION_MESSAGE);
-                                displayArea.append("\n" + domestic.display());
                         } catch (NumberFormatException ex) {
                                 JOptionPane.showMessageDialog(this, "Please enter valid numeric values.");
                         } catch (NullPointerException ex) {
@@ -586,7 +585,6 @@ public class NOCApp extends JFrame {
                                 JOptionPane.showMessageDialog(this, "Commercial Cylinder ordered successfully!",
                                                 "Suceess",
                                                 JOptionPane.INFORMATION_MESSAGE);
-                                displayArea.append("\n" + cylinder.display());
                         } catch (NumberFormatException eX) {
                                 JOptionPane.showMessageDialog(this, "Please enter the valid numeric values");
                         } catch (NullPointerException ex) {
@@ -650,6 +648,9 @@ public class NOCApp extends JFrame {
                         String cylinderId = JOptionPane.showInputDialog(this, "Enter Cylinder ID for Bulk Discount:");
                         if (cylinderId != null && !cylinderId.trim().isEmpty()) {
                                 bulkDiscount(cylinderId.trim());
+                        } else {
+                                JOptionPane.showMessageDialog(this, "Please enter a Cylinder ID");
+
                         }
                 });
 
@@ -665,6 +666,9 @@ public class NOCApp extends JFrame {
                         String cylinderId = JOptionPane.showInputDialog(this, "Enter Cylinder ID for Subsidy Amount:");
                         if (cylinderId != null && !cylinderId.trim().isEmpty()) {
                                 subsidyDiscount(cylinderId.trim());
+                        } else {
+                                JOptionPane.showMessageDialog(this, "Please enter a Cylinder ID");
+
                         }
                 });
 
@@ -686,7 +690,7 @@ public class NOCApp extends JFrame {
                         }
                 });
 
-                // Identify Button - Changed to "Identify" only
+                // Identify buttton
                 JButton identifyBtn = new JButton("Identify");
                 identifyBtn.setBounds(420, 28, 100, 30);
                 actionPanel.add(identifyBtn);
@@ -698,6 +702,8 @@ public class NOCApp extends JFrame {
                         String cylinderId = JOptionPane.showInputDialog(this, "Enter Cylinder ID to Identify Type:");
                         if (cylinderId != null && !cylinderId.trim().isEmpty()) {
                                 identifyCylinderType(cylinderId.trim());
+                        } else {
+                                JOptionPane.showMessageDialog(this, "please enter a Cylinder ID");
                         }
                 });
 
