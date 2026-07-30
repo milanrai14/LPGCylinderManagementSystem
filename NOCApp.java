@@ -12,10 +12,29 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.border.TitledBorder;
 
+/**
+ * This GUI application manages LPG cylinder bookings for both domestic and
+ * commerical customers.
+ * It provides functionality for adding cylinders, applying discounts, and
+ * displaying records.
+ * 
+ * @author Milan Rai
+ * @version 1.1.1.1
+ */
+
 public class NOCApp extends JFrame {
+        /** The standard length for citizenship numbers */
         final int CITIZENSHIP_LENGTH = 12;
+        /** ArrayList to store domestic and commerical cylinders records. */
         ArrayList<LPGCylinder> cylinders = new ArrayList<LPGCylinder>();
 
+        /**
+         * Validates cylinder ID and booking ID for uniqueness and format compliance
+         * 
+         * @param cylinderId The cylidner ID to validate
+         * @param bookingId  The booking ID to validate
+         * @return true if both IDs are valid and unique, otherwise false.
+         */
         public boolean validateCylinderAndBookingIds(String cylinderId, String bookingId) {
                 if (cylinderId == null || cylinderId.trim().isEmpty()) {
                         JOptionPane.showMessageDialog(this, "Cylinder Id cannot be empty");
@@ -25,6 +44,7 @@ public class NOCApp extends JFrame {
                         JOptionPane.showMessageDialog(this, "Invalid Cylinder ID Format. Use NOC-000 Format");
                         return false;
                 }
+                // Check for duplicate cylinder ID
                 for (LPGCylinder cylinder : cylinders) {
                         if (cylinder.getCylinderId().equals(cylinderId)) {
                                 JOptionPane.showMessageDialog(this,
@@ -33,7 +53,7 @@ public class NOCApp extends JFrame {
                                 return false;
                         }
                 }
-
+                // Check for duplicate booking ID
                 for (LPGCylinder cylinder : cylinders) {
                         if (cylinder.getBookingId().equals(bookingId)) {
                                 JOptionPane.showMessageDialog(this,
@@ -44,6 +64,14 @@ public class NOCApp extends JFrame {
                 }
                 return true;
         }
+
+        /**
+         * Validates that quantity and base price are positive values.
+         * 
+         * @param quantity  The quantity of the cylinder
+         * @param basePrice The base price per cylinder
+         * @return true if both values are valid, otherwise false
+         */
 
         public boolean validateQuantityAndBasePrice(int quantity, double basePrice) {
                 if (quantity <= 0) {
@@ -59,6 +87,14 @@ public class NOCApp extends JFrame {
                 return true;
         }
 
+        /**
+         * Determines if a customer is eligible for subsidy based on citizenship and
+         * quantity.
+         * 
+         * @param cizitenshipNumber The customer's citizenship number
+         * @param quantity          The quantity of cylinders ordered
+         * @return true if customer is eligible for subsidy, otherwise false
+         */
         public boolean isEligibleForSubsidy(String cizitenshipNumber, int quantity) {
                 boolean validCitizenship = cizitenshipNumber != null
                                 && cizitenshipNumber.trim().length() == CITIZENSHIP_LENGTH;
@@ -66,6 +102,11 @@ public class NOCApp extends JFrame {
                 return validCitizenship && withInQuota;
         }
 
+        /**
+         * Identifies and displays the type of cylinder for entered cylinder ID.
+         * 
+         * @param cylinderId
+         */
         public void identifyCylinderType(String cylinderId) {
                 for (LPGCylinder cylinder : cylinders) {
                         System.out.println("Cylinder ID: " + cylinderId);
@@ -81,6 +122,13 @@ public class NOCApp extends JFrame {
 
                 JOptionPane.showMessageDialog(this, "No cylinder with that Cylinder ID.");
         }
+
+        /**
+         * Applies bulk discount to a commerical cylinder and displays the Discounted
+         * price.
+         * 
+         * @param cylinderId The cylinder ID to apply bulk discount
+         */
 
         public void bulkDiscount(String cylinderId) {
                 for (LPGCylinder cylinder : cylinders) {
@@ -109,6 +157,11 @@ public class NOCApp extends JFrame {
                                 JOptionPane.ERROR_MESSAGE);
         }
 
+        /**
+         * Displays subsidy discount details for a domestic cylinder.
+         * 
+         * @param cylindeId The cylinder ID to apply subsidy amount
+         */
         public void subsidyDiscount(String cylindeId) {
                 for (LPGCylinder cylinder : cylinders) {
                         if (cylinder instanceof DomesticCylinder) {
@@ -127,7 +180,14 @@ public class NOCApp extends JFrame {
 
         }
 
-        public boolean  isCylinderIdEmpty(String cylinderId) {
+        /**
+         * Checks if a cylinder ID is null or empty
+         * 
+         * @param cylinderId The cylinder ID to check
+         * @return true if the ID is null or empty, false otherwise
+         */
+
+        public boolean isCylinderIdEmpty(String cylinderId) {
                 if (cylinderId.isEmpty()) {
                         JOptionPane.showMessageDialog(this, "Cylinder ID Cannot be Null or empty");
                         return true;
@@ -135,6 +195,11 @@ public class NOCApp extends JFrame {
                 return false;
         }
 
+        /**
+         * Constructor of NOCApp.
+         * Initializes the GUI components, sets uop event listners, and displays the
+         * application window.
+         */
         public NOCApp() {
                 setTitle("Nepal Oil Corporation Management System");
                 setSize(1000, 820);
@@ -143,6 +208,7 @@ public class NOCApp extends JFrame {
                                 "Nepal Oil Corporation Management System", TitledBorder.CENTER, TitledBorder.TOP));
                 setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
                 setLayout(null);
+                setResizable(false);
 
                 /**
                  * Creating JPanel, which contains all components related to domestic cylinder
@@ -155,15 +221,16 @@ public class NOCApp extends JFrame {
                 domesticPanel.setBounds(20, 10, 450, 430);
                 add(domesticPanel);
 
+                // Customer Type Lable and ComboBox
                 JLabel domCustTypeLabel = new JLabel("Customer Type:");
                 domCustTypeLabel.setBounds(20, 30, 140, 25);
                 domesticPanel.add(domCustTypeLabel);
-
                 String[] customerTypes = { "Select One", "Domestic", "Commercial" };
                 JComboBox<String> domCustTypeCombo = new JComboBox<>(customerTypes);
                 domCustTypeCombo.setBounds(170, 30, 230, 25);
                 domesticPanel.add(domCustTypeCombo);
 
+                // Customer Name
                 JLabel domNameLabel = new JLabel("Customer Name:");
                 domNameLabel.setBounds(20, 65, 140, 25);
                 domesticPanel.add(domNameLabel);
@@ -171,6 +238,7 @@ public class NOCApp extends JFrame {
                 domNameField.setBounds(170, 65, 230, 25);
                 domesticPanel.add(domNameField);
 
+                // Citizenship Number
                 JLabel domCitizenshipLabel = new JLabel("Citizenship Number:");
                 domCitizenshipLabel.setBounds(20, 100, 140, 25);
                 domesticPanel.add(domCitizenshipLabel);
@@ -178,6 +246,7 @@ public class NOCApp extends JFrame {
                 domCitizenshipField.setBounds(170, 100, 230, 25);
                 domesticPanel.add(domCitizenshipField);
 
+                // Booking ID
                 JLabel domBookingLabel = new JLabel("Booking ID:");
                 domBookingLabel.setBounds(20, 135, 140, 25);
                 domesticPanel.add(domBookingLabel);
@@ -185,6 +254,7 @@ public class NOCApp extends JFrame {
                 domBookingField.setBounds(170, 135, 230, 25);
                 domesticPanel.add(domBookingField);
 
+                // Month Selection
                 JLabel domMonthLabel = new JLabel("Month:");
                 domMonthLabel.setBounds(20, 170, 140, 25);
                 domesticPanel.add(domMonthLabel);
@@ -194,6 +264,7 @@ public class NOCApp extends JFrame {
                 domMonthCombo.setBounds(170, 170, 230, 25);
                 domesticPanel.add(domMonthCombo);
 
+                // Cylinder ID
                 JLabel domCylinderLabel = new JLabel("Cylinder ID:");
                 domCylinderLabel.setBounds(20, 205, 140, 25);
                 domesticPanel.add(domCylinderLabel);
@@ -201,6 +272,7 @@ public class NOCApp extends JFrame {
                 domCylinderField.setBounds(170, 205, 230, 25);
                 domesticPanel.add(domCylinderField);
 
+                // Quantity of Order
                 JLabel domQtyLabel = new JLabel("Quantity of Order:");
                 domQtyLabel.setBounds(20, 240, 140, 25);
                 domesticPanel.add(domQtyLabel);
@@ -208,6 +280,7 @@ public class NOCApp extends JFrame {
                 domQtyField.setBounds(170, 240, 230, 25);
                 domesticPanel.add(domQtyField);
 
+                // Weight selection
                 JLabel domWeightLabel = new JLabel("Weight (Kg):");
                 domWeightLabel.setBounds(20, 275, 140, 25);
                 domesticPanel.add(domWeightLabel);
@@ -216,6 +289,7 @@ public class NOCApp extends JFrame {
                 domWeightCombo.setBounds(170, 275, 230, 25);
                 domesticPanel.add(domWeightCombo);
 
+                // Base price
                 JLabel domBasePriceLabel = new JLabel("Base Price:");
                 domBasePriceLabel.setBounds(20, 310, 140, 25);
                 domesticPanel.add(domBasePriceLabel);
@@ -223,6 +297,7 @@ public class NOCApp extends JFrame {
                 domBasePriceField.setBounds(170, 310, 230, 25);
                 domesticPanel.add(domBasePriceField);
 
+                // Subsidy Amount
                 JLabel domSubsidyLabel = new JLabel("Subsidy Amount:");
                 domSubsidyLabel.setBounds(20, 345, 140, 25);
                 domesticPanel.add(domSubsidyLabel);
@@ -241,7 +316,10 @@ public class NOCApp extends JFrame {
                 displayArea.setLineWrap(true);
                 displayArea.setWrapStyleWord(true);
 
-                // Add domestic cylinder register
+                /**
+                 * Action Listener for adding a domestic cylinder
+                 * Validates all input fields and creates a new DomesticCylinder object.
+                 */
                 addDomesticBtn.addActionListener(e -> {
                         String customerType = (String) domCustTypeCombo.getSelectedItem();
                         if (!"Domestic".equalsIgnoreCase(customerType)) {
@@ -263,13 +341,15 @@ public class NOCApp extends JFrame {
                                 String weight = (String) domWeightCombo.getSelectedItem();
                                 double basePrice = Double.parseDouble(domBasePriceField.getText());
                                 double subsidyAmount = Double.parseDouble(domSubsidyField.getText());
+
+                                // Validate customer name format
                                 if (!customerName.matches("^[A-Za-z]+ [A-Za-z]+$")) {
                                         JOptionPane.showMessageDialog(this,
                                                         "Invalid name format. Please enter first and last name.",
                                                         "Validation Error", JOptionPane.ERROR_MESSAGE);
                                         return;
                                 }
-
+                                // validate citizenship number
                                 if (citizenshipNumber.isEmpty()) {
                                         JOptionPane.showMessageDialog(this, "Citizenship number cannot be empty",
                                                         "Invalid Citizenship", JOptionPane.ERROR_MESSAGE);
@@ -289,11 +369,13 @@ public class NOCApp extends JFrame {
                                         return;
                                 }
 
+                                // Validate IDs and pricing
                                 if (!validateCylinderAndBookingIds(cylinderId, bookingId)
                                                 || !validateQuantityAndBasePrice(quantity, basePrice)) {
                                         return;
                                 }
 
+                                // Domestic customers can order at most 2 cylinders
                                 if (quantity > 2) {
                                         JOptionPane.showMessageDialog(this,
                                                         "Domestic Customer cannot order and used more than 2 cylinder per month",
@@ -309,12 +391,14 @@ public class NOCApp extends JFrame {
                                         return;
                                 }
 
+                                // Check subsidy eligibility
                                 if (!isEligibleForSubsidy(citizenshipNumber, quantity)) {
                                         JOptionPane.showMessageDialog(this,
                                                         "Customer is not eligible for subsify. \n Subsidy will be set to 0.");
                                         return;
                                 }
 
+                                // Create and add domestic cylinder
                                 DomesticCylinder domestic = new DomesticCylinder(cylinderId, customerType, bookingId,
                                                 basePrice,
                                                 weight, bookingMonth, customerName, subsidyAmount, citizenshipNumber,
@@ -334,12 +418,15 @@ public class NOCApp extends JFrame {
 
                 });
 
+                // Clear Form Button for Domestic Panel
                 JButton clearDomesticBtn = new JButton(
                                 "Clear Form");
                 clearDomesticBtn.setBounds(230, 385, 160, 32);
                 domesticPanel.add(clearDomesticBtn);
 
-                // addAction listner to clear the input field
+                /**
+                 * Action listner to clear all input fields in the domestic panel
+                 */
                 clearDomesticBtn.addActionListener(e -> {
                         domCustTypeCombo.setSelectedIndex(0);
                         domNameField.setText(" ");
@@ -353,7 +440,10 @@ public class NOCApp extends JFrame {
                         domSubsidyField.setText("0.0");
                 });
 
-                // COMMERCIAL PANEL
+                /**
+                 * Creating JPanel for commercial cylinder management,
+                 * including input fields and action buttons.
+                 */
                 JPanel commercialPanel = new JPanel();
                 commercialPanel.setBorder(
                                 BorderFactory.createTitledBorder(BorderFactory.createLineBorder(Color.BLACK, 2),
@@ -363,91 +453,94 @@ public class NOCApp extends JFrame {
 
                 add(commercialPanel);
 
-                // Commercial Fields
+                // Commercial Customer Type and ComboBox
                 JLabel comCustTypeLabel = new JLabel("Customer Type:");
                 comCustTypeLabel.setBounds(20, 30, 140, 25);
                 commercialPanel.add(comCustTypeLabel);
-
                 JComboBox<String> comCustTypeCombo = new JComboBox<>(customerTypes);
                 comCustTypeCombo.setBounds(170, 30, 230, 25);
                 commercialPanel.add(comCustTypeCombo);
 
+                // Company Name
                 JLabel comCompanyLabel = new JLabel("Company Name:");
                 comCompanyLabel.setBounds(20, 65, 140, 25);
                 commercialPanel.add(comCompanyLabel);
-
                 JTextField comCompanyField = new JTextField();
                 comCompanyField.setBounds(170, 65, 230, 25);
                 commercialPanel.add(comCompanyField);
 
+                // Company Address
                 JLabel comAddressLabel = new JLabel("Company Address:");
                 comAddressLabel.setBounds(20, 100, 140, 25);
                 commercialPanel.add(comAddressLabel);
-
                 JTextField comAddressField = new JTextField();
                 comAddressField.setBounds(170, 100, 230, 25);
                 commercialPanel.add(comAddressField);
 
+                // Business License
                 JLabel comLicenseLabel = new JLabel("Business License:");
                 comLicenseLabel.setBounds(20, 135, 140, 25);
                 commercialPanel.add(comLicenseLabel);
-
                 JTextField comLicenseField = new JTextField();
                 comLicenseField.setBounds(170, 135, 230, 25);
                 commercialPanel.add(comLicenseField);
 
+                // Booking ID
                 JLabel comBookingIdLabel = new JLabel("Booking ID:");
                 comBookingIdLabel.setBounds(20, 170, 140, 25);
                 commercialPanel.add(comBookingIdLabel);
-
                 JTextField comBookingIdField = new JTextField();
                 comBookingIdField.setBounds(170, 170, 230, 25);
                 commercialPanel.add(comBookingIdField);
 
+                // Cylinder ID
                 JLabel comCylinderIdLabel = new JLabel("Cylinder ID:");
                 comCylinderIdLabel.setBounds(20, 205, 140, 25);
                 commercialPanel.add(comCylinderIdLabel);
-
                 JTextField comCylinderIdField = new JTextField();
                 comCylinderIdField.setBounds(170, 205, 230, 25);
                 commercialPanel.add(comCylinderIdField);
 
+                // Month Selection
                 JLabel comMonthLabel = new JLabel("Month:");
                 comMonthLabel.setBounds(20, 240, 140, 25);
                 commercialPanel.add(comMonthLabel);
-
                 JComboBox<String> comMonthCombo = new JComboBox<>(months);
                 comMonthCombo.setBounds(170, 240, 230, 25);
                 commercialPanel.add(comMonthCombo);
 
+                // Quantity
                 JLabel comQuantityLabel = new JLabel("Quantity of Cylinders:");
                 comQuantityLabel.setBounds(20, 275, 140, 25);
                 commercialPanel.add(comQuantityLabel);
-
                 JTextField comQuantityField = new JTextField();
                 comQuantityField.setBounds(170, 275, 230, 25);
                 commercialPanel.add(comQuantityField);
 
+                // Weight selection
                 JLabel comWeightLabel = new JLabel("Cylinder Weight:");
                 comWeightLabel.setBounds(20, 310, 140, 25);
                 commercialPanel.add(comWeightLabel);
-
                 JComboBox<String> comWeightCombo = new JComboBox<>(weightList);
                 comWeightCombo.setBounds(170, 310, 230, 25);
                 commercialPanel.add(comWeightCombo);
 
+                // Base price
                 JLabel comBasePriceLabel = new JLabel("Base Price:");
                 comBasePriceLabel.setBounds(20, 345, 140, 25);
                 commercialPanel.add(comBasePriceLabel);
-
                 JTextField comBasePriceField = new JTextField();
                 comBasePriceField.setBounds(170, 345, 230, 25);
                 commercialPanel.add(comBasePriceField);
 
+                // Add Comercial Button
                 JButton addComBtn = new JButton("Add Commercial");
                 addComBtn.setBounds(40, 385, 170, 35);
                 commercialPanel.add(addComBtn);
-                // Add Comercial Cylinder
+                /**
+                 * Action listener for adding a commercial cylinder.
+                 * Validates all input fields and creates a new CommercialCylinder object.
+                 */
                 addComBtn.addActionListener(e -> {
                         try {
                                 String customerType = (String) comCustTypeCombo.getSelectedItem();
@@ -469,12 +562,14 @@ public class NOCApp extends JFrame {
                                 String comWeight = (String) comWeightCombo.getSelectedItem();
                                 double basePrice = Double.parseDouble(comBasePriceField.getText());
 
+                                // Validate business License
                                 if (comLicense == null && !comLicense.matches("^[0-9]{6}$")) {
                                         JOptionPane.showMessageDialog(this,
                                                         "Invalid Company License Number. Format: 6 digits",
                                                         "Validation Errot", JOptionPane.ERROR_MESSAGE);
                                         return;
                                 }
+                                // Validate IDs and pricing
                                 if (!validateCylinderAndBookingIds(comCylinderId, comBooking)) {
                                         return;
                                 }
@@ -482,6 +577,7 @@ public class NOCApp extends JFrame {
                                         return;
                                 }
 
+                                // Create and add comercial cylinder
                                 CommercialCylinder cylinder = new CommercialCylinder(comCylinderId, customerType,
                                                 comBooking,
                                                 basePrice, comWeight, comMonth, companyName, companyAddress, comLicense,
@@ -499,9 +595,13 @@ public class NOCApp extends JFrame {
 
                 });
 
+                // Clear for button for commercial panel
                 JButton clearComBtn = new JButton("Clear Form");
                 clearComBtn.setBounds(220, 385, 170, 35);
                 commercialPanel.add(clearComBtn);
+                /**
+                 * Action listener to clear all input fields in the commercial panel.
+                 */
                 clearComBtn.addActionListener(e -> {
                         comCustTypeCombo.setSelectedIndex(0);
                         comCompanyField.setText("");
@@ -516,6 +616,7 @@ public class NOCApp extends JFrame {
 
                 });
 
+                // Scrollable Display Area for records
                 JScrollPane scrollPane = new JScrollPane(displayArea);
                 scrollPane.setBounds(20, 460, 940, 200);
                 scrollPane.setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(Color.BLACK, 2),
@@ -523,7 +624,11 @@ public class NOCApp extends JFrame {
 
                 add(scrollPane);
 
-                // Action Buttons
+                /**
+                 * Action Buttons Panel
+                 * Contains buttons for various operations: Bulk Discount, Subsidy, Display,
+                 * Identify, Export, Load
+                 */
                 JPanel actionPanel = new JPanel();
                 actionPanel.setLayout(null);
                 actionPanel.setBounds(20, 680, 940, 80);
@@ -533,40 +638,44 @@ public class NOCApp extends JFrame {
 
                 actionPanel.setLayout(null);
 
-                JLabel cylinderIdLabel = new JLabel("Cylinder ID:");
-                cylinderIdLabel.setBounds(15, 30, 75, 25);
-                actionPanel.add(cylinderIdLabel);
-
-                JTextField cylinderIdField = new JTextField();
-                cylinderIdField.setBounds(95, 30, 120, 28);
-                actionPanel.add(cylinderIdField);
-
+                // Bulk Discount Button
                 JButton bulkDiscountBtn = new JButton("Bulk Discount");
-                bulkDiscountBtn.setBounds(225, 28, 130, 30);
+                bulkDiscountBtn.setBounds(15, 28, 130, 30);
                 actionPanel.add(bulkDiscountBtn);
 
-                // register with bulkDiscount
+                /**
+                 * Action listener for applying bulk discount to commercial cylinders.
+                 */
                 bulkDiscountBtn.addActionListener(e -> {
-                        String cylinderId = cylinderIdField.getText();
-                        if(isCylinderIdEmpty(cylinderId)) return;
-                        bulkDiscount(cylinderId);
+                        String cylinderId = JOptionPane.showInputDialog(this, "Enter Cylinder ID for Bulk Discount:");
+                        if (cylinderId != null && !cylinderId.trim().isEmpty()) {
+                                bulkDiscount(cylinderId.trim());
+                        }
                 });
 
-                JButton subsidyBtn = new JButton("Price After Subsidy");
-                subsidyBtn.setBounds(365, 28, 155, 30);
+                // Subsidy Button - Changed to "Subsidy Amount"
+                JButton subsidyBtn = new JButton("Subsidy Amount");
+                subsidyBtn.setBounds(155, 28, 155, 30);
                 actionPanel.add(subsidyBtn);
-                subsidyBtn.addActionListener(e -> {
-                        String cylinderId = cylinderIdField.getText();
-                        if(isCylinderIdEmpty(cylinderId)) return;
 
-                        subsidyDiscount(cylinderId);
+                /**
+                 * Action listener for displaying subsidy details for domestic cylinders.
+                 */
+                subsidyBtn.addActionListener(e -> {
+                        String cylinderId = JOptionPane.showInputDialog(this, "Enter Cylinder ID for Subsidy Amount:");
+                        if (cylinderId != null && !cylinderId.trim().isEmpty()) {
+                                subsidyDiscount(cylinderId.trim());
+                        }
                 });
 
+                // Display Button
                 JButton displayBtn = new JButton("Display");
-                displayBtn.setBounds(530, 28, 90, 30);
+                displayBtn.setBounds(320, 28, 90, 30);
                 actionPanel.add(displayBtn);
 
-                // addActionListner for displayall btn
+                /**
+                 * Action listener to display all cylinder records.
+                 */
                 displayBtn.addActionListener(e -> {
                         if (cylinders.isEmpty()) {
                                 JOptionPane.showMessageDialog(this, "No cylinder records");
@@ -577,24 +686,72 @@ public class NOCApp extends JFrame {
                         }
                 });
 
-                JButton identifyBtn = new JButton("Identify Type");
-                identifyBtn.setBounds(630, 28, 125, 30);
+                // Identify Button - Changed to "Identify" only
+                JButton identifyBtn = new JButton("Identify");
+                identifyBtn.setBounds(420, 28, 100, 30);
                 actionPanel.add(identifyBtn);
-                identifyBtn.addActionListener(e -> {
-                        String cylinderId = cylinderIdField.getText();
-                        if(isCylinderIdEmpty(cylinderId)) return;
 
-                        identifyCylinderType(cylinderId);
-                        cylinderIdField.setText("");
+                /**
+                 * Action listener to identify cylinder type.
+                 */
+                identifyBtn.addActionListener(e -> {
+                        String cylinderId = JOptionPane.showInputDialog(this, "Enter Cylinder ID to Identify Type:");
+                        if (cylinderId != null && !cylinderId.trim().isEmpty()) {
+                                identifyCylinderType(cylinderId.trim());
+                        }
                 });
 
+                // Export button
                 JButton exportBtn = new JButton("Export");
-                exportBtn.setBounds(765, 28, 80, 30);
+                exportBtn.setBounds(530, 28, 80, 30);
                 actionPanel.add(exportBtn);
 
+                /**
+                 * Action listener for Export button
+                 */
+                exportBtn.addActionListener(e -> {
+                        // Add your export functionality here
+                        JOptionPane.showMessageDialog(this, "Export functionality to be implemented");
+                });
+
+                // Load Button
                 JButton loadBtn = new JButton("Load");
-                loadBtn.setBounds(850, 28, 75, 30);
+                loadBtn.setBounds(620, 28, 80, 30);
                 actionPanel.add(loadBtn);
+
+                /**
+                 * Action listener for Load button
+                 */
+                loadBtn.addActionListener(e -> {
+                        // Add your load functionality here
+                        JOptionPane.showMessageDialog(this, "Load functionality to be implemented");
+                });
+
+                // Clear Button
+                JButton clearBtn = new JButton("Clear");
+                clearBtn.setBounds(710, 28, 80, 30);
+                actionPanel.add(clearBtn);
+
+                /**
+                 * Action listener for Clear button
+                 */
+                clearBtn.addActionListener(e -> {
+                        displayArea.setText("");
+                        JOptionPane.showMessageDialog(this, "Display area cleared");
+                });
+
+                // Save Button
+                JButton saveBtn = new JButton("Save");
+                saveBtn.setBounds(800, 28, 80, 30);
+                actionPanel.add(saveBtn);
+
+                /**
+                 * Action listener for Save button
+                 */
+                saveBtn.addActionListener(e -> {
+                        // Add your save functionality here
+                        JOptionPane.showMessageDialog(this, "Save functionality to be implemented");
+                });
 
                 add(actionPanel);
                 setVisible(true);
