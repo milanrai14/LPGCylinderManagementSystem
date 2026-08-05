@@ -1,8 +1,12 @@
 import java.awt.Color;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -645,11 +649,11 @@ public class NOCApp extends JFrame {
                  * Action listener for applying bulk discount to commercial cylinders.
                  */
                 bulkDiscountBtn.addActionListener(e -> {
-                        String cylinderId = JOptionPane.showInputDialog(this, "Enter Cylinder ID for Bulk Discount:");
+                        String cylinderId = JOptionPane.showInputDialog(this, "Enter Cylinder ID for Bulk Discount:", "Bulk Discount", JOptionPane.INFORMATION_MESSAGE);
                         if (cylinderId != null && !cylinderId.trim().isEmpty()) {
                                 bulkDiscount(cylinderId.trim());
                         } else {
-                                JOptionPane.showMessageDialog(this, "Please enter a Cylinder ID");
+                                JOptionPane.showMessageDialog(this, "Please enter a Cylinder ID", "Invalid", JOptionPane.ERROR_MESSAGE);
 
                         }
                 });
@@ -663,7 +667,7 @@ public class NOCApp extends JFrame {
                  * Action listener for displaying subsidy details for domestic cylinders.
                  */
                 subsidyBtn.addActionListener(e -> {
-                        String cylinderId = JOptionPane.showInputDialog(this, "Enter Cylinder ID for Subsidy Amount:");
+                        String cylinderId = JOptionPane.showInputDialog(this, "Enter Cylinder ID for Subsidy Amount:", "Subsidy Amount", JOptionPane.INFORMATION_MESSAGE);
                         if (cylinderId != null && !cylinderId.trim().isEmpty()) {
                                 subsidyDiscount(cylinderId.trim());
                         } else {
@@ -682,7 +686,7 @@ public class NOCApp extends JFrame {
                  */
                 displayBtn.addActionListener(e -> {
                         if (cylinders.isEmpty()) {
-                                JOptionPane.showMessageDialog(this, "No cylinder records");
+                                JOptionPane.showMessageDialog(this, "No cylinder records", "No Cylinder",JOptionPane.ERROR_MESSAGE);
                                 return;
                         }
                         for (LPGCylinder cylinder : cylinders) {
@@ -699,11 +703,11 @@ public class NOCApp extends JFrame {
                  * Action listener to identify cylinder type.
                  */
                 identifyBtn.addActionListener(e -> {
-                        String cylinderId = JOptionPane.showInputDialog(this, "Enter Cylinder ID to Identify Type:");
+                        String cylinderId = JOptionPane.showInputDialog(this, "Enter Cylinder ID to Identify Type:","Identify Cylinder", JOptionPane.INFORMATION_MESSAGE);
                         if (cylinderId != null && !cylinderId.trim().isEmpty()) {
                                 identifyCylinderType(cylinderId.trim());
                         } else {
-                                JOptionPane.showMessageDialog(this, "please enter a Cylinder ID");
+                                JOptionPane.showMessageDialog(this, "please enter a Cylinder ID", "Invalid", JOptionPane.ERROR_MESSAGE);
                         }
                 });
 
@@ -755,8 +759,20 @@ public class NOCApp extends JFrame {
                  * Action listener for Save button
                  */
                 saveBtn.addActionListener(e -> {
-                        // Add your save functionality here
-                        JOptionPane.showMessageDialog(this, "Save functionality to be implemented");
+                        JFileChooser fileChooser = new JFileChooser();
+                        int result = fileChooser.showSaveDialog(this);
+                        if(result == JFileChooser.APPROVE_OPTION){
+                                File file = fileChooser.getSelectedFile();
+                                try(ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(file))) {
+                                        oos.writeObject(cylinders);
+                                        JOptionPane.showMessageDialog(this, "Data Saved Successfully");
+                                        
+                                } catch (Exception ex) {
+                                        JOptionPane.showMessageDialog(this, "Error haha");
+                                        System.out.println(ex.getMessage());
+                                }
+                        }
+
                 });
 
                 add(actionPanel);
