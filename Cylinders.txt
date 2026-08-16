@@ -1,0 +1,30 @@
+==================== CYLINDER EXPORT REPORT ====================
+
+===== Domestic Cylinder Details =====
+Cylinder ID: NOC-123
+Cylinder Type: Domestic
+Booking ID: 123
+Base Price: 200.0
+Weight: 14.0 kg
+Citizenship Number: 111111111111
+Quantity Ordered: 2
+
+Eligible for Subsidy: true
+Subsidy Amount: Rs 0.0
+Final Price: Rs 400.0
+=======================================
+
+===== Commercial Cylinder Details =====
+Cylinder ID: NOC-111
+Cylinder Type: Commercial
+Booking ID: 111
+Base Price: Rs 200.0
+Weight: 14.0 kg
+Business License: 111111
+Quantity Ordered: 20
+Commercial Discount: 0.05%
+Final Price: Rs 3800.0
+=======================================
+
+Total Cylinders Exported: 2
+============================================================

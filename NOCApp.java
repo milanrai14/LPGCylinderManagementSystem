@@ -1,7 +1,9 @@
 import java.awt.Color;
+import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
@@ -652,11 +654,13 @@ public class NOCApp extends JFrame {
                  * Action listener for applying bulk discount to commercial cylinders.
                  */
                 bulkDiscountBtn.addActionListener(e -> {
-                        String cylinderId = JOptionPane.showInputDialog(this, "Enter Cylinder ID for Bulk Discount:", "Bulk Discount", JOptionPane.INFORMATION_MESSAGE);
+                        String cylinderId = JOptionPane.showInputDialog(this, "Enter Cylinder ID for Bulk Discount:",
+                                        "Bulk Discount", JOptionPane.INFORMATION_MESSAGE);
                         if (cylinderId != null && !cylinderId.trim().isEmpty()) {
                                 bulkDiscount(cylinderId.trim());
                         } else {
-                                JOptionPane.showMessageDialog(this, "Please enter a Cylinder ID", "Invalid", JOptionPane.ERROR_MESSAGE);
+                                JOptionPane.showMessageDialog(this, "Please enter a Cylinder ID", "Invalid",
+                                                JOptionPane.ERROR_MESSAGE);
 
                         }
                 });
@@ -670,7 +674,8 @@ public class NOCApp extends JFrame {
                  * Action listener for displaying subsidy details for domestic cylinders.
                  */
                 subsidyBtn.addActionListener(e -> {
-                        String cylinderId = JOptionPane.showInputDialog(this, "Enter Cylinder ID for Subsidy Amount:", "Subsidy Amount", JOptionPane.INFORMATION_MESSAGE);
+                        String cylinderId = JOptionPane.showInputDialog(this, "Enter Cylinder ID for Subsidy Amount:",
+                                        "Subsidy Amount", JOptionPane.INFORMATION_MESSAGE);
                         if (cylinderId != null && !cylinderId.trim().isEmpty()) {
                                 subsidyDiscount(cylinderId.trim());
                         } else {
@@ -689,7 +694,8 @@ public class NOCApp extends JFrame {
                  */
                 displayBtn.addActionListener(e -> {
                         if (cylinders.isEmpty()) {
-                                JOptionPane.showMessageDialog(this, "No cylinder records", "No Cylinder",JOptionPane.ERROR_MESSAGE);
+                                JOptionPane.showMessageDialog(this, "No cylinder records", "No Cylinder",
+                                                JOptionPane.ERROR_MESSAGE);
                                 return;
                         }
                         for (LPGCylinder cylinder : cylinders) {
@@ -706,11 +712,13 @@ public class NOCApp extends JFrame {
                  * Action listener to identify cylinder type.
                  */
                 identifyBtn.addActionListener(e -> {
-                        String cylinderId = JOptionPane.showInputDialog(this, "Enter Cylinder ID to Identify Type:","Identify Cylinder", JOptionPane.INFORMATION_MESSAGE);
+                        String cylinderId = JOptionPane.showInputDialog(this, "Enter Cylinder ID to Identify Type:",
+                                        "Identify Cylinder", JOptionPane.INFORMATION_MESSAGE);
                         if (cylinderId != null && !cylinderId.trim().isEmpty()) {
                                 identifyCylinderType(cylinderId.trim());
                         } else {
-                                JOptionPane.showMessageDialog(this, "please enter a Cylinder ID", "Invalid", JOptionPane.ERROR_MESSAGE);
+                                JOptionPane.showMessageDialog(this, "please enter a Cylinder ID", "Invalid",
+                                                JOptionPane.ERROR_MESSAGE);
                         }
                 });
 
@@ -723,19 +731,94 @@ public class NOCApp extends JFrame {
                  * Action listener for Export button
                  */
                 exportBtn.addActionListener(e -> {
-                        try(BufferedWriter writer = new BufferedWriter(new FileWriter("Cylinders.txt"))) {
-                                for(LPGCylinder cylinder: cylinders){
-                                        if(cylinder instanceof DomesticCylinder){
-                                                writer.write("\n===Domestic Cylinder");
-                                        } else if( cylinder instanceof CommercialCylinder){
-                                                writer.write("Commercical cylinfrt");
-                                        }
-                                }
-                                JOptionPane.showMessageDialog(this, "Cylinder exported successfully.");
-                            
-                        } catch (IOException ex) {
-                                JOptionPane.showMessageDialog(this, "An error occured while exporting cylinders.");
+                        try (BufferedWriter writer = new BufferedWriter(new FileWriter("Cylinders.txt"))) {
 
+                                // Check if there are cylinders
+                                if (cylinders.isEmpty()) {
+                                        writer.write("No cylinders to export.");
+                                        JOptionPane.showMessageDialog(this, "No cylinders to export!");
+                                        return;
+                                }
+                                writer.write("==================== CYLINDER EXPORT REPORT ====================");
+                                writer.newLine();
+                                writer.newLine();
+
+                                int count = 1;
+                                for (LPGCylinder cylinder : cylinders) {
+
+                                        if (cylinder instanceof DomesticCylinder) {
+                                                DomesticCylinder domestic = (DomesticCylinder) cylinder;
+
+                                                writer.write("===== Domestic Cylinder Details =====");
+                                                writer.newLine();
+                                                writer.write("Cylinder ID: " + domestic.getCylinderId());
+                                                writer.newLine();
+                                                writer.write("Cylinder Type: Domestic");
+                                                writer.newLine();
+                                                writer.write("Booking ID: " + domestic.getBookingId());
+                                                writer.newLine();
+                                                writer.write("Base Price: " + domestic.getBasePrice());
+                                                writer.newLine();
+                                                writer.write("Weight: " + domestic.getWeight() + " kg");
+                                                writer.newLine();
+                                                writer.write("Citizenship Number: " + domestic.getCitizenshipNumber());
+                                                writer.newLine();
+                                                writer.write("Quantity Ordered: "
+                                                                + domestic.getQuantityOfOrderCylinder());
+                                                writer.newLine();
+                                                writer.newLine();
+                                                writer.write("Eligible for Subsidy: "
+                                                                + domestic.isEligibleForSubsidy());
+                                                writer.newLine();
+                                                writer.write("Subsidy Amount: Rs " + domestic.getSubsidyAmount());
+                                                writer.newLine();
+                                                writer.write("Final Price: Rs " + domestic.calculateFinalPrice());
+                                                writer.newLine();
+                                                writer.write("=======================================");
+                                                writer.newLine();
+                                                writer.newLine();
+
+                                        } else if (cylinder instanceof CommercialCylinder) {
+                                                CommercialCylinder commercial = (CommercialCylinder) cylinder;
+
+                                                writer.write("===== Commercial Cylinder Details =====");
+                                                writer.newLine();
+                                                writer.write("Cylinder ID: " + commercial.getCylinderId());
+                                                writer.newLine();
+                                                writer.write("Cylinder Type: Commercial");
+                                                writer.newLine();
+                                                writer.write("Booking ID: " + commercial.getBookingId());
+                                                writer.newLine();
+                                                writer.write("Base Price: Rs " + commercial.getBasePrice());
+                                                writer.newLine();
+                                                writer.write("Weight: " + commercial.getWeight() + " kg");
+                                                writer.newLine();
+                                                writer.write("Business License: " + commercial.getBusinessLicense());
+                                                writer.newLine();
+                                                writer.write("Quantity Ordered: " + commercial.getQuantity());
+                                                writer.newLine();
+                                                writer.write("Commercial Discount: "
+                                                                + commercial.getCommercialDiscount() + "%");
+                                                writer.newLine();
+                                                writer.write("Final Price: Rs " + commercial.calculateFinalPrice());
+                                                writer.newLine();
+                                                writer.write("=======================================");
+                                                writer.newLine();
+                                                writer.newLine();
+                                        }
+
+                                        count++;
+                                }
+
+                                writer.write("Total Cylinders Exported: " + cylinders.size());
+                                writer.newLine();
+                                writer.write("============================================================");
+
+                                JOptionPane.showMessageDialog(this,
+                                                "Exported " + cylinders.size() + " cylinders successfully!");
+
+                        } catch (IOException ex) {
+                                JOptionPane.showMessageDialog(this, "Error exporting: " + ex.getMessage());
                         }
                 });
 
@@ -747,12 +830,28 @@ public class NOCApp extends JFrame {
                 /**
                  * Action listener for Load button
                  */
+
                 loadBtn.addActionListener(e -> {
                         JFileChooser fileChooser = new JFileChooser();
-                        int result = fileChooser.showOpenDialog(this);
-                        if(result == JFileChooser.APPROVE_OPTION){
+                        int userChoice = fileChooser.showOpenDialog(this);
+
+                        if (userChoice == JFileChooser.APPROVE_OPTION) {
                                 File selectedFile = fileChooser.getSelectedFile();
-                                
+
+                                try (BufferedReader reader = new BufferedReader(new FileReader(selectedFile))) {
+                                        StringBuilder content = new StringBuilder();
+                                        String line;
+
+                                        while ((line = reader.readLine()) != null) {
+                                                content.append(line).append("\n");
+                                        }
+
+                                        displayArea.setText(content.toString());
+                                        JOptionPane.showMessageDialog(this, "File loaded successfully!");
+
+                                } catch (IOException ex) {
+                                        JOptionPane.showMessageDialog(this, "Error loading file: " + ex.getMessage());
+                                }
                         }
                 });
 
@@ -777,22 +876,93 @@ public class NOCApp extends JFrame {
                 /**
                  * Action listener for Save button
                  */
-                saveBtn.addActionListener(e -> {
-                        JFileChooser fileChooser = new JFileChooser();
-                        int result = fileChooser.showSaveDialog(this);
-                        if(result == JFileChooser.APPROVE_OPTION){
-                                File file = fileChooser.getSelectedFile();
-                                try(ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(file))) {
-                                        oos.writeObject(cylinders);
-                                        JOptionPane.showMessageDialog(this, "Data Saved Successfully");
-                                        
-                                } catch (Exception ex) {
-                                        JOptionPane.showMessageDialog(this, "Error haha");
-                                        System.out.println(ex.getMessage());
-                                }
-                        }
-
-                });
+saveBtn.addActionListener(e -> {
+    if (cylinders.isEmpty()) {
+        JOptionPane.showMessageDialog(this, "No data to save!");
+        return;
+    }
+    
+    JFileChooser fileChooser = new JFileChooser();
+    fileChooser.setSelectedFile(new File("cylinders_data.txt"));
+    int result = fileChooser.showSaveDialog(this);
+    
+    if (result == JFileChooser.APPROVE_OPTION) {
+        File file = fileChooser.getSelectedFile();
+        
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(file))) {
+            
+            // Write header (to know how many cylinders)
+            writer.write("CYLINDER_DATA");
+            writer.newLine();
+            writer.write("Total: " + cylinders.size());
+            writer.newLine();
+            writer.write("---START---");
+            writer.newLine();
+            
+            // Save each cylinder
+            for (LPGCylinder cylinder : cylinders) {
+                
+                if (cylinder instanceof DomesticCylinder) {
+                    DomesticCylinder d = (DomesticCylinder) cylinder;
+                    
+                    writer.write("TYPE:DOMESTIC");
+                    writer.newLine();
+                    writer.write("cylinderId:" + d.getCylinderId());
+                    writer.newLine();
+                    writer.write("bookingId:" + d.getBookingId());
+                    writer.newLine();
+                    writer.write("basePrice:" + d.getBasePrice());
+                    writer.newLine();
+                    writer.write("weight:" + d.getWeight());
+                    writer.newLine();
+                    writer.write("citizenshipNumber:" + d.getCitizenshipNumber());
+                    writer.newLine();
+                    writer.write("quantityOrdered:" + d.getQuantityOfOrderCylinder());
+                    writer.newLine();
+                    writer.write("isEligibleForSubsidy:" + d.isEligibleForSubsidy());
+                    writer.newLine();
+                    writer.write("subsidyAmount:" + d.getSubsidyAmount());
+                    writer.newLine();
+                    writer.write("finalPrice:" + d.calculateFinalPrice());
+                    writer.newLine();
+                    writer.write("---END---");
+                    writer.newLine();
+                    
+                } else if (cylinder instanceof CommercialCylinder) {
+                    CommercialCylinder c = (CommercialCylinder) cylinder;
+                    
+                    writer.write("TYPE:COMMERCIAL");
+                    writer.newLine();
+                    writer.write("cylinderId:" + c.getCylinderId());
+                    writer.newLine();
+                    writer.write("bookingId:" + c.getBookingId());
+                    writer.newLine();
+                    writer.write("basePrice:" + c.getBasePrice());
+                    writer.newLine();
+                    writer.write("weight:" + c.getWeight());
+                    writer.newLine();
+                    writer.write("businessLicense:" + c.getBusinessLicense());
+                    writer.newLine();
+                    writer.write("quantityOrdered:" + c.getQuantity());
+                    writer.newLine();
+                    writer.write("commercialDiscount:" + c.getCommercialDiscount());
+                    writer.newLine();
+                    writer.write("finalPrice:" + c.calculateFinalPrice());
+                    writer.newLine();
+                    writer.write("---END---");
+                    writer.newLine();
+                }
+            }
+            
+            writer.write("---END OF DATA---");
+            
+            JOptionPane.showMessageDialog(this, "Data saved successfully!");
+            
+        } catch (IOException ex) {
+            JOptionPane.showMessageDialog(this, "Error saving: " + ex.getMessage());
+        }
+    }
+});
 
                 add(actionPanel);
                 setVisible(true);
