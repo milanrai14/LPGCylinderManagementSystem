@@ -1,6 +1,9 @@
 import java.awt.Color;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import javax.swing.BorderFactory;
@@ -720,8 +723,20 @@ public class NOCApp extends JFrame {
                  * Action listener for Export button
                  */
                 exportBtn.addActionListener(e -> {
-                        // Add your export functionality here
-                        JOptionPane.showMessageDialog(this, "Export functionality to be implemented");
+                        try(BufferedWriter writer = new BufferedWriter(new FileWriter("Cylinders.txt"))) {
+                                for(LPGCylinder cylinder: cylinders){
+                                        if(cylinder instanceof DomesticCylinder){
+                                                writer.write("\n===Domestic Cylinder");
+                                        } else if( cylinder instanceof CommercialCylinder){
+                                                writer.write("Commercical cylinfrt");
+                                        }
+                                }
+                                JOptionPane.showMessageDialog(this, "Cylinder exported successfully.");
+                            
+                        } catch (IOException ex) {
+                                JOptionPane.showMessageDialog(this, "An error occured while exporting cylinders.");
+
+                        }
                 });
 
                 // Load Button
@@ -733,8 +748,12 @@ public class NOCApp extends JFrame {
                  * Action listener for Load button
                  */
                 loadBtn.addActionListener(e -> {
-                        // Add your load functionality here
-                        JOptionPane.showMessageDialog(this, "Load functionality to be implemented");
+                        JFileChooser fileChooser = new JFileChooser();
+                        int result = fileChooser.showOpenDialog(this);
+                        if(result == JFileChooser.APPROVE_OPTION){
+                                File selectedFile = fileChooser.getSelectedFile();
+                                
+                        }
                 });
 
                 // Clear Button
